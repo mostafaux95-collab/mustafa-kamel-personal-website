@@ -1,0 +1,33 @@
+---
+title: "Systems before screens"
+date: "2026-02-10"
+excerpt: "Why I stopped designing individual screens first, and started every project by asking what the underlying system needs to be."
+readTime: "5 min read"
+tags: ["Design Systems", "Process"]
+---
+
+Early in my career, a "design" meant a screen. A client or PM would describe a feature, and I'd open Figma and start drawing the thing they asked for. It looked like productivity — fast turnaround, pixels appearing quickly — but it wasn't design. It was illustration with extra steps.
+
+The shift happened on a project where I was asked to redesign a settings page. Simple enough. But halfway through, I realized the settings page used four different button styles, three spacing scales, and two different ways of representing "this feature is disabled." None of that was in the brief. All of it was the *actual* problem.
+
+## The screen is a symptom
+
+A screen is where inconsistency becomes visible, not where it originates. If every screen in a product looks like it was designed by a different person, the fix isn't a better screen — it's a system that makes it hard to produce an inconsistent screen in the first place.
+
+This is the case for design tokens, shared components, and documented interaction states before it's the case for taste. Taste matters, but taste applied inconsistently reads as chaos, not craft.
+
+## What "systems first" actually looks like in practice
+
+When I start a project now, before any high-fidelity screen exists, I ask:
+
+- What are the 5–10 components this feature will actually need?
+- Do any of them already exist, half-formed, somewhere else in the product?
+- What states does each component need — empty, loading, error, disabled — and are those states consistent with how the rest of the product handles them?
+
+Answering these questions is slower at first. It feels like overhead when a PM wants to see something *now*. But it compounds. The fifth screen built on a real system takes a fraction of the time the first one did, because the decisions are already made.
+
+## The tradeoff worth naming
+
+Systems-first design has a real cost: it's slower to produce the first visible result, and it requires trust from stakeholders who want to see progress. Part of the job is managing that — showing the system's components in isolation early, so people aren't just waiting for a finished screen to believe something is happening.
+
+Every pixel still has to earn its place. But increasingly, the question I ask isn't "does this pixel look right," it's "does this pixel belong to a system that will still make sense in six months."

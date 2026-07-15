@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/700.css";
+
+@theme {
+  --color-bg: #0d0d11;
+  --color-bg-raised: #131318;
+  --color-card: #17171e;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.12);
+  --color-primary: #432666;
+  --color-primary-soft: #6a3f9c;
+  --color-accent: #f58963;
+  --color-accent-soft: #ffb99c;
+  --color-ink: #ffffff;
+  --color-ink-secondary: rgba(255, 255, 255, 0.72);
+  --color-ink-muted: rgba(255, 255, 255, 0.45);
+
+  --font-display: "Space Grotesk", "General Sans", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --breakpoint-xs: 420px;
+  --breakpoint-3xl: 1800px;
+
+  --container-portfolio: 1400px;
+
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 10s ease-in-out infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) translateX(0px);
+    }
+    50% {
+      transform: translateY(-16px) translateX(6px);
+    }
+  }
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  background: var(--color-bg);
+  color-scheme: dark;
+}
+
+/* ---------- Light theme ---------- */
+html.light {
+  --color-bg: #faf9f7;
+  --color-bg-raised: #f1efeb;
+  --color-card: #ffffff;
+  --color-border: rgba(22, 18, 31, 0.09);
+  --color-border-strong: rgba(22, 18, 31, 0.18);
+  --color-primary: #432666;
+  --color-primary-soft: #6a3f9c;
+  --color-accent: #d9663a;
+  --color-accent-soft: #f58963;
+  --color-ink: #16121f;
+  --color-ink-secondary: rgba(22, 18, 31, 0.75);
+  --color-ink-muted: rgba(22, 18, 31, 0.5);
+  color-scheme: light;
+}
+
+html.light .noise-overlay {
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Arabic ---------- */
+html[lang="ar"] {
+  --font-display: "IBM Plex Sans Arabic", "Space Grotesk", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+}
+
+/* Positive tracking mangles connected Arabic script; negative squeezes it */
+html[lang="ar"] * {
+  letter-spacing: 0 !important;
+}
+
+html[lang="ar"] .font-mono {
+  font-family: ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #1a0f10;
+}
+
+/* custom cursor hides native pointer on fine-pointer devices only */
+@media (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* Outline hugs each element's own border-radius (pills stay pills) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px
+    color-mix(in srgb, var(--color-ink) 30%, transparent);
+  color: transparent;
+}
+
+/* Ghost copy of the hero headline, revealed inside a cursor spotlight */
+.spotlight-layer {
+  -webkit-text-stroke: 1.5px var(--color-accent);
+  color: transparent;
+  -webkit-mask-image: radial-gradient(
+    150px circle at var(--spot-x, -300px) var(--spot-y, -300px),
+    black 35%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    150px circle at var(--spot-x, -300px) var(--spot-y, -300px),
+    black 35%,
+    transparent 72%
+  );
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .spotlight-layer {
+    display: none;
+  }
+}
+
+/* Light sweep across a button on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.65s ease;
+  pointer-events: none;
+}
+.btn-shine:hover::after {
+  transform: translateX(130%);
+}
+
+/* Underline that grows in from the left on hover */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s ease;
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-shine::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

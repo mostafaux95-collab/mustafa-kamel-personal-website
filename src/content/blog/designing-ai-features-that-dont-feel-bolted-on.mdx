@@ -1,0 +1,31 @@
+---
+title: "Designing AI features that don't feel bolted on"
+date: "2026-01-22"
+excerpt: "A sparkle icon and a chat box is not an AI feature. Notes on designing AI-assisted flows that actually change how someone works."
+readTime: "6 min read"
+tags: ["AI", "Product Design"]
+---
+
+The fastest way to spot an AI feature that was designed backwards is a sparkle icon next to a button that used to just... work. The feature existed, someone decided it needed "AI," and a chat box got bolted onto the side of it. It's a tell, and users learn to route around it.
+
+Working on AI-assisted features for both sellers and shoppers, the question I kept coming back to wasn't "where can we add AI" — it was "where is the user currently doing work that a system could do for them, badly disguised as a decision they have to make."
+
+## The next-best-action problem
+
+Most dashboards bury the important thing under a pile of equally-weighted menu items. A seller opening their storefront doesn't need twelve navigation options with equal visual weight — they need to know, right now, what the one thing worth doing today is: a stale listing to update, a pricing anomaly to check, an order that's about to breach a promised delivery window.
+
+That's a genuinely good use of AI-assisted design: not generating content for the sake of it, but surfacing a next-best-action that would otherwise require the user to already know what to look for. The interesting design problem isn't the model — it's the confidence threshold. Show a low-confidence suggestion as if it's certain, and you erode trust the first time it's wrong. Hide a high-confidence one behind a generic "insights" tab, and nobody ever finds it.
+
+## Designing for being wrong
+
+Every AI-assisted flow needs a real answer to: what happens when the system is wrong, and how does the user recover without feeling stupid for trusting it?
+
+In practice, this means:
+
+- Suggestions are always reversible in one action, not buried in a confirmation dialog that assumes the user will read it carefully.
+- The system explains *why* it suggested something, briefly, so a wrong suggestion is diagnosable instead of just mysterious.
+- Confidence is communicated visually, not just correctness — a suggestion that's "probably right" should not look identical to one that's "definitely right."
+
+## The AI is not the feature
+
+The feature is still the outcome — the seller's listing gets fixed, the shopper finds the product faster. AI is the mechanism, and mechanisms don't deserve their own icon in the UI. The best compliment an AI-assisted flow can get is that a user doesn't mention the AI part at all — they just say the product got easier to use.

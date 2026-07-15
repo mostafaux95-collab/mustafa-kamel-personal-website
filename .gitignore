@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Build output
+dist/
+server/dist/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env.*.local
+server/.env
+server/.env.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Prisma
+server/prisma/dev.db
+server/prisma/dev.db-journal
+
+# Docker volumes are named volumes (not bind-mounted), nothing to ignore here

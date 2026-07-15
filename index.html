@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0D0D11" />
+    <title>مصطفى كامل · مصمّم منتجات أوّل</title>
+    <meta
+      name="description"
+      content="مصطفى كامل · مصمّم منتجات أوّل متخصص في استراتيجية تجربة المستخدم وأنظمة التصميم ومنتجات الذكاء الاصطناعي عبر SaaS والتجارة الإلكترونية والتقنية المالية."
+    />
+    <meta property="og:title" content="مصطفى كامل · مصمّم منتجات أوّل" />
+    <meta
+      property="og:description"
+      content="أصمّم منتجات يتذكّرها الناس. خبرة +6 سنوات عبر SaaS والتجارة الإلكترونية والتقنية المالية ومنتجات الذكاء الاصطناعي."
+    />
+    <meta property="og:type" content="website" />
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("mk-theme") === "light") {
+            document.documentElement.classList.add("light");
+          }
+          var lang = localStorage.getItem("mk-lang") || "ar";
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
