@@ -16,17 +16,21 @@ const BCRYPT_ROUNDS = 12;
 // Editor can read+write content but not manage users/settings, Viewer is
 // read-only everywhere. Admin-only permissions (users/settings) stay
 // Super-Admin-exclusive.
+const CONTENT_ENTITIES = ['projects', 'testimonials', 'clients', 'services', 'skills', 'experience'];
+
 const PERMISSIONS: { key: string; description: string }[] = [
   { key: 'users:invite', description: 'Invite new admin users' },
   { key: 'users:read', description: 'View other admin users' },
   { key: 'users:write', description: 'Edit or deactivate admin users' },
   { key: 'settings:manage', description: 'Manage site settings' },
-  { key: 'projects:read', description: 'View projects, including drafts' },
-  { key: 'projects:write', description: 'Create, edit, delete, or publish projects' },
+  ...CONTENT_ENTITIES.flatMap((entity) => [
+    { key: `${entity}:read`, description: `View ${entity}, including drafts` },
+    { key: `${entity}:write`, description: `Create, edit, delete, or publish ${entity}` },
+  ]),
 ];
 
-const CONTENT_READ = ['projects:read'];
-const CONTENT_WRITE = ['projects:write'];
+const CONTENT_READ = CONTENT_ENTITIES.map((entity) => `${entity}:read`);
+const CONTENT_WRITE = CONTENT_ENTITIES.map((entity) => `${entity}:write`);
 
 const ROLE_PERMISSIONS: Record<Role, string[]> = {
   [Role.SUPER_ADMIN]: PERMISSIONS.map((p) => p.key),

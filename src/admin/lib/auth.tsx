@@ -80,10 +80,21 @@ export function useAdminAuth() {
 // Route-level permission check, mirroring the backend's seeded permission
 // keys (see server/prisma/seed.ts) so the UI hides actions a role can't
 // perform rather than letting them hit a 403.
+const CONTENT_ENTITIES = ["projects", "testimonials", "clients", "services", "skills", "experience"];
+const CONTENT_READ = CONTENT_ENTITIES.map((e) => `${e}:read`);
+const CONTENT_WRITE = CONTENT_ENTITIES.map((e) => `${e}:write`);
+
 const ROLE_PERMISSIONS: Record<AdminRole, string[]> = {
-  SUPER_ADMIN: ["users:invite", "users:read", "users:write", "settings:manage", "projects:read", "projects:write"],
-  EDITOR: ["projects:read", "projects:write"],
-  VIEWER: ["projects:read"],
+  SUPER_ADMIN: [
+    "users:invite",
+    "users:read",
+    "users:write",
+    "settings:manage",
+    ...CONTENT_READ,
+    ...CONTENT_WRITE,
+  ],
+  EDITOR: [...CONTENT_READ, ...CONTENT_WRITE],
+  VIEWER: [...CONTENT_READ],
 };
 
 export function useHasPermission(permission: string) {

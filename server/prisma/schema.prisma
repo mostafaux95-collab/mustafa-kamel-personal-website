@@ -174,3 +174,146 @@ model Project {
   @@index([status, sortOrder])
   @@map("projects")
 }
+
+model Testimonial {
+  id String @id @default(uuid())
+
+  quote   String
+  quoteAr String?
+
+  role   String
+  roleAr String?
+
+  company String
+
+  // Placeholder monogram tile until the media library (later phase)
+  // supports a real avatar upload — same pattern as data/companyLogos.ts.
+  avatarInitial String?
+  avatarBg      String?
+  avatarFg      String?
+
+  status    ContentStatus @default(DRAFT)
+  featured  Boolean       @default(false)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("testimonials")
+}
+
+model Client {
+  id String @id @default(uuid())
+
+  name   String
+  nameAr String?
+
+  logoInitial String
+  logoBg      String
+  logoFg      String
+
+  website  String?
+  category String?
+
+  status    ContentStatus @default(DRAFT)
+  featured  Boolean       @default(false)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("clients")
+}
+
+model Service {
+  id String @id @default(uuid())
+
+  title   String
+  titleAr String?
+  body    String
+  bodyAr  String?
+
+  // lucide-react icon name (e.g. "PenLine") — resolved client-side.
+  icon String?
+
+  status    ContentStatus @default(DRAFT)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("services")
+}
+
+model Skill {
+  id String @id @default(uuid())
+
+  name   String
+  category String
+
+  detail   String
+  detailAr String?
+
+  level Int?
+  years Int?
+
+  status    ContentStatus @default(DRAFT)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("skills")
+}
+
+model Experience {
+  id String @id @default(uuid())
+
+  company String
+
+  role   String
+  roleAr String?
+
+  period String
+
+  location   String
+  locationAr String?
+
+  summary   String
+  summaryAr String?
+
+  highlights   String[] @default([])
+  highlightsAr String[] @default([])
+
+  logoInitial String?
+  logoBg      String?
+  logoFg      String?
+
+  status    ContentStatus @default(DRAFT)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("experiences")
+}

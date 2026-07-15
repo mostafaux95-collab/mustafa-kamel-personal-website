@@ -7,6 +7,16 @@ import AdminLogin from "./pages/Login";
 import AdminDashboard from "./pages/Dashboard";
 import ProjectsList from "./pages/projects/ProjectsList";
 import ProjectForm from "./pages/projects/ProjectForm";
+import TestimonialsList from "./pages/testimonials/TestimonialsList";
+import TestimonialForm from "./pages/testimonials/TestimonialForm";
+import ClientsList from "./pages/clients/ClientsList";
+import ClientForm from "./pages/clients/ClientForm";
+import ServicesList from "./pages/services/ServicesList";
+import ServiceForm from "./pages/services/ServiceForm";
+import SkillsList from "./pages/skills/SkillsList";
+import SkillForm from "./pages/skills/SkillForm";
+import ExperienceList from "./pages/experience/ExperienceList";
+import ExperienceForm from "./pages/experience/ExperienceForm";
 
 // Mounted at /admin/* by the main App router. Deliberately isolated from
 // the public site's providers (i18n, sound, GSAP scroll setup, cursor) —
@@ -32,9 +42,30 @@ export default function AdminApp() {
               }
             >
               <Route index element={<AdminDashboard />} />
+
               <Route path="projects" element={<ProjectsList />} />
               <Route path="projects/new" element={<ProjectForm />} />
               <Route path="projects/:id" element={<ProjectForm />} />
+
+              <Route path="testimonials" element={<TestimonialsList />} />
+              <Route path="testimonials/new" element={<TestimonialForm />} />
+              <Route path="testimonials/:id" element={<TestimonialForm />} />
+
+              <Route path="clients" element={<ClientsList />} />
+              <Route path="clients/new" element={<ClientForm />} />
+              <Route path="clients/:id" element={<ClientForm />} />
+
+              <Route path="services" element={<ServicesList />} />
+              <Route path="services/new" element={<ServiceForm />} />
+              <Route path="services/:id" element={<ServiceForm />} />
+
+              <Route path="skills" element={<SkillsList />} />
+              <Route path="skills/new" element={<SkillForm />} />
+              <Route path="skills/:id" element={<SkillForm />} />
+
+              <Route path="experience" element={<ExperienceList />} />
+              <Route path="experience/new" element={<ExperienceForm />} />
+              <Route path="experience/:id" element={<ExperienceForm />} />
             </Route>
           </Routes>
         </AdminAuthProvider>

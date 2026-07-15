@@ -1,5 +1,16 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, FolderKanban, LogOut, Moon, Sun } from "lucide-react";
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Quote,
+  Building2,
+  Wrench,
+  Sparkles,
+  Briefcase,
+  LogOut,
+  Moon,
+  Sun,
+} from "lucide-react";
 import { useAdminAuth } from "@/admin/lib/auth";
 import { useTheme } from "@/lib/theme";
 import clsx from "clsx";
@@ -7,6 +18,11 @@ import clsx from "clsx";
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
   { to: "/admin/projects", label: "Projects", icon: FolderKanban, end: false },
+  { to: "/admin/testimonials", label: "Testimonials", icon: Quote, end: false },
+  { to: "/admin/clients", label: "Clients", icon: Building2, end: false },
+  { to: "/admin/services", label: "Services", icon: Wrench, end: false },
+  { to: "/admin/skills", label: "Skills", icon: Sparkles, end: false },
+  { to: "/admin/experience", label: "Experience", icon: Briefcase, end: false },
 ];
 
 export default function AdminLayout() {

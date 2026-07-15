@@ -12,6 +12,11 @@ import { MailModule } from './mail/mail.module';
 import { SettingsModule } from './settings/settings.module';
 import { HealthModule } from './health/health.module';
 import { ProjectsModule } from './projects/projects.module';
+import { TestimonialsModule } from './testimonials/testimonials.module';
+import { ClientsModule } from './clients/clients.module';
+import { ServicesModule } from './services/services.module';
+import { SkillsModule } from './skills/skills.module';
+import { ExperienceModule } from './experience/experience.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -41,6 +46,11 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
     SettingsModule,
     HealthModule,
     ProjectsModule,
+    TestimonialsModule,
+    ClientsModule,
+    ServicesModule,
+    SkillsModule,
+    ExperienceModule,
   ],
   providers: [
     // Applied in array order: rate-limit first (cheapest check), then
