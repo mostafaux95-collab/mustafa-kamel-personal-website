@@ -1,0 +1,110 @@
+// Prisma schema — Phase 1 (foundation): auth, RBAC, audit/soft-delete conventions.
+// See /Users/mostafa/.claude/plans/wondrous-leaping-nebula.md for the full rationale.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  // Pinned explicitly: this project has no "type": "module" in package.json
+  // (plain CommonJS), so auto-detection isn't reliable here.
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  EDITOR
+  VIEWER
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  passwordHash String
+
+  firstName String
+  lastName  String
+  role      Role   @default(VIEWER)
+
+  isEmailVerified       Boolean   @default(false)
+  emailVerifyToken      String?   @unique
+  emailVerifyExpiresAt  DateTime?
+
+  passwordResetToken     String?   @unique
+  passwordResetExpiresAt DateTime?
+
+  // 2FA-ready fields; the TOTP flow itself ships in a later phase.
+  twoFactorEnabled       Boolean  @default(false)
+  twoFactorSecret        String?
+  twoFactorRecoveryCodes String[] @default([])
+
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+
+  refreshTokens RefreshToken[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@map("users")
+}
+
+model Permission {
+  id          String @id @default(uuid())
+  key         String @unique // e.g. "projects:write", "users:invite", "settings:manage"
+  description String?
+
+  roles RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String     @id @default(uuid())
+  role         Role
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([role, permissionId])
+  @@map("role_permissions")
+}
+
+model RefreshToken {
+  id        String @id @default(uuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String @unique // never store the raw token
+
+  expiresAt           DateTime
+  revokedAt           DateTime?
+  replacedByTokenHash String?
+
+  userAgent String?
+  ipAddress String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// Minimal key/value skeleton for Phase 1 (maintenance mode flag, token TTL
+// overrides, email-from address, etc.) — expanded into typed settings in a
+// later phase once the admin UI needs richer structure.
+model SiteSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       Json
+  updatedAt   DateTime @updatedAt
+  updatedById String?
+
+  @@map("site_settings")
+}

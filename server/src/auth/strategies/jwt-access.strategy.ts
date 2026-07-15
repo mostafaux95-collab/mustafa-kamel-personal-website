@@ -1,0 +1,39 @@
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PrismaService } from '../../database/prisma.service';
+import { RolesService } from '../../roles/roles.service';
+import type { AppConfig } from '../../config/configuration';
+import type { AccessTokenPayload, AuthenticatedUser } from '../../common/types/auth.types';
+
+@Injectable()
+export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access') {
+  constructor(
+    config: ConfigService<AppConfig, true>,
+    private readonly prisma: PrismaService,
+    private readonly rolesService: RolesService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: config.get('jwt.accessSecret', { infer: true }),
+    });
+  }
+
+  async validate(payload: AccessTokenPayload): Promise<AuthenticatedUser> {
+    const user = await this.prisma.user.findUnique({ where: { id: payload.sub } });
+    if (!user || user.deletedAt || !user.isActive) {
+      throw new UnauthorizedException('Account is no longer active');
+    }
+
+    const permissions = await this.rolesService.getPermissionKeysForRole(user.role);
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      permissions,
+    };
+  }
+}
