@@ -11,6 +11,7 @@ import { RolesModule } from './roles/roles.module';
 import { MailModule } from './mail/mail.module';
 import { SettingsModule } from './settings/settings.module';
 import { HealthModule } from './health/health.module';
+import { ProjectsModule } from './projects/projects.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -39,6 +40,7 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
     MailModule,
     SettingsModule,
     HealthModule,
+    ProjectsModule,
   ],
   providers: [
     // Applied in array order: rate-limit first (cheapest check), then

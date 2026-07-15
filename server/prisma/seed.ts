@@ -11,23 +11,27 @@ if (!databaseUrl) {
 const prisma = new PrismaClient({ adapter: new PrismaPg(databaseUrl) });
 const BCRYPT_ROUNDS = 12;
 
-// Phase 1's full permission surface. Later phases add their own keys here
-// (e.g. "projects:write") as each content module lands — this list is not
-// meant to be exhaustive forever, just accurate for what Phase 1 gates.
+// Permission surface grows as each phase/module lands. Content permissions
+// (e.g. "projects:*") follow one convention: Super Admin gets everything,
+// Editor can read+write content but not manage users/settings, Viewer is
+// read-only everywhere. Admin-only permissions (users/settings) stay
+// Super-Admin-exclusive.
 const PERMISSIONS: { key: string; description: string }[] = [
   { key: 'users:invite', description: 'Invite new admin users' },
   { key: 'users:read', description: 'View other admin users' },
   { key: 'users:write', description: 'Edit or deactivate admin users' },
   { key: 'settings:manage', description: 'Manage site settings' },
+  { key: 'projects:read', description: 'View projects, including drafts' },
+  { key: 'projects:write', description: 'Create, edit, delete, or publish projects' },
 ];
 
-// Super Admin gets everything; Editor/Viewer start with nothing in Phase 1
-// (no content modules exist yet to grant access to) and gain permissions
-// as later phases seed their own keys.
+const CONTENT_READ = ['projects:read'];
+const CONTENT_WRITE = ['projects:write'];
+
 const ROLE_PERMISSIONS: Record<Role, string[]> = {
   [Role.SUPER_ADMIN]: PERMISSIONS.map((p) => p.key),
-  [Role.EDITOR]: [],
-  [Role.VIEWER]: [],
+  [Role.EDITOR]: [...CONTENT_READ, ...CONTENT_WRITE],
+  [Role.VIEWER]: [...CONTENT_READ],
 };
 
 async function seedPermissions() {

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "@/pages/Home";
 import Work from "@/pages/Work";
 import AboutPage from "@/pages/AboutPage";
@@ -7,6 +7,7 @@ import SkillsPage from "@/pages/SkillsPage";
 import ContactPage from "@/pages/ContactPage";
 import Cv from "@/pages/Cv";
 import CaseStudy from "@/pages/CaseStudy";
+import AdminApp from "@/admin/AdminApp";
 import Cursor from "@/components/cursor/Cursor";
 import CommandPalette from "@/components/CommandPalette";
 import ShortcutsModal from "@/components/ShortcutsModal";
@@ -33,19 +34,31 @@ function KonamiListener() {
   return <KonamiEffect active={active} />;
 }
 
+function PublicChrome() {
+  return (
+    <>
+      <div className="noise-overlay" />
+      <Cursor />
+      <CommandPalette />
+      <ShortcutsModal />
+      <KonamiListener />
+    </>
+  );
+}
+
 export default function App() {
   useLenis();
+  const location = useLocation();
+  // The admin dashboard is a plain tool UI — skip the public site's custom
+  // cursor, noise texture, command palette, and easter eggs there.
+  const isAdmin = location.pathname.startsWith("/admin");
 
   return (
     <ThemeProvider>
       <LangProvider>
         <SoundProvider>
-          <div className="noise-overlay" />
-          <Cursor />
+          {!isAdmin && <PublicChrome />}
           <ScrollToTop />
-          <CommandPalette />
-          <ShortcutsModal />
-          <KonamiListener />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/work" element={<Work />} />
@@ -54,6 +67,7 @@ export default function App() {
             <Route path="/skills" element={<SkillsPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/cv" element={<Cv />} />
+            <Route path="/admin/*" element={<AdminApp />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </SoundProvider>

@@ -108,3 +108,69 @@ model SiteSetting {
 
   @@map("site_settings")
 }
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// Phase 2: first content model, matching the existing frontend's
+// src/data/projects.ts card shape (grid/listing surface). The deeper
+// case-study narrative (chapters, gallery, impact) is a separate future
+// model — mirrors how the current site already splits "projects" (cards)
+// from "case studies" (long-form pages) as two distinct data sources.
+model Project {
+  id   String @id @default(uuid())
+  slug String @unique
+
+  // Bilingual: base column = English, *Ar = Arabic (nullable while
+  // content is being translated). Convention set in Phase 1.
+  title   String
+  titleAr String?
+
+  company String
+
+  tagline   String
+  taglineAr String?
+
+  role   String
+  roleAr String?
+
+  category String
+  year     String
+
+  coverGradientFrom String
+  coverGradientTo   String
+
+  challenge   String
+  challengeAr String?
+  solution    String
+  solutionAr  String?
+
+  // [{ value: string, label: string, labelAr?: string }]
+  metrics Json
+
+  techStack String[] @default([])
+  tags      String[] @default([])
+
+  hasCaseStudy Boolean @default(false)
+
+  metaTitle          String?
+  metaTitleAr        String?
+  metaDescription    String?
+  metaDescriptionAr  String?
+
+  status    ContentStatus @default(DRAFT)
+  featured  Boolean       @default(false)
+  sortOrder Int           @default(0)
+  views     Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("projects")
+}
