@@ -337,6 +337,8 @@ export const en = {
     namePh: "Your name",
     email: "Email",
     emailPh: "you@company.com",
+    whatsapp: "WhatsApp Number",
+    whatsappPh: "+20 10 1234 5678",
     message: "Message",
     messagePh: "Tell me about your product and what you need…",
     send: "Send Message",

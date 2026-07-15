@@ -52,38 +52,46 @@ export default function Hero() {
     () => {
       if (prefersReducedMotion()) return;
 
-      // Char-splitting breaks connected Arabic script - split words instead
+      // GSAP SplitText has no RTL/bidi awareness: it reconstructs each
+      // word's text by measuring character bounding boxes in left-to-right
+      // screen order, which for Arabic glyphs reverses every word's
+      // character order once re-inserted into the DOM (e.g. "أصمّم" comes
+      // out as "ممّصأ"). There's no split config that avoids this for
+      // Arabic, so Arabic skips SplitText entirely and animates each line
+      // as a single whole block instead - the browser then renders the
+      // untouched, correctly-shaped Arabic text natively.
       const isAr = lang === "ar";
-      const splitType = isAr ? "words,lines" : "chars,words";
-      const mask = isAr ? ("lines" as const) : ("words" as const);
-      const pick = (s: SplitText) => (isAr ? s.words : s.chars);
-      const stagger = isAr ? 0.09 : 0.022;
-
-      const split1 = SplitText.create(line1Ref.current, { type: splitType, mask });
-      const split2 = SplitText.create(line2Ref.current, { type: splitType, mask });
-      const split3 = SplitText.create(accentRef.current, { type: splitType, mask });
 
       const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
       tl.from(
         avatarRef.current,
         { scale: 0.5, autoAlpha: 0, duration: 0.9, ease: "back.out(1.6)" },
         0,
-      )
-        .from(badgeRef.current, { y: 14, autoAlpha: 0, duration: 0.7 }, 0.1)
-        .from(pick(split1), { yPercent: 120, rotate: isAr ? 0 : 5, duration: 1.1, stagger }, 0.2)
-        .from(pick(split2), { yPercent: 120, rotate: isAr ? 0 : 5, duration: 1.1, stagger }, 0.45)
-        .from(
-          pick(split3),
-          {
-            yPercent: 130,
-            rotate: isAr ? 0 : -6,
-            duration: 1.2,
-            stagger: stagger * 1.5,
-            ease: "back.out(1.4)",
-          },
-          0.65,
-        )
-        .from(paraRef.current, { y: 24, autoAlpha: 0, duration: 0.9 }, 1.0)
+      ).from(badgeRef.current, { y: 14, autoAlpha: 0, duration: 0.7 }, 0.1);
+
+      let split1: SplitText | undefined;
+      let split2: SplitText | undefined;
+      let split3: SplitText | undefined;
+
+      if (isAr) {
+        tl.from(line1Ref.current, { y: 34, autoAlpha: 0, duration: 0.9 }, 0.2)
+          .from(line2Ref.current, { y: 34, autoAlpha: 0, duration: 0.9 }, 0.4)
+          .from(accentRef.current, { y: 34, autoAlpha: 0, duration: 0.9, ease: "back.out(1.4)" }, 0.55);
+      } else {
+        split1 = SplitText.create(line1Ref.current, { type: "chars,words", mask: "words" });
+        split2 = SplitText.create(line2Ref.current, { type: "chars,words", mask: "words" });
+        split3 = SplitText.create(accentRef.current, { type: "chars,words", mask: "words" });
+
+        tl.from(split1.chars, { yPercent: 120, rotate: 5, duration: 1.1, stagger: 0.022 }, 0.2)
+          .from(split2.chars, { yPercent: 120, rotate: 5, duration: 1.1, stagger: 0.022 }, 0.45)
+          .from(
+            split3.chars,
+            { yPercent: 130, rotate: -6, duration: 1.2, stagger: 0.033, ease: "back.out(1.4)" },
+            0.65,
+          );
+      }
+
+      tl.from(paraRef.current, { y: 24, autoAlpha: 0, duration: 0.9 }, 1.0)
         .from(ctasRef.current, { y: 24, autoAlpha: 0, duration: 0.9 }, 1.15)
         .from(hintRef.current, { autoAlpha: 0, duration: 0.8 }, 1.5)
         .to(overlayRef.current, { autoAlpha: 1, duration: 1 }, 1.6);
@@ -129,9 +137,9 @@ export default function Hero() {
 
       return () => {
         removePointer();
-        split1.revert();
-        split2.revert();
-        split3.revert();
+        split1?.revert();
+        split2?.revert();
+        split3?.revert();
       };
     },
     { scope: sectionRef, dependencies: [lang], revertOnUpdate: true },

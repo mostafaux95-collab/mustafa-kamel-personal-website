@@ -128,7 +128,7 @@ const SOCIALS = [
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
-  const [values, setValues] = useState({ name: "", email: "", message: "" });
+  const [values, setValues] = useState({ name: "", email: "", whatsapp: "", message: "" });
   const { t } = useLang();
 
   function handleSubmit(e: React.FormEvent) {
@@ -233,6 +233,15 @@ export default function Contact() {
                       onChange={(v) => setValues((s) => ({ ...s, email: v }))}
                     />
                     <Field
+                      id="whatsapp"
+                      label={t.contact.whatsapp}
+                      placeholder={t.contact.whatsappPh}
+                      type="tel"
+                      required={false}
+                      value={values.whatsapp}
+                      onChange={(v) => setValues((s) => ({ ...s, whatsapp: v }))}
+                    />
+                    <Field
                       id="message"
                       label={t.contact.message}
                       placeholder={t.contact.messagePh}
@@ -267,6 +276,7 @@ function Field({
   onChange,
   type = "text",
   textarea = false,
+  required = true,
 }: {
   id: string;
   label: string;
@@ -275,6 +285,7 @@ function Field({
   onChange: (v: string) => void;
   type?: string;
   textarea?: boolean;
+  required?: boolean;
 }) {
   const fieldId = `field-${id}`;
   const shared =
@@ -302,7 +313,7 @@ function Field({
           id={fieldId}
           type={type}
           placeholder={placeholder}
-          required
+          required={required}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={`${shared} rounded-full`}

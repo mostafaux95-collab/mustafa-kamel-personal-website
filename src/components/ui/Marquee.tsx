@@ -13,16 +13,6 @@ export default function Marquee({
   const stripRef = useRef<HTMLDivElement>(null);
   const { lang } = useLang();
   const isRtl = lang === "ar";
-  // Mirrors isRtl for the ScrollTrigger callback below, which is created
-  // once per tween and must not close over a stale value when the
-  // language toggles without rebuilding the whole GSAP context.
-  const isRtlRef = useRef(isRtl);
-  isRtlRef.current = isRtl;
-  // The tween built on mount; its direction is flipped live via
-  // timeScale sign (see the effect below) rather than rebuilt, so a
-  // language toggle never has to tear down and restart a running
-  // ScrollTrigger-driven tween.
-  const tweenRef = useRef<gsap.core.Tween | null>(null);
 
   useGSAP(
     () => {
@@ -33,8 +23,15 @@ export default function Marquee({
       // inside the 0 to -50% window means the viewport is always covered,
       // so the loop wraps with zero visible gap in either direction.
       // A long linear duration keeps the drift calm and continuous.
+      //
+      // Direction is chosen by picking which fromTo to build, NOT by
+      // flipping timeScale negative on an already-running repeat:-1 tween
+      // — GSAP can't play an infinitely-repeating tween backward past its
+      // start (totalTime hits 0 and the tween just stops there), which is
+      // why the strip used to freeze on an RTL language switch.
       const DURATION = 110;
-      const tween = reverse
+      const goForward = reverse === isRtl;
+      const tween = goForward
         ? gsap.fromTo(
             strip,
             { xPercent: -50 },
@@ -45,8 +42,6 @@ export default function Marquee({
             { xPercent: 0 },
             { xPercent: -50, duration: DURATION, ease: "none", repeat: -1 },
           );
-      tween.timeScale(isRtlRef.current ? -1 : 1);
-      tweenRef.current = tween;
 
       // Scroll velocity gives a gentle lean and a slight push, then settles.
       const st = ScrollTrigger.create({
@@ -58,27 +53,16 @@ export default function Marquee({
             ease: "power2.out",
             overwrite: "auto",
           });
-          const speed = gsap.utils.clamp(1, 1.8, 1 + Math.abs(v) / 3500);
-          tween.timeScale(isRtlRef.current ? -speed : speed);
+          tween.timeScale(gsap.utils.clamp(1, 1.8, 1 + Math.abs(v) / 3500));
         },
       });
 
       return () => {
         st.kill();
         tween.kill();
-        tweenRef.current = null;
       };
     },
-    { scope: wrapRef, dependencies: [items.join(), reverse], revertOnUpdate: true },
-  );
-
-  // Flip the running tween's direction live when the language toggles,
-  // instead of rebuilding the whole GSAP context.
-  useGSAP(
-    () => {
-      tweenRef.current?.timeScale(isRtl ? -1 : 1);
-    },
-    { dependencies: [isRtl] },
+    { scope: wrapRef, dependencies: [items.join(), reverse, isRtl], revertOnUpdate: true },
   );
 
   // Each half repeats the items enough times to always exceed the viewport
@@ -112,7 +96,7 @@ export default function Marquee({
       // Physical LTR layout regardless of page direction: the translation
       // math stays identical in Arabic and English, and the strip always
       // anchors to the viewport's left edge. Direction is handled purely
-      // via the tween's timeScale sign above.
+      // by which fromTo variant is built above.
       dir="ltr"
       className="pointer-events-none overflow-hidden border-y border-ink/[0.06] py-8 sm:py-10"
     >

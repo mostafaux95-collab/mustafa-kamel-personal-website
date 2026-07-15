@@ -39,7 +39,7 @@ export default function NextSteps() {
             const isLast = i === t.nextSteps.steps.length - 1;
             return (
               <div key={step.title} data-reveal className="flex-1">
-                <div className="flex items-start gap-4">
+                <div className="flex h-full items-stretch gap-4">
                   <div className="group relative flex-1 rounded-3xl border border-ink/[0.08] bg-[var(--color-card)] p-7 transition-colors duration-500 hover:border-[var(--color-accent)]/40">
                     <div className="flex items-center justify-between">
                       <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-ink/10 bg-ink/[0.03]">

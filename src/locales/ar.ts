@@ -327,6 +327,8 @@ export const ar: Locale = {
     namePh: "اسمك الكريم",
     email: "البريد الإلكتروني",
     emailPh: "you@company.com",
+    whatsapp: "رقم واتساب",
+    whatsappPh: "+20 10 1234 5678",
     message: "الرسالة",
     messagePh: "حدّثني عن منتجك وما تحتاجه…",
     send: "أرسل الرسالة",
