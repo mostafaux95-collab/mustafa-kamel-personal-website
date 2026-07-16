@@ -55,6 +55,7 @@ export const en = {
     para: "A selection of platforms where I owned design end to end, from research and systems to the pixels that shipped.",
     allWork: "All work",
     filters: { all: "All", saas: "SaaS", ecommerce: "E-commerce", fnb: "F&B" },
+    loading: "Loading projects…",
   },
   projects: {
     "tamm-seller-dashboard": {
@@ -381,11 +382,12 @@ export const en = {
   caseStudy: {
     back: "Back to work",
     role: "Role",
-    team: "Team",
-    gallery: "Gallery",
-    finalUi: "Final UI",
+    challenge: "The challenge",
+    solution: "The solution",
     impact: "Impact",
-    reflection: "Reflection",
+    techStack: "Tech stack",
+    tags: "Tags",
+    notFound: "This case study isn't available.",
   },
   palette: {
     placeholder: "Type a command…",

@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "@/components/sections/ProjectCard";
-import { projects } from "@/data/projects";
+import { fetchPublic } from "@/lib/api";
+import type { ApiProject } from "@/lib/projectsApi";
 import { useLang } from "@/lib/i18n";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 
@@ -20,6 +22,12 @@ export default function ProjectGrid() {
   const indicatorRef = useRef<HTMLSpanElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const firstRun = useRef(true);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["public", "projects"],
+    queryFn: () => fetchPublic<{ items: ApiProject[] }>("/projects?pageSize=100"),
+  });
+  const projects = data?.items ?? [];
 
   const visible = filter === "all" ? projects : projects.filter((p) => p.tags.includes(filter));
 
@@ -124,6 +132,12 @@ export default function ProjectGrid() {
           </button>
         ))}
       </div>
+
+      {isLoading && (
+        <p className="py-16 text-center text-sm text-[var(--color-ink-muted)]">
+          {t.projectsSection.loading}
+        </p>
+      )}
 
       <div ref={listRef} className="flex flex-col gap-8 sm:gap-10">
         {visible.map((project, i) => (

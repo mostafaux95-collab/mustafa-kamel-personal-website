@@ -2,31 +2,35 @@ import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { Project } from "@/data/projects";
+import type { ApiProject } from "@/lib/projectsApi";
 import CountUp from "@/components/ui/CountUp";
+import { getAssetUrl } from "@/lib/api";
 import { useFinePointer, useReducedMotion } from "@/lib/useReducedMotion";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 import { useLang } from "@/lib/i18n";
 
-export default function ProjectCard({ project, index }: { project: Project; index: number }) {
+export default function ProjectCard({ project, index }: { project: ApiProject; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const numberRef = useRef<HTMLSpanElement>(null);
   const isFine = useFinePointer();
   const reduced = useReducedMotion();
   const tiltEnabled = isFine && !reduced;
-  const { t } = useLang();
+  const { lang } = useLang();
+  const isAr = lang === "ar";
 
-  // Translated copy for this card; falls back to the base data if a slug
-  // ever exists without a locale entry.
-  const copy = t.projects[project.slug as keyof typeof t.projects] ?? {
+  const copy = {
     company: project.company,
-    title: project.title,
-    tagline: project.tagline,
+    title: isAr && project.titleAr ? project.titleAr : project.title,
+    tagline: isAr && project.taglineAr ? project.taglineAr : project.tagline,
     category: project.category,
     year: project.year,
-    metrics: project.metrics,
+    metrics: project.metrics.map((m) => ({
+      value: m.value,
+      label: isAr && m.labelAr ? m.labelAr : m.label,
+    })),
   };
+  const thumbnailSrc = getAssetUrl(project.thumbnailUrl);
 
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
@@ -86,9 +90,16 @@ export default function ProjectCard({ project, index }: { project: Project; inde
       <div
         className="relative h-[46vh] min-h-[320px] w-full overflow-hidden sm:h-[56vh]"
         style={{
-          background: `linear-gradient(135deg, ${project.cover.gradientFrom}, ${project.cover.gradientTo})`,
+          background: `linear-gradient(135deg, ${project.coverGradientFrom}, ${project.coverGradientTo})`,
         }}
       >
+        {thumbnailSrc && (
+          <img
+            src={thumbnailSrc}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         <div
           ref={glowRef}
           className="absolute -inset-[15%] opacity-40 transition-transform duration-700 ease-out group-hover:scale-105"

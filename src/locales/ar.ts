@@ -57,6 +57,7 @@ export const ar: Locale = {
     para: "مجموعة من المنصّات التي قدت تصميمها من البداية للنهاية، من البحث والأنظمة إلى آخر بكسل وصل للإنتاج.",
     allWork: "كل الأعمال",
     filters: { all: "الكل", saas: "SaaS", ecommerce: "تجارة إلكترونية", fnb: "مأكولات ومشروبات" },
+    loading: "جارٍ تحميل المشاريع…",
   },
   projects: {
     "tamm-seller-dashboard": {
@@ -371,11 +372,12 @@ export const ar: Locale = {
   caseStudy: {
     back: "عودة إلى الأعمال",
     role: "الدور",
-    team: "الفريق",
-    gallery: "المعرض",
-    finalUi: "الواجهة النهائية",
+    challenge: "التحدي",
+    solution: "الحل",
     impact: "الأثر",
-    reflection: "خلاصة",
+    techStack: "التقنيات المستخدمة",
+    tags: "الوسوم",
+    notFound: "دراسة الحالة هذه غير متاحة.",
   },
   palette: {
     placeholder: "اكتب أمرًا…",
