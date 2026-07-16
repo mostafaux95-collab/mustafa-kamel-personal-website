@@ -1,4 +1,14 @@
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:4000/api";
+// The origin without the /api suffix — MediaAsset.url is stored as a path
+// relative to this (e.g. "/uploads/xxx.jpg"), served outside the /api
+// prefix (see server/src/main.ts's useStaticAssets call).
+const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
+
+export function getAssetUrl(path: string | null | undefined): string | undefined {
+  if (!path) return undefined;
+  if (/^https?:\/\//.test(path)) return path;
+  return `${API_ORIGIN}${path}`;
+}
 
 // Access token lives in memory only (never localStorage) — the refresh
 // token is an httpOnly cookie the browser handles automatically. On a
@@ -59,7 +69,11 @@ async function refreshAccessToken(): Promise<boolean> {
 
 async function request<T>(path: string, options: RequestInit = {}, isRetry = false): Promise<T> {
   const headers = new Headers(options.headers);
-  headers.set("Content-Type", "application/json");
+  // Let the browser set Content-Type (with the multipart boundary) itself
+  // when uploading FormData — setting it manually breaks the boundary.
+  if (!(options.body instanceof FormData)) {
+    headers.set("Content-Type", "application/json");
+  }
   if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
 
   const res = await fetch(`${API_URL}${path}`, {
@@ -91,5 +105,6 @@ export const api = {
   patch: <T>(path: string, data?: unknown) =>
     request<T>(path, { method: "PATCH", body: data !== undefined ? JSON.stringify(data) : undefined }),
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+  upload: <T>(path: string, formData: FormData) => request<T>(path, { method: "POST", body: formData }),
   refresh: refreshAccessToken,
 };

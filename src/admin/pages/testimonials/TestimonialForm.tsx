@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, Select, Checkbox, FormActions } from "@/admin/components/FormFields";
+import { ImageUpload } from "@/admin/components/ImageUpload";
 
 interface FormValues {
   quote: string;
@@ -13,6 +14,7 @@ interface FormValues {
   avatarInitial: string;
   avatarBg: string;
   avatarFg: string;
+  avatarUrl: string | undefined;
   status: "DRAFT" | "PUBLISHED";
   featured: boolean;
   sortOrder: number;
@@ -27,6 +29,7 @@ const EMPTY: FormValues = {
   avatarInitial: "",
   avatarBg: "#432666",
   avatarFg: "#ffffff",
+  avatarUrl: undefined,
   status: "DRAFT",
   featured: false,
   sortOrder: 0,
@@ -56,6 +59,7 @@ export default function TestimonialForm() {
         avatarInitial: (existing.avatarInitial as string) ?? "",
         avatarBg: (existing.avatarBg as string) ?? "#432666",
         avatarFg: (existing.avatarFg as string) ?? "#ffffff",
+        avatarUrl: (existing.avatarUrl as string) ?? undefined,
       }));
     }
   }, [existing]);
@@ -108,7 +112,11 @@ export default function TestimonialForm() {
           </Row>
         </Section>
 
-        <Section title="Avatar tile">
+        <Section title="Avatar">
+          <ImageUpload label="Photo" value={values.avatarUrl} onChange={(v) => set("avatarUrl", v)} />
+          <p className="mt-4 mb-1.5 text-xs text-ink/40">
+            Fallback monogram tile — used until a photo is uploaded above.
+          </p>
           <Row>
             <Field label="Initial" value={values.avatarInitial} onChange={(v) => set("avatarInitial", v)} />
             <div />

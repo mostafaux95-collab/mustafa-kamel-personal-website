@@ -17,6 +17,7 @@ import { ClientsModule } from './clients/clients.module';
 import { ServicesModule } from './services/services.module';
 import { SkillsModule } from './skills/skills.module';
 import { ExperienceModule } from './experience/experience.module';
+import { MediaModule } from './media/media.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -51,6 +52,7 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
     ServicesModule,
     SkillsModule,
     ExperienceModule,
+    MediaModule,
   ],
   providers: [
     // Applied in array order: rate-limit first (cheapest check), then

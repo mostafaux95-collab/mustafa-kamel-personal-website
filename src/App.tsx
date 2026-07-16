@@ -1,5 +1,7 @@
 import { useCallback, useState } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { publicQueryClient } from "@/lib/publicQueryClient";
 import Home from "@/pages/Home";
 import Work from "@/pages/Work";
 import AboutPage from "@/pages/AboutPage";
@@ -54,24 +56,26 @@ export default function App() {
   const isAdmin = location.pathname.startsWith("/admin");
 
   return (
-    <ThemeProvider>
-      <LangProvider>
-        <SoundProvider>
-          {!isAdmin && <PublicChrome />}
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/work" element={<Work />} />
-            <Route path="/work/:slug" element={<CaseStudy />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/skills" element={<SkillsPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/cv" element={<Cv />} />
-            <Route path="/admin/*" element={<AdminApp />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </SoundProvider>
-      </LangProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={publicQueryClient}>
+      <ThemeProvider>
+        <LangProvider>
+          <SoundProvider>
+            {!isAdmin && <PublicChrome />}
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/work/:slug" element={<CaseStudy />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/skills" element={<SkillsPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/cv" element={<Cv />} />
+              <Route path="/admin/*" element={<AdminApp />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </SoundProvider>
+        </LangProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, FormActions } from "@/admin/components/FormFields";
+import { ImageUpload } from "@/admin/components/ImageUpload";
 
 interface Metric {
   value: string;
@@ -24,6 +25,8 @@ interface ProjectFormValues {
   year: string;
   coverGradientFrom: string;
   coverGradientTo: string;
+  thumbnailUrl: string | undefined;
+  coverImageUrl: string | undefined;
   challenge: string;
   challengeAr: string;
   solution: string;
@@ -54,6 +57,8 @@ const EMPTY: ProjectFormValues = {
   year: "",
   coverGradientFrom: "#432666",
   coverGradientTo: "#6a3f9c",
+  thumbnailUrl: undefined,
+  coverImageUrl: undefined,
   challenge: "",
   challengeAr: "",
   solution: "",
@@ -106,6 +111,8 @@ export default function ProjectForm() {
         metaDescriptionAr: existing.metaDescriptionAr ?? "",
         techStack: existing.techStack.join(", "),
         tags: existing.tags.join(", "),
+        thumbnailUrl: existing.thumbnailUrl ?? undefined,
+        coverImageUrl: existing.coverImageUrl ?? undefined,
       });
     }
   }, [existing]);
@@ -189,10 +196,25 @@ export default function ProjectForm() {
           </Row>
         </Section>
 
-        <Section title="Cover gradient">
+        <Section title="Cover image">
+          <div className="flex flex-wrap gap-6">
+            <ImageUpload
+              label="Thumbnail (grid card)"
+              value={values.thumbnailUrl}
+              onChange={(v) => set("thumbnailUrl", v)}
+            />
+            <ImageUpload
+              label="Cover (case study header)"
+              value={values.coverImageUrl}
+              onChange={(v) => set("coverImageUrl", v)}
+            />
+          </div>
+          <p className="mt-4 text-xs text-ink/40">
+            Fallback gradient tile — used on the public site until an image is uploaded above.
+          </p>
           <Row>
-            <ColorField label="From" value={values.coverGradientFrom} onChange={(v) => set("coverGradientFrom", v)} />
-            <ColorField label="To" value={values.coverGradientTo} onChange={(v) => set("coverGradientTo", v)} />
+            <ColorField label="Gradient from" value={values.coverGradientFrom} onChange={(v) => set("coverGradientFrom", v)} />
+            <ColorField label="Gradient to" value={values.coverGradientTo} onChange={(v) => set("coverGradientTo", v)} />
           </Row>
         </Section>
 

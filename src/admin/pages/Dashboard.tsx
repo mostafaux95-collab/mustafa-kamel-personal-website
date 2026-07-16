@@ -3,22 +3,24 @@ import { FolderKanban, Quote, Building2, Wrench, Sparkles, Briefcase } from "luc
 import { Link } from "react-router-dom";
 import { api } from "@/admin/lib/api";
 import { useAdminAuth } from "@/admin/lib/auth";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface ListResult {
   total: number;
 }
 
-const ENTITIES = [
-  { key: "projects", label: "Projects", icon: FolderKanban },
-  { key: "testimonials", label: "Testimonials", icon: Quote },
-  { key: "clients", label: "Clients", icon: Building2 },
-  { key: "services", label: "Services", icon: Wrench },
-  { key: "skills", label: "Skills", icon: Sparkles },
-  { key: "experience", label: "Experience", icon: Briefcase },
-];
-
 export default function AdminDashboard() {
   const { user } = useAdminAuth();
+  const { t } = useAdminLang();
+
+  const ENTITIES = [
+    { key: "projects", label: t.nav.projects, icon: FolderKanban },
+    { key: "testimonials", label: t.nav.testimonials, icon: Quote },
+    { key: "clients", label: t.nav.clients, icon: Building2 },
+    { key: "services", label: t.nav.services, icon: Wrench },
+    { key: "skills", label: t.nav.skills, icon: Sparkles },
+    { key: "experience", label: t.nav.experience, icon: Briefcase },
+  ];
 
   const results = useQueries({
     queries: ENTITIES.map((e) => ({
@@ -30,9 +32,9 @@ export default function AdminDashboard() {
   return (
     <div className="p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        Welcome back, {user?.firstName}
+        {t.dashboard.welcome}, {user?.firstName}
       </h1>
-      <p className="mt-1 text-sm text-ink/50">Here's what's happening with your site.</p>
+      <p className="mt-1 text-sm text-ink/50">{t.dashboard.subtitle}</p>
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {ENTITIES.map((entity, i) => (
@@ -53,8 +55,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="mt-10 rounded-2xl border border-dashed border-ink/[0.12] p-8 text-center text-sm text-ink/40">
-        Case Studies, Blog, Media Library, Contact inbox, and Analytics land here as Phase 2
-        continues.
+        {t.dashboard.comingSoon}
       </div>
     </div>
   );

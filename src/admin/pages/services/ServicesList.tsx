@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { EntityList } from "@/admin/components/EntityList";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface ServiceItem {
   id: string;
@@ -9,6 +10,7 @@ interface ServiceItem {
 }
 
 export default function ServicesList() {
+  const { t: ui } = useAdminLang();
   return (
     <EntityList<ServiceItem>
       title="Services"
@@ -28,7 +30,7 @@ export default function ServicesList() {
                 s.status === "PUBLISHED" ? "bg-emerald-500/10 text-emerald-500" : "bg-ink/[0.06] text-ink/50",
               )}
             >
-              {s.status === "PUBLISHED" ? "Published" : "Draft"}
+              {s.status === "PUBLISHED" ? ui.common.published : ui.common.draft}
             </span>
           ),
         },

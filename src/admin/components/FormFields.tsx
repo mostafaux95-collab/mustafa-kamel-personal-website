@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 // Shared building blocks for admin entity forms (Projects, Testimonials,
 // Clients, Services, Skills, Experience) — kept deliberately plain
@@ -176,6 +177,7 @@ export function FormActions({
   onCancel: () => void;
   createLabel: string;
 }) {
+  const { t } = useAdminLang();
   return (
     <div className="flex gap-3 pt-2">
       <button
@@ -183,14 +185,14 @@ export function FormActions({
         disabled={isPending}
         className="rounded-full bg-[var(--color-accent)] px-7 py-3 font-display text-sm font-semibold text-[#1a0f10] disabled:opacity-60"
       >
-        {isPending ? "Saving…" : isEdit ? "Save changes" : createLabel}
+        {isPending ? t.common.saving : isEdit ? t.common.save : createLabel}
       </button>
       <button
         type="button"
         onClick={onCancel}
         className="rounded-full border border-ink/10 px-7 py-3 font-display text-sm font-semibold text-ink/70"
       >
-        Cancel
+        {t.common.cancel}
       </button>
     </div>
   );

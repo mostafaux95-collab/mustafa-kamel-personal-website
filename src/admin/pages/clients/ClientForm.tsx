@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, ColorField, Select, Checkbox, FormActions } from "@/admin/components/FormFields";
+import { ImageUpload } from "@/admin/components/ImageUpload";
 
 interface FormValues {
   name: string;
@@ -10,6 +11,7 @@ interface FormValues {
   logoInitial: string;
   logoBg: string;
   logoFg: string;
+  logoUrl: string | undefined;
   website: string;
   category: string;
   status: "DRAFT" | "PUBLISHED";
@@ -23,6 +25,7 @@ const EMPTY: FormValues = {
   logoInitial: "",
   logoBg: "#432666",
   logoFg: "#ffffff",
+  logoUrl: undefined,
   website: "",
   category: "",
   status: "DRAFT",
@@ -52,6 +55,7 @@ export default function ClientForm() {
         nameAr: (existing.nameAr as string) ?? "",
         website: (existing.website as string) ?? "",
         category: (existing.category as string) ?? "",
+        logoUrl: (existing.logoUrl as string) ?? undefined,
       }));
     }
   }, [existing]);
@@ -101,9 +105,13 @@ export default function ClientForm() {
           </Row>
         </Section>
 
-        <Section title="Logo tile">
+        <Section title="Logo">
+          <ImageUpload label="Logo image" value={values.logoUrl} onChange={(v) => set("logoUrl", v)} />
+          <p className="mt-4 mb-1.5 text-xs text-ink/40">
+            Fallback monogram tile — used until a logo is uploaded above.
+          </p>
           <Row>
-            <Field label="Initial" value={values.logoInitial} onChange={(v) => set("logoInitial", v)} required />
+            <Field label="Initial" value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />
             <div />
           </Row>
           <Row>

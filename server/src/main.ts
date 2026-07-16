@@ -1,22 +1,39 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { cleanupOpenApiDoc, ZodValidationPipe } from 'nestjs-zod';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import { mkdirSync } from 'node:fs';
 import { AppModule } from './app.module';
+import { UPLOAD_DIR } from './media/media.service';
 import type { AppConfig } from './config/configuration';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  mkdirSync(UPLOAD_DIR, { recursive: true });
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService<AppConfig, true>);
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      // Uploaded images are fetched cross-origin by the Vite dev server
+      // (localhost:5173) and the eventual production frontend origin —
+      // helmet's default CORP header blocks that unless relaxed.
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+    }),
+  );
   app.use(cookieParser(config.get('cookieSecret', { infer: true })));
   app.enableCors({
     origin: config.get('corsOrigin', { infer: true }),
     credentials: true,
   });
+
+  // Served outside the /api prefix (setGlobalPrefix only applies to
+  // controller routes) so a MediaAsset's stored `url` (e.g.
+  // "/uploads/xxx.jpg") resolves directly against the API origin.
+  app.useStaticAssets(UPLOAD_DIR, { prefix: '/uploads' });
 
   app.useGlobalPipes(new ZodValidationPipe());
   app.setGlobalPrefix('api');

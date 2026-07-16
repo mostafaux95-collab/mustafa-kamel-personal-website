@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { EntityList } from "@/admin/components/EntityList";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface ExperienceItem {
   id: string;
@@ -10,6 +11,7 @@ interface ExperienceItem {
 }
 
 export default function ExperienceList() {
+  const { t: ui } = useAdminLang();
   return (
     <EntityList<ExperienceItem>
       title="Experience"
@@ -30,7 +32,7 @@ export default function ExperienceList() {
                 e.status === "PUBLISHED" ? "bg-emerald-500/10 text-emerald-500" : "bg-ink/[0.06] text-ink/50",
               )}
             >
-              {e.status === "PUBLISHED" ? "Published" : "Draft"}
+              {e.status === "PUBLISHED" ? ui.common.published : ui.common.draft}
             </span>
           ),
         },

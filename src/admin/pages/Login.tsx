@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
 import { useAdminAuth } from "@/admin/lib/auth";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 import { ApiError } from "@/admin/lib/api";
 
 export default function AdminLogin() {
   const { status, login } = useAdminAuth();
+  const { t } = useAdminLang();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
@@ -26,7 +28,7 @@ export default function AdminLogin() {
       await login(email, password);
       navigate("/admin", { replace: true });
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Something went wrong. Try again.");
+      setError(err instanceof ApiError ? err.message : t.login.genericError);
     } finally {
       setLoading(false);
     }
@@ -36,8 +38,8 @@ export default function AdminLogin() {
     <div className="flex min-h-screen items-center justify-center bg-[var(--color-bg)] px-4 text-ink">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <span className="font-display text-lg font-semibold">Mustafa Kamel</span>
-          <p className="mt-1 text-sm text-ink/50">Sign in to the admin dashboard</p>
+          <span className="font-display text-lg font-semibold">{t.login.title}</span>
+          <p className="mt-1 text-sm text-ink/50">{t.login.subtitle}</p>
         </div>
 
         <form
@@ -51,10 +53,10 @@ export default function AdminLogin() {
           )}
 
           <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
-            Email
+            {t.login.email}
           </label>
           <div className="relative mb-5">
-            <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35" />
+            <Mail size={16} className="absolute start-4 top-1/2 -translate-y-1/2 text-ink/35" />
             <input
               type="email"
               required
@@ -67,10 +69,10 @@ export default function AdminLogin() {
           </div>
 
           <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
-            Password
+            {t.login.password}
           </label>
           <div className="relative mb-6">
-            <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink/35" />
+            <Lock size={16} className="absolute start-4 top-1/2 -translate-y-1/2 text-ink/35" />
             <input
               type="password"
               required
@@ -86,7 +88,7 @@ export default function AdminLogin() {
             disabled={loading}
             className="w-full rounded-full bg-[var(--color-accent)] px-6 py-3.5 font-display text-sm font-semibold text-[#1a0f10] transition-opacity disabled:opacity-60"
           >
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? t.login.signingIn : t.login.signIn}
           </button>
         </form>
       </div>

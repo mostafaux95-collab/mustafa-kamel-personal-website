@@ -3,11 +3,28 @@ import FadeIn from "@/components/ui/FadeIn";
 import { useLang } from "@/lib/i18n";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 import { useRef } from "react";
-import { COMPANY_LOGOS } from "@/data/companyLogos";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPublic, getAssetUrl } from "@/lib/api";
+
+interface ClientItem {
+  id: string;
+  name: string;
+  nameAr: string | null;
+  logoInitial: string | null;
+  logoBg: string | null;
+  logoFg: string | null;
+  logoUrl: string | null;
+}
 
 export default function Companies() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const groupRef = useRef<HTMLDivElement>(null);
+
+  const { data } = useQuery({
+    queryKey: ["public", "clients"],
+    queryFn: () => fetchPublic<{ items: ClientItem[] }>("/clients?pageSize=50"),
+  });
+  const clients = data?.items ?? [];
 
   useGSAP(
     () => {
@@ -49,8 +66,10 @@ export default function Companies() {
         });
       });
     },
-    { scope: groupRef, dependencies: [t], revertOnUpdate: true },
+    { scope: groupRef, dependencies: [t, clients.length], revertOnUpdate: true },
   );
+
+  if (clients.length === 0) return null;
 
   return (
     <section className="border-t border-ink/[0.06] py-16 sm:py-20">
@@ -64,28 +83,39 @@ export default function Companies() {
           ref={groupRef}
           className="mt-9 flex flex-wrap items-center gap-x-12 gap-y-8"
         >
-          {t.cv.roles.map((role, i) => {
-            const logo = COMPANY_LOGOS[i % COMPANY_LOGOS.length];
+          {clients.map((client) => {
+            const name = lang === "ar" && client.nameAr ? client.nameAr : client.name;
+            const logoSrc = getAssetUrl(client.logoUrl);
             return (
               <div
-                key={role.company + role.period}
+                key={client.id}
                 data-company
                 data-cursor="link"
                 className="group flex cursor-default items-center gap-3.5"
               >
-                <span
-                  data-tile
-                  aria-hidden
-                  className="flex h-10 w-10 items-center justify-center rounded-xl font-display text-base font-bold shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6 sm:h-11 sm:w-11"
-                  style={{ backgroundColor: logo.bg, color: logo.fg }}
-                >
-                  {logo.initial}
-                </span>
+                {logoSrc ? (
+                  <img
+                    data-tile
+                    src={logoSrc}
+                    alt=""
+                    aria-hidden
+                    className="h-10 w-10 rounded-xl object-cover shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6 sm:h-11 sm:w-11"
+                  />
+                ) : (
+                  <span
+                    data-tile
+                    aria-hidden
+                    className="flex h-10 w-10 items-center justify-center rounded-xl font-display text-base font-bold shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6 sm:h-11 sm:w-11"
+                    style={{ backgroundColor: client.logoBg ?? "#432666", color: client.logoFg ?? "#ffffff" }}
+                  >
+                    {client.logoInitial ?? name.slice(0, 1)}
+                  </span>
+                )}
                 <span
                   data-name
                   className="font-display text-2xl font-semibold text-ink/40 transition-colors duration-300 group-hover:text-ink sm:text-3xl"
                 >
-                  {role.company}
+                  {name}
                 </span>
               </div>
             );

@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { EntityList } from "@/admin/components/EntityList";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface TestimonialItem {
   id: string;
@@ -10,6 +11,7 @@ interface TestimonialItem {
 }
 
 export default function TestimonialsList() {
+  const { t: ui } = useAdminLang();
   return (
     <EntityList<TestimonialItem>
       title="Testimonials"
@@ -30,7 +32,7 @@ export default function TestimonialsList() {
                 t.status === "PUBLISHED" ? "bg-emerald-500/10 text-emerald-500" : "bg-ink/[0.06] text-ink/50",
               )}
             >
-              {t.status === "PUBLISHED" ? "Published" : "Draft"}
+              {t.status === "PUBLISHED" ? ui.common.published : ui.common.draft}
             </span>
           ),
         },

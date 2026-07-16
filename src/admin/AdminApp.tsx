@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { adminQueryClient } from "./lib/queryClient";
 import { AdminAuthProvider, RequireAuth } from "./lib/auth";
+import { AdminLangProvider, useAdminLang } from "./lib/adminI18n";
 import AdminLayout from "./layout/AdminLayout";
 import AdminLogin from "./pages/Login";
 import AdminDashboard from "./pages/Dashboard";
@@ -20,16 +21,26 @@ import ExperienceForm from "./pages/experience/ExperienceForm";
 
 // Mounted at /admin/* by the main App router. Deliberately isolated from
 // the public site's providers (i18n, sound, GSAP scroll setup, cursor) —
-// the admin dashboard is a plain, LTR-only, non-animated tool UI.
+// the admin dashboard has its own language state (AdminLangProvider,
+// persisted separately from the public site's) and a non-animated tool UI.
 export default function AdminApp() {
   return (
+    <AdminLangProvider>
+      <AdminAppShell />
+    </AdminLangProvider>
+  );
+}
+
+function AdminAppShell() {
+  const { dir, lang } = useAdminLang();
+
+  return (
     // The public site can leave document.dir="rtl" behind (persisted
-    // Arabic preference). Tailwind's logical-property classes (ps-/pe-)
-    // used throughout the admin UI resolve off the nearest `dir`
-    // ancestor, not just <html>, so pinning it here keeps the admin
-    // panel LTR regardless of what the visitor last set on the public
-    // site — without needing to rewrite every class to physical sides.
-    <div dir="ltr">
+    // Arabic preference), and Tailwind's logical-property classes
+    // (ps-/pe-) resolve off the nearest `dir` ancestor, not just <html> —
+    // so the admin panel's own language state drives its own `dir` here,
+    // independent of whatever the visitor last set on the public site.
+    <div dir={dir} lang={lang}>
       <QueryClientProvider client={adminQueryClient}>
         <AdminAuthProvider>
           <Routes>

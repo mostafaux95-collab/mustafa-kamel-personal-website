@@ -5,6 +5,7 @@ import { Plus, Star, Trash2 } from "lucide-react";
 import clsx from "clsx";
 import { api } from "@/admin/lib/api";
 import { useHasPermission } from "@/admin/lib/auth";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface ProjectListItem {
   id: string;
@@ -26,6 +27,7 @@ export default function ProjectsList() {
   const [search, setSearch] = useState("");
   const canWrite = useHasPermission("projects:write");
   const queryClient = useQueryClient();
+  const { t } = useAdminLang();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin", "projects", "list"],
@@ -46,7 +48,9 @@ export default function ProjectsList() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-semibold text-ink">Projects</h1>
-          <p className="mt-1 text-sm text-ink/50">{data?.total ?? 0} total</p>
+          <p className="mt-1 text-sm text-ink/50">
+            {data?.total ?? 0} {t.common.total}
+          </p>
         </div>
         {canWrite && (
           <Link
@@ -54,7 +58,7 @@ export default function ProjectsList() {
             className="flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 py-2.5 font-display text-sm font-semibold text-[#1a0f10]"
           >
             <Plus size={16} />
-            New project
+            {t.common.new}
           </Link>
         )}
       </div>
@@ -69,11 +73,11 @@ export default function ProjectsList() {
       <div className="mt-6 overflow-hidden rounded-2xl border border-ink/[0.08]">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-ink/[0.08] bg-[var(--color-card)] text-left text-xs uppercase tracking-widest text-ink/45">
-              <th className="px-5 py-3 font-medium">Title</th>
-              <th className="px-5 py-3 font-medium">Company</th>
-              <th className="px-5 py-3 font-medium">Category</th>
-              <th className="px-5 py-3 font-medium">Status</th>
+            <tr className="border-b border-ink/[0.08] bg-[var(--color-card)] text-start text-xs uppercase tracking-widest text-ink/45">
+              <th className="px-5 py-3 text-start font-medium">Title</th>
+              <th className="px-5 py-3 text-start font-medium">Company</th>
+              <th className="px-5 py-3 text-start font-medium">Category</th>
+              <th className="px-5 py-3 text-start font-medium">{t.common.status}</th>
               <th className="px-5 py-3 font-medium"></th>
             </tr>
           </thead>
@@ -81,14 +85,14 @@ export default function ProjectsList() {
             {isLoading && (
               <tr>
                 <td colSpan={5} className="px-5 py-10 text-center text-ink/40">
-                  Loading…
+                  {t.common.loading}
                 </td>
               </tr>
             )}
             {!isLoading && items.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-5 py-10 text-center text-ink/40">
-                  No projects yet.
+                  {t.common.empty}
                 </td>
               </tr>
             )}
@@ -117,7 +121,7 @@ export default function ProjectsList() {
                         : "bg-ink/[0.06] text-ink/50",
                     )}
                   >
-                    {p.status === "PUBLISHED" ? "Published" : "Draft"}
+                    {p.status === "PUBLISHED" ? t.common.published : t.common.draft}
                   </span>
                 </td>
                 <td className="px-5 py-3.5 text-end">
@@ -127,7 +131,7 @@ export default function ProjectsList() {
                         if (confirm(`Delete "${p.title}"?`)) deleteMutation.mutate(p.id);
                       }}
                       className="text-ink/35 transition-colors hover:text-red-400"
-                      aria-label="Delete"
+                      aria-label={t.common.delete}
                     >
                       <Trash2 size={15} />
                     </button>

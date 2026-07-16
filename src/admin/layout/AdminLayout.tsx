@@ -10,31 +10,34 @@ import {
   LogOut,
   Moon,
   Sun,
+  Languages,
 } from "lucide-react";
 import { useAdminAuth } from "@/admin/lib/auth";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 import { useTheme } from "@/lib/theme";
 import clsx from "clsx";
-
-const NAV = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/admin/projects", label: "Projects", icon: FolderKanban, end: false },
-  { to: "/admin/testimonials", label: "Testimonials", icon: Quote, end: false },
-  { to: "/admin/clients", label: "Clients", icon: Building2, end: false },
-  { to: "/admin/services", label: "Services", icon: Wrench, end: false },
-  { to: "/admin/skills", label: "Skills", icon: Sparkles, end: false },
-  { to: "/admin/experience", label: "Experience", icon: Briefcase, end: false },
-];
 
 export default function AdminLayout() {
   const { user, logout } = useAdminAuth();
   const { theme, toggle } = useTheme();
+  const { t, toggle: toggleLang } = useAdminLang();
+
+  const NAV = [
+    { to: "/admin", label: t.nav.dashboard, icon: LayoutDashboard, end: true },
+    { to: "/admin/projects", label: t.nav.projects, icon: FolderKanban, end: false },
+    { to: "/admin/testimonials", label: t.nav.testimonials, icon: Quote, end: false },
+    { to: "/admin/clients", label: t.nav.clients, icon: Building2, end: false },
+    { to: "/admin/services", label: t.nav.services, icon: Wrench, end: false },
+    { to: "/admin/skills", label: t.nav.skills, icon: Sparkles, end: false },
+    { to: "/admin/experience", label: t.nav.experience, icon: Briefcase, end: false },
+  ];
 
   return (
     <div className="flex min-h-screen bg-[var(--color-bg)] text-ink">
       <aside className="flex w-64 shrink-0 flex-col border-e border-ink/[0.08] bg-[var(--color-card)]">
         <div className="flex h-16 items-center border-b border-ink/[0.08] px-6">
           <span className="font-display text-sm font-semibold tracking-tight">
-            Mustafa Kamel <span className="text-ink/40">/ Admin</span>
+            Mustafa Kamel <span className="text-ink/40">/ {t.layout.admin}</span>
           </span>
         </div>
         <nav className="flex-1 space-y-1 p-4">
@@ -76,16 +79,23 @@ export default function AdminLayout() {
               className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-ink/10 py-2 text-xs font-medium text-ink/60 transition-colors hover:text-ink"
             >
               {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-              Theme
+              {t.layout.theme}
             </button>
             <button
-              onClick={() => logout()}
+              onClick={toggleLang}
               className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-ink/10 py-2 text-xs font-medium text-ink/60 transition-colors hover:text-ink"
             >
-              <LogOut size={14} />
-              Sign out
+              <Languages size={14} />
+              {t.layout.language}
             </button>
           </div>
+          <button
+            onClick={() => logout()}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-ink/10 py-2 text-xs font-medium text-ink/60 transition-colors hover:text-ink"
+          >
+            <LogOut size={14} />
+            {t.layout.signOut}
+          </button>
         </div>
       </aside>
 

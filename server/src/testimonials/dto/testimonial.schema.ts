@@ -10,6 +10,7 @@ export const TestimonialFieldsSchema = z.object({
   avatarInitial: z.string().optional(),
   avatarBg: z.string().optional(),
   avatarFg: z.string().optional(),
+  avatarUrl: z.string().optional(),
   status: z.nativeEnum(ContentStatus).default(ContentStatus.DRAFT),
   featured: z.boolean().default(false),
   sortOrder: z.coerce.number().int().default(0),

@@ -142,6 +142,12 @@ model Project {
   coverGradientFrom String
   coverGradientTo   String
 
+  // Real uploads (media library) take priority over the gradient tile
+  // above when present — gradient stays as the fallback for projects
+  // that haven't had a cover image uploaded yet.
+  thumbnailUrl   String?
+  coverImageUrl  String?
+
   challenge   String
   challengeAr String?
   solution    String
@@ -186,11 +192,13 @@ model Testimonial {
 
   company String
 
-  // Placeholder monogram tile until the media library (later phase)
-  // supports a real avatar upload — same pattern as data/companyLogos.ts.
+  // Monogram tile is the fallback; avatarUrl (media library upload)
+  // takes priority when present — same real-image-over-placeholder
+  // pattern as Project's thumbnailUrl/coverImageUrl.
   avatarInitial String?
   avatarBg      String?
   avatarFg      String?
+  avatarUrl     String?
 
   status    ContentStatus @default(DRAFT)
   featured  Boolean       @default(false)
@@ -212,9 +220,12 @@ model Client {
   name   String
   nameAr String?
 
-  logoInitial String
-  logoBg      String
-  logoFg      String
+  // Monogram tile fields are now optional fallbacks — logoUrl (media
+  // library upload) takes priority when present.
+  logoInitial String?
+  logoBg      String?
+  logoFg      String?
+  logoUrl     String?
 
   website  String?
   category String?
@@ -316,4 +327,34 @@ model Experience {
 
   @@index([status, sortOrder])
   @@map("experiences")
+}
+
+// Local-disk media library (Phase 3 pulled forward). `url` is a path
+// relative to the API's static /uploads mount (e.g. "/uploads/xxx.jpg"),
+// not an absolute URL — callers build the full src by prefixing the API
+// origin. Swapping to Cloudinary/S3 later only changes how `url` is
+// produced, not how it's consumed.
+model MediaAsset {
+  id String @id @default(uuid())
+
+  url          String
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+
+  altText   String?
+  altTextAr String?
+  folder    String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([folder])
+  @@map("media_assets")
 }

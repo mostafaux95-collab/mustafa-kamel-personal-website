@@ -16,7 +16,7 @@ const BCRYPT_ROUNDS = 12;
 // Editor can read+write content but not manage users/settings, Viewer is
 // read-only everywhere. Admin-only permissions (users/settings) stay
 // Super-Admin-exclusive.
-const CONTENT_ENTITIES = ['projects', 'testimonials', 'clients', 'services', 'skills', 'experience'];
+const CONTENT_ENTITIES = ['projects', 'testimonials', 'clients', 'services', 'skills', 'experience', 'media'];
 
 const PERMISSIONS: { key: string; description: string }[] = [
   { key: 'users:invite', description: 'Invite new admin users' },
