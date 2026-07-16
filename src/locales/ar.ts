@@ -372,6 +372,7 @@ export const ar: Locale = {
   caseStudy: {
     back: "عودة إلى الأعمال",
     role: "الدور",
+    gallery: "معرض الصور",
     challenge: "التحدي",
     solution: "الحل",
     impact: "الأثر",

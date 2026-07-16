@@ -27,6 +27,7 @@ export const ProjectFieldsSchema = z.object({
   coverGradientTo: z.string().min(1),
   thumbnailUrl: z.string().optional(),
   coverImageUrl: z.string().optional(),
+  galleryUrls: z.array(z.string()).default([]),
   challenge: z.string().min(1),
   challengeAr: z.string().optional(),
   solution: z.string().min(1),

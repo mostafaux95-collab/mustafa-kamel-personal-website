@@ -382,6 +382,7 @@ export const en = {
   caseStudy: {
     back: "Back to work",
     role: "Role",
+    gallery: "Gallery",
     challenge: "The challenge",
     solution: "The solution",
     impact: "Impact",

@@ -121,6 +121,29 @@ export default function CaseStudy() {
           </Container>
         </section>
 
+        {project.galleryUrls.length > 0 && (
+          <section className="border-t border-ink/[0.06] py-32 sm:py-40">
+            <Container>
+              <FadeIn className="mb-16">
+                <span className="font-display text-[13px] font-medium uppercase tracking-[0.25em] text-[var(--color-accent)]">
+                  {t.caseStudy.gallery}
+                </span>
+              </FadeIn>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {project.galleryUrls.map((url, i) => (
+                  <FadeIn key={url} delay={i * 0.06}>
+                    <img
+                      src={getAssetUrl(url)}
+                      alt=""
+                      className="aspect-4/3 w-full rounded-2xl border border-ink/[0.08] object-cover"
+                    />
+                  </FadeIn>
+                ))}
+              </div>
+            </Container>
+          </section>
+        )}
+
         {project.metrics.length > 0 && (
           <section className="border-t border-ink/[0.06] py-32 sm:py-40">
             <Container>

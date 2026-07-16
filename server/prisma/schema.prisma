@@ -147,6 +147,7 @@ model Project {
   // that haven't had a cover image uploaded yet.
   thumbnailUrl   String?
   coverImageUrl  String?
+  galleryUrls    String[] @default([])
 
   challenge   String
   challengeAr String?

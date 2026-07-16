@@ -24,6 +24,7 @@ export interface ApiProject {
   coverGradientTo: string;
   thumbnailUrl: string | null;
   coverImageUrl: string | null;
+  galleryUrls: string[];
   challenge: string;
   challengeAr: string | null;
   solution: string;

@@ -5,6 +5,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, MultiSelect, FormActions } from "@/admin/components/FormFields";
 import { ImageUpload } from "@/admin/components/ImageUpload";
+import { GalleryUpload } from "@/admin/components/GalleryUpload";
 import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface Metric {
@@ -28,6 +29,7 @@ interface ProjectFormValues {
   coverGradientTo: string;
   thumbnailUrl: string | undefined;
   coverImageUrl: string | undefined;
+  galleryUrls: string[];
   challenge: string;
   challengeAr: string;
   solution: string;
@@ -60,6 +62,7 @@ const EMPTY: ProjectFormValues = {
   coverGradientTo: "#6a3f9c",
   thumbnailUrl: undefined,
   coverImageUrl: undefined,
+  galleryUrls: [],
   challenge: "",
   challengeAr: "",
   solution: "",
@@ -214,6 +217,14 @@ export default function ProjectForm() {
             <ColorField label={t.fields.gradientFrom} value={values.coverGradientFrom} onChange={(v) => set("coverGradientFrom", v)} />
             <ColorField label={t.fields.gradientTo} value={values.coverGradientTo} onChange={(v) => set("coverGradientTo", v)} />
           </Row>
+        </Section>
+
+        <Section title={t.sections.gallery}>
+          <GalleryUpload
+            label={t.fields.galleryImages}
+            value={values.galleryUrls}
+            onChange={(v) => set("galleryUrls", v)}
+          />
         </Section>
 
         <Section title={t.sections.story}>
