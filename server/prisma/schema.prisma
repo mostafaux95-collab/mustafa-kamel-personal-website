@@ -114,6 +114,28 @@ enum ContentStatus {
   PUBLISHED
 }
 
+// Public contact-form submissions. Unlike the content models, there's no
+// draft/published lifecycle — just an inbox read/unread state — and
+// createdById/updatedById stay null on creation since the submitter is
+// an anonymous site visitor, not an authenticated admin user.
+model ContactMessage {
+  id       String  @id @default(uuid())
+  name     String
+  email    String
+  whatsapp String?
+  message  String
+  isRead   Boolean @default(false)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([isRead, createdAt])
+  @@map("contact_messages")
+}
+
 // Phase 2: first content model, matching the existing frontend's
 // src/data/projects.ts card shape (grid/listing surface). The deeper
 // case-study narrative (chapters, gallery, impact) is a separate future

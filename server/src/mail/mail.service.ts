@@ -30,6 +30,19 @@ export class MailService {
     ]);
   }
 
+  async sendContactNotification(
+    to: string,
+    submission: { name: string; email: string; whatsapp?: string; message: string },
+  ): Promise<void> {
+    await this.send(to, `New contact form message from ${submission.name}`, [
+      `Name: ${submission.name}`,
+      `Email: ${submission.email}`,
+      ...(submission.whatsapp ? [`WhatsApp: ${submission.whatsapp}`] : []),
+      '',
+      submission.message,
+    ]);
+  }
+
   private async send(to: string, subject: string, lines: string[]): Promise<void> {
     const transport = this.config.get('mail.transport', { infer: true });
     const from = this.config.get('mail.from', { infer: true });
