@@ -133,7 +133,7 @@ export default function Testimonials() {
 
         <div
           ref={trackRef}
-          className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-6 pb-4 sm:mx-0 sm:px-0"
+          className="no-scrollbar -mx-6 -my-4 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-6 py-4 sm:mx-0 sm:px-0"
         >
           {hasReal
             ? realTestimonials.map((item, i) => {
