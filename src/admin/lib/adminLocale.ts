@@ -13,6 +13,7 @@ export const adminEn = {
     services: "Services",
     skills: "Skills",
     experience: "Experience",
+    messages: "Messages",
   },
   layout: {
     admin: "Admin",
@@ -33,7 +34,7 @@ export const adminEn = {
     welcome: "Welcome back",
     subtitle: "Here's what's happening with your site.",
     comingSoon:
-      "Case Studies, Blog, Media Library, Contact inbox, and Analytics land here as Phase 2 continues.",
+      "Case Studies, Blog, Media Library, and Analytics land here as Phase 2 continues.",
   },
   common: {
     new: "New",
@@ -69,6 +70,7 @@ export const adminEn = {
     content: "Content",
     role: "Role",
     summary: "Summary",
+    gallery: "Gallery",
   },
   // Field labels, shared across whichever forms use them.
   fields: {
@@ -96,8 +98,12 @@ export const adminEn = {
     metricLabelAr: "Label (AR)",
     addMetric: "Add metric",
     techStack: "Tech stack (comma-separated)",
-    tags: "Tags (comma-separated)",
+    tags: "Tags",
+    tagSaas: "SaaS",
+    tagEcommerce: "E-commerce",
+    tagFnb: "F&B",
     hasCaseStudy: "Has a full case study page",
+    galleryImages: "Gallery images",
     metaTitleEn: "Meta title (EN)",
     metaTitleAr: "Meta title (AR)",
     metaDescriptionEn: "Meta description (EN)",
@@ -116,7 +122,7 @@ export const adminEn = {
     quoteAr: "Quote (AR)",
     bodyEn: "Body (EN)",
     bodyAr: "Body (AR)",
-    icon: "Icon (lucide-react name, e.g. PenLine)",
+    icon: "Icon",
     name: "Name",
     detailEn: "Detail (EN)",
     detailAr: "Detail (AR)",
@@ -160,6 +166,17 @@ export const adminEn = {
   imageUpload: {
     clickOrDrop: "Click or drop",
     remove: "Remove image",
+    addAnother: "Add image",
+  },
+  messages: {
+    title: "Messages",
+    empty: "No messages yet.",
+    unread: "Unread",
+    read: "Read",
+    markRead: "Mark as read",
+    markUnread: "Mark as unread",
+    from: "From",
+    deleteConfirm: "Delete this message?",
   },
 };
 
@@ -174,6 +191,7 @@ export const adminAr: AdminLocale = {
     services: "الخدمات",
     skills: "المهارات",
     experience: "الخبرات",
+    messages: "الرسائل",
   },
   layout: {
     admin: "الإدارة",
@@ -194,7 +212,7 @@ export const adminAr: AdminLocale = {
     welcome: "أهلاً بعودتك",
     subtitle: "إليك آخر مستجدات موقعك.",
     comingSoon:
-      "دراسات الحالة، المدونة، مكتبة الوسائط، صندوق الرسائل، والتحليلات ستُضاف هنا مع استمرار المرحلة الثانية.",
+      "دراسات الحالة، المدونة، مكتبة الوسائط، والتحليلات ستُضاف هنا مع استمرار المرحلة الثانية.",
   },
   common: {
     new: "جديد",
@@ -229,6 +247,7 @@ export const adminAr: AdminLocale = {
     content: "المحتوى",
     role: "الدور الوظيفي",
     summary: "الملخص",
+    gallery: "معرض الصور",
   },
   fields: {
     slug: "الرابط المختصر",
@@ -255,8 +274,12 @@ export const adminAr: AdminLocale = {
     metricLabelAr: "التسمية (عربي)",
     addMetric: "إضافة مؤشر",
     techStack: "التقنيات المستخدمة (مفصولة بفواصل)",
-    tags: "الوسوم (مفصولة بفواصل)",
+    tags: "الوسوم",
+    tagSaas: "SaaS",
+    tagEcommerce: "تجارة إلكترونية",
+    tagFnb: "مأكولات ومشروبات",
     hasCaseStudy: "له صفحة دراسة حالة كاملة",
+    galleryImages: "صور المعرض",
     metaTitleEn: "عنوان السيو (إنجليزي)",
     metaTitleAr: "عنوان السيو (عربي)",
     metaDescriptionEn: "وصف السيو (إنجليزي)",
@@ -275,7 +298,7 @@ export const adminAr: AdminLocale = {
     quoteAr: "الاقتباس (عربي)",
     bodyEn: "المحتوى (إنجليزي)",
     bodyAr: "المحتوى (عربي)",
-    icon: "الأيقونة (اسم من مكتبة lucide-react، مثل PenLine)",
+    icon: "الأيقونة",
     name: "الاسم",
     detailEn: "التفاصيل (إنجليزي)",
     detailAr: "التفاصيل (عربي)",
@@ -318,5 +341,16 @@ export const adminAr: AdminLocale = {
   imageUpload: {
     clickOrDrop: "اضغط أو اسحب الصورة هنا",
     remove: "إزالة الصورة",
+    addAnother: "إضافة صورة",
+  },
+  messages: {
+    title: "الرسائل",
+    empty: "لا توجد رسائل بعد.",
+    unread: "غير مقروءة",
+    read: "مقروءة",
+    markRead: "وضع علامة كمقروءة",
+    markUnread: "وضع علامة كغير مقروءة",
+    from: "من",
+    deleteConfirm: "هل تريد حذف هذه الرسالة؟",
   },
 };

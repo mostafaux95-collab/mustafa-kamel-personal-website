@@ -149,6 +149,54 @@ export function Select({
   );
 }
 
+export function MultiSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string[];
+  onChange: (v: string[]) => void;
+  options: { value: string; label: string }[];
+}) {
+  function toggle(optionValue: string) {
+    onChange(
+      value.includes(optionValue)
+        ? value.filter((v) => v !== optionValue)
+        : [...value, optionValue],
+    );
+  }
+
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
+        {label}
+      </label>
+      <div className="flex flex-wrap gap-2">
+        {options.map((o) => {
+          const active = value.includes(o.value);
+          return (
+            <button
+              key={o.value}
+              type="button"
+              onClick={() => toggle(o.value)}
+              aria-pressed={active}
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                active
+                  ? "border-[var(--color-accent)] bg-[var(--color-accent)]/15 text-[var(--color-accent)]"
+                  : "border-ink/10 bg-ink/[0.02] text-ink/60 hover:border-ink/20"
+              }`}
+            >
+              {o.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function Checkbox({
   label,
   checked,

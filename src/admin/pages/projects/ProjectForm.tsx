@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { api, ApiError } from "@/admin/lib/api";
-import { Section, Row, Field, Textarea, ColorField, FormActions } from "@/admin/components/FormFields";
+import { Section, Row, Field, Textarea, ColorField, MultiSelect, FormActions } from "@/admin/components/FormFields";
 import { ImageUpload } from "@/admin/components/ImageUpload";
 import { useAdminLang } from "@/admin/lib/adminI18n";
 
@@ -34,7 +34,7 @@ interface ProjectFormValues {
   solutionAr: string;
   metrics: Metric[];
   techStack: string;
-  tags: string;
+  tags: string[];
   hasCaseStudy: boolean;
   metaTitle: string;
   metaTitleAr: string;
@@ -66,7 +66,7 @@ const EMPTY: ProjectFormValues = {
   solutionAr: "",
   metrics: [],
   techStack: "",
-  tags: "",
+  tags: [],
   hasCaseStudy: false,
   metaTitle: "",
   metaTitleAr: "",
@@ -77,10 +77,9 @@ const EMPTY: ProjectFormValues = {
   sortOrder: 0,
 };
 
-type ApiProject = Omit<ProjectFormValues, "techStack" | "tags"> & {
+type ApiProject = Omit<ProjectFormValues, "techStack"> & {
   id: string;
   techStack: string[];
-  tags: string[];
 };
 
 export default function ProjectForm() {
@@ -112,7 +111,7 @@ export default function ProjectForm() {
         metaDescription: existing.metaDescription ?? "",
         metaDescriptionAr: existing.metaDescriptionAr ?? "",
         techStack: existing.techStack.join(", "),
-        tags: existing.tags.join(", "),
+        tags: existing.tags,
         thumbnailUrl: existing.thumbnailUrl ?? undefined,
         coverImageUrl: existing.coverImageUrl ?? undefined,
       });
@@ -124,7 +123,6 @@ export default function ProjectForm() {
       const payload = {
         ...values,
         techStack: values.techStack.split(",").map((s) => s.trim()).filter(Boolean),
-        tags: values.tags.split(",").map((s) => s.trim()).filter(Boolean),
       };
       return isEdit
         ? api.patch(`/admin/projects/${id}`, payload)
@@ -263,14 +261,23 @@ export default function ProjectForm() {
         </Section>
 
         <Section title={t.sections.techTags}>
-          <Row>
-            <Field
-              label={t.fields.techStack}
-              value={values.techStack}
-              onChange={(v) => set("techStack", v)}
+          <Field
+            label={t.fields.techStack}
+            value={values.techStack}
+            onChange={(v) => set("techStack", v)}
+          />
+          <div className="mt-4">
+            <MultiSelect
+              label={t.fields.tags}
+              value={values.tags}
+              onChange={(v) => set("tags", v)}
+              options={[
+                { value: "saas", label: t.fields.tagSaas },
+                { value: "ecommerce", label: t.fields.tagEcommerce },
+                { value: "fnb", label: t.fields.tagFnb },
+              ]}
             />
-            <Field label={t.fields.tags} value={values.tags} onChange={(v) => set("tags", v)} />
-          </Row>
+          </div>
           <label className="mt-3 flex items-center gap-2 text-sm text-ink/70">
             <input
               type="checkbox"
