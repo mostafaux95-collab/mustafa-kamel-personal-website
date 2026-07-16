@@ -13,16 +13,16 @@ export default function SkillsList() {
   const { t: ui } = useAdminLang();
   return (
     <EntityList<SkillItem>
-      title="Skills"
+      title={ui.nav.skills}
       basePath="/admin/skills"
       permissionKey="skills"
-      searchPlaceholder="Search skills…"
+      searchPlaceholder={ui.common.search}
       matchesSearch={(s, q) => `${s.name} ${s.category}`.toLowerCase().includes(q.toLowerCase())}
       columns={[
-        { header: "Name", render: (s) => s.name },
-        { header: "Category", render: (s) => <span className="text-ink/60">{s.category}</span> },
+        { header: ui.lists.name, render: (s) => s.name },
+        { header: ui.lists.category, render: (s) => <span className="text-ink/60">{s.category}</span> },
         {
-          header: "Status",
+          header: ui.common.status,
           render: (s) => (
             <span
               className={clsx(

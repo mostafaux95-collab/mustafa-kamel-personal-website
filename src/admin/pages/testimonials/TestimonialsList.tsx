@@ -14,17 +14,17 @@ export default function TestimonialsList() {
   const { t: ui } = useAdminLang();
   return (
     <EntityList<TestimonialItem>
-      title="Testimonials"
+      title={ui.nav.testimonials}
       basePath="/admin/testimonials"
       permissionKey="testimonials"
-      searchPlaceholder="Search testimonials…"
+      searchPlaceholder={ui.common.search}
       matchesSearch={(t, s) => `${t.quote} ${t.company} ${t.role}`.toLowerCase().includes(s.toLowerCase())}
       columns={[
-        { header: "Quote", render: (t) => <span className="line-clamp-1 max-w-md">{t.quote}</span> },
-        { header: "Company", render: (t) => <span className="text-ink/60">{t.company}</span> },
-        { header: "Role", render: (t) => <span className="text-ink/60">{t.role}</span> },
+        { header: ui.lists.quote, render: (t) => <span className="line-clamp-1 max-w-md">{t.quote}</span> },
+        { header: ui.lists.company, render: (t) => <span className="text-ink/60">{t.company}</span> },
+        { header: ui.lists.role, render: (t) => <span className="text-ink/60">{t.role}</span> },
         {
-          header: "Status",
+          header: ui.common.status,
           render: (t) => (
             <span
               className={clsx(

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { ImagePlus, Loader2, X } from "lucide-react";
 import { api, getAssetUrl, ApiError } from "@/admin/lib/api";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface UploadedAsset {
   url: string;
@@ -20,6 +21,7 @@ export function ImageUpload({
   value: string | undefined;
   onChange: (url: string | undefined) => void;
 }) {
+  const { t } = useAdminLang();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +64,7 @@ export function ImageUpload({
             type="button"
             onClick={() => onChange(undefined)}
             className="absolute -end-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-ink text-bg shadow-md"
-            aria-label="Remove image"
+            aria-label={t.imageUpload.remove}
           >
             <X size={14} />
           </button>
@@ -90,7 +92,7 @@ export function ImageUpload({
           ) : (
             <>
               <ImagePlus size={20} />
-              <span className="text-xs">Click or drop</span>
+              <span className="text-xs">{t.imageUpload.clickOrDrop}</span>
             </>
           )}
         </button>

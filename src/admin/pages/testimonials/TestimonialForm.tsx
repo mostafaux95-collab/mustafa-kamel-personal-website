@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, Select, Checkbox, FormActions } from "@/admin/components/FormFields";
 import { ImageUpload } from "@/admin/components/ImageUpload";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface FormValues {
   quote: string;
@@ -36,6 +37,7 @@ const EMPTY: FormValues = {
 };
 
 export default function TestimonialForm() {
+  const { t } = useAdminLang();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -81,7 +83,7 @@ export default function TestimonialForm() {
   return (
     <div className="mx-auto max-w-3xl p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        {isEdit ? "Edit testimonial" : "New testimonial"}
+        {isEdit ? t.editTitles.testimonial.edit : t.editTitles.testimonial.new}
       </h1>
 
       {error && (
@@ -98,54 +100,52 @@ export default function TestimonialForm() {
         }}
         className="mt-6 space-y-8"
       >
-        <Section title="Quote">
+        <Section title={t.sections.quote}>
           <Row>
-            <Textarea label="Quote (EN)" value={values.quote} onChange={(v) => set("quote", v)} required />
-            <Textarea label="Quote (AR)" value={values.quoteAr} onChange={(v) => set("quoteAr", v)} dir="rtl" />
+            <Textarea label={t.fields.quoteEn} value={values.quote} onChange={(v) => set("quote", v)} required />
+            <Textarea label={t.fields.quoteAr} value={values.quoteAr} onChange={(v) => set("quoteAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Role (EN)" value={values.role} onChange={(v) => set("role", v)} required />
-            <Field label="Role (AR)" value={values.roleAr} onChange={(v) => set("roleAr", v)} dir="rtl" />
+            <Field label={t.fields.roleEn} value={values.role} onChange={(v) => set("role", v)} required />
+            <Field label={t.fields.roleAr} value={values.roleAr} onChange={(v) => set("roleAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Company" value={values.company} onChange={(v) => set("company", v)} required />
+            <Field label={t.fields.company} value={values.company} onChange={(v) => set("company", v)} required />
           </Row>
         </Section>
 
-        <Section title="Avatar">
-          <ImageUpload label="Photo" value={values.avatarUrl} onChange={(v) => set("avatarUrl", v)} />
-          <p className="mt-4 mb-1.5 text-xs text-ink/40">
-            Fallback monogram tile — used until a photo is uploaded above.
-          </p>
+        <Section title={t.sections.avatar}>
+          <ImageUpload label={t.fields.photo} value={values.avatarUrl} onChange={(v) => set("avatarUrl", v)} />
+          <p className="mt-4 mb-1.5 text-xs text-ink/40">{t.fields.avatarNote}</p>
           <Row>
-            <Field label="Initial" value={values.avatarInitial} onChange={(v) => set("avatarInitial", v)} />
+            <Field label={t.fields.initial} value={values.avatarInitial} onChange={(v) => set("avatarInitial", v)} />
             <div />
           </Row>
           <Row>
-            <ColorField label="Background" value={values.avatarBg} onChange={(v) => set("avatarBg", v)} />
-            <ColorField label="Text" value={values.avatarFg} onChange={(v) => set("avatarFg", v)} />
+            <ColorField label={t.fields.background} value={values.avatarBg} onChange={(v) => set("avatarBg", v)} />
+            <ColorField label={t.fields.text} value={values.avatarFg} onChange={(v) => set("avatarFg", v)} />
           </Row>
         </Section>
 
-        <Section title="Publishing">
+        <Section title={t.sections.publishing}>
           <div className="flex flex-wrap items-end gap-4">
             <Select
-              label="Status"
+              label={t.common.status}
               value={values.status}
               onChange={(v) => set("status", v as "DRAFT" | "PUBLISHED")}
               options={[
-                { value: "DRAFT", label: "Draft" },
-                { value: "PUBLISHED", label: "Published" },
+                { value: "DRAFT", label: t.common.draft },
+                { value: "PUBLISHED", label: t.common.published },
               ]}
             />
             <Field
-              label="Sort order"
+              label={t.common.sortOrder}
               type="number"
               value={String(values.sortOrder)}
               onChange={(v) => set("sortOrder", Number(v) || 0)}
               compact
             />
-            <Checkbox label="Featured" checked={values.featured} onChange={(v) => set("featured", v)} />
+            <Checkbox label={t.common.featured} checked={values.featured} onChange={(v) => set("featured", v)} />
           </div>
         </Section>
 
@@ -153,7 +153,7 @@ export default function TestimonialForm() {
           isEdit={isEdit}
           isPending={saveMutation.isPending}
           onCancel={() => navigate("/admin/testimonials")}
-          createLabel="Create testimonial"
+          createLabel={t.createLabels.testimonial}
         />
       </form>
     </div>

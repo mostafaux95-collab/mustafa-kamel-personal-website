@@ -14,17 +14,17 @@ export default function ExperienceList() {
   const { t: ui } = useAdminLang();
   return (
     <EntityList<ExperienceItem>
-      title="Experience"
+      title={ui.nav.experience}
       basePath="/admin/experience"
       permissionKey="experience"
-      searchPlaceholder="Search experience…"
+      searchPlaceholder={ui.common.search}
       matchesSearch={(e, q) => `${e.company} ${e.role}`.toLowerCase().includes(q.toLowerCase())}
       columns={[
-        { header: "Company", render: (e) => e.company },
-        { header: "Role", render: (e) => <span className="text-ink/60">{e.role}</span> },
-        { header: "Period", render: (e) => <span className="text-ink/60">{e.period}</span> },
+        { header: ui.lists.company, render: (e) => e.company },
+        { header: ui.lists.role, render: (e) => <span className="text-ink/60">{e.role}</span> },
+        { header: ui.lists.period, render: (e) => <span className="text-ink/60">{e.period}</span> },
         {
-          header: "Status",
+          header: ui.common.status,
           render: (e) => (
             <span
               className={clsx(

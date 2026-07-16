@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, Select, FormActions } from "@/admin/components/FormFields";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface FormValues {
   company: string;
@@ -41,6 +42,7 @@ const EMPTY: FormValues = {
 };
 
 export default function ExperienceForm() {
+  const { t } = useAdminLang();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -96,7 +98,7 @@ export default function ExperienceForm() {
   return (
     <div className="mx-auto max-w-3xl p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        {isEdit ? "Edit experience" : "New experience"}
+        {isEdit ? t.editTitles.experience.edit : t.editTitles.experience.new}
       </h1>
 
       {error && (
@@ -113,30 +115,30 @@ export default function ExperienceForm() {
         }}
         className="mt-6 space-y-8"
       >
-        <Section title="Role">
+        <Section title={t.sections.role}>
           <Row>
-            <Field label="Company" value={values.company} onChange={(v) => set("company", v)} required />
-            <Field label="Period" value={values.period} onChange={(v) => set("period", v)} required />
+            <Field label={t.fields.company} value={values.company} onChange={(v) => set("company", v)} required />
+            <Field label={t.fields.period} value={values.period} onChange={(v) => set("period", v)} required />
           </Row>
           <Row>
-            <Field label="Role (EN)" value={values.role} onChange={(v) => set("role", v)} required />
-            <Field label="Role (AR)" value={values.roleAr} onChange={(v) => set("roleAr", v)} dir="rtl" />
+            <Field label={t.fields.roleEn} value={values.role} onChange={(v) => set("role", v)} required />
+            <Field label={t.fields.roleAr} value={values.roleAr} onChange={(v) => set("roleAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Location (EN)" value={values.location} onChange={(v) => set("location", v)} required />
-            <Field label="Location (AR)" value={values.locationAr} onChange={(v) => set("locationAr", v)} dir="rtl" />
+            <Field label={t.fields.locationEn} value={values.location} onChange={(v) => set("location", v)} required />
+            <Field label={t.fields.locationAr} value={values.locationAr} onChange={(v) => set("locationAr", v)} dir="rtl" />
           </Row>
         </Section>
 
-        <Section title="Summary">
+        <Section title={t.sections.summary}>
           <Row>
-            <Textarea label="Summary (EN)" value={values.summary} onChange={(v) => set("summary", v)} required />
-            <Textarea label="Summary (AR)" value={values.summaryAr} onChange={(v) => set("summaryAr", v)} dir="rtl" />
+            <Textarea label={t.fields.summaryEn} value={values.summary} onChange={(v) => set("summary", v)} required />
+            <Textarea label={t.fields.summaryAr} value={values.summaryAr} onChange={(v) => set("summaryAr", v)} dir="rtl" />
           </Row>
           <Row>
             <div>
               <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
-                Highlights (EN) — one per line
+                {t.fields.highlightsEn}
               </label>
               <textarea
                 rows={5}
@@ -147,7 +149,7 @@ export default function ExperienceForm() {
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
-                Highlights (AR) — one per line
+                {t.fields.highlightsAr}
               </label>
               <textarea
                 dir="rtl"
@@ -160,30 +162,30 @@ export default function ExperienceForm() {
           </Row>
         </Section>
 
-        <Section title="Logo tile">
+        <Section title={t.sections.logoTile}>
           <Row>
-            <Field label="Initial" value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />
+            <Field label={t.fields.initial} value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />
             <div />
           </Row>
           <Row>
-            <ColorField label="Background" value={values.logoBg} onChange={(v) => set("logoBg", v)} />
-            <ColorField label="Text" value={values.logoFg} onChange={(v) => set("logoFg", v)} />
+            <ColorField label={t.fields.background} value={values.logoBg} onChange={(v) => set("logoBg", v)} />
+            <ColorField label={t.fields.text} value={values.logoFg} onChange={(v) => set("logoFg", v)} />
           </Row>
         </Section>
 
-        <Section title="Publishing">
+        <Section title={t.sections.publishing}>
           <div className="flex flex-wrap items-end gap-4">
             <Select
-              label="Status"
+              label={t.common.status}
               value={values.status}
               onChange={(v) => set("status", v as "DRAFT" | "PUBLISHED")}
               options={[
-                { value: "DRAFT", label: "Draft" },
-                { value: "PUBLISHED", label: "Published" },
+                { value: "DRAFT", label: t.common.draft },
+                { value: "PUBLISHED", label: t.common.published },
               ]}
             />
             <Field
-              label="Sort order"
+              label={t.common.sortOrder}
               type="number"
               value={String(values.sortOrder)}
               onChange={(v) => set("sortOrder", Number(v) || 0)}
@@ -196,7 +198,7 @@ export default function ExperienceForm() {
           isEdit={isEdit}
           isPending={saveMutation.isPending}
           onCancel={() => navigate("/admin/experience")}
-          createLabel="Create experience"
+          createLabel={t.createLabels.experience}
         />
       </form>
     </div>

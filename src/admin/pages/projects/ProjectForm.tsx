@@ -5,6 +5,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, FormActions } from "@/admin/components/FormFields";
 import { ImageUpload } from "@/admin/components/ImageUpload";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface Metric {
   value: string;
@@ -83,6 +84,7 @@ type ApiProject = Omit<ProjectFormValues, "techStack" | "tags"> & {
 };
 
 export default function ProjectForm() {
+  const { t } = useAdminLang();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -156,7 +158,7 @@ export default function ProjectForm() {
   return (
     <div className="mx-auto max-w-3xl p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        {isEdit ? "Edit project" : "New project"}
+        {isEdit ? t.editTitles.project.edit : t.editTitles.project.new}
       </h1>
 
       {error && (
@@ -173,70 +175,68 @@ export default function ProjectForm() {
         }}
         className="mt-6 space-y-8"
       >
-        <Section title="Basics">
+        <Section title={t.sections.basics}>
           <Row>
-            <Field label="Slug" value={values.slug} onChange={(v) => set("slug", v)} required />
-            <Field label="Company" value={values.company} onChange={(v) => set("company", v)} required />
+            <Field label={t.fields.slug} value={values.slug} onChange={(v) => set("slug", v)} required />
+            <Field label={t.fields.company} value={values.company} onChange={(v) => set("company", v)} required />
           </Row>
           <Row>
-            <Field label="Title (EN)" value={values.title} onChange={(v) => set("title", v)} required />
-            <Field label="Title (AR)" value={values.titleAr} onChange={(v) => set("titleAr", v)} dir="rtl" />
+            <Field label={t.fields.titleEn} value={values.title} onChange={(v) => set("title", v)} required />
+            <Field label={t.fields.titleAr} value={values.titleAr} onChange={(v) => set("titleAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Tagline (EN)" value={values.tagline} onChange={(v) => set("tagline", v)} required />
-            <Field label="Tagline (AR)" value={values.taglineAr} onChange={(v) => set("taglineAr", v)} dir="rtl" />
+            <Field label={t.fields.taglineEn} value={values.tagline} onChange={(v) => set("tagline", v)} required />
+            <Field label={t.fields.taglineAr} value={values.taglineAr} onChange={(v) => set("taglineAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Role (EN)" value={values.role} onChange={(v) => set("role", v)} required />
-            <Field label="Role (AR)" value={values.roleAr} onChange={(v) => set("roleAr", v)} dir="rtl" />
+            <Field label={t.fields.roleEn} value={values.role} onChange={(v) => set("role", v)} required />
+            <Field label={t.fields.roleAr} value={values.roleAr} onChange={(v) => set("roleAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Category" value={values.category} onChange={(v) => set("category", v)} required />
-            <Field label="Year" value={values.year} onChange={(v) => set("year", v)} required />
+            <Field label={t.fields.category} value={values.category} onChange={(v) => set("category", v)} required />
+            <Field label={t.fields.year} value={values.year} onChange={(v) => set("year", v)} required />
           </Row>
         </Section>
 
-        <Section title="Cover image">
+        <Section title={t.sections.coverImage}>
           <div className="flex flex-wrap gap-6">
             <ImageUpload
-              label="Thumbnail (grid card)"
+              label={t.fields.thumbnail}
               value={values.thumbnailUrl}
               onChange={(v) => set("thumbnailUrl", v)}
             />
             <ImageUpload
-              label="Cover (case study header)"
+              label={t.fields.cover}
               value={values.coverImageUrl}
               onChange={(v) => set("coverImageUrl", v)}
             />
           </div>
-          <p className="mt-4 text-xs text-ink/40">
-            Fallback gradient tile — used on the public site until an image is uploaded above.
-          </p>
+          <p className="mt-4 text-xs text-ink/40">{t.fields.gradientNote}</p>
           <Row>
-            <ColorField label="Gradient from" value={values.coverGradientFrom} onChange={(v) => set("coverGradientFrom", v)} />
-            <ColorField label="Gradient to" value={values.coverGradientTo} onChange={(v) => set("coverGradientTo", v)} />
+            <ColorField label={t.fields.gradientFrom} value={values.coverGradientFrom} onChange={(v) => set("coverGradientFrom", v)} />
+            <ColorField label={t.fields.gradientTo} value={values.coverGradientTo} onChange={(v) => set("coverGradientTo", v)} />
           </Row>
         </Section>
 
-        <Section title="Story">
+        <Section title={t.sections.story}>
           <Row>
-            <Textarea label="Challenge (EN)" value={values.challenge} onChange={(v) => set("challenge", v)} required />
-            <Textarea label="Challenge (AR)" value={values.challengeAr} onChange={(v) => set("challengeAr", v)} dir="rtl" />
+            <Textarea label={t.fields.challengeEn} value={values.challenge} onChange={(v) => set("challenge", v)} required />
+            <Textarea label={t.fields.challengeAr} value={values.challengeAr} onChange={(v) => set("challengeAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Textarea label="Solution (EN)" value={values.solution} onChange={(v) => set("solution", v)} required />
-            <Textarea label="Solution (AR)" value={values.solutionAr} onChange={(v) => set("solutionAr", v)} dir="rtl" />
+            <Textarea label={t.fields.solutionEn} value={values.solution} onChange={(v) => set("solution", v)} required />
+            <Textarea label={t.fields.solutionAr} value={values.solutionAr} onChange={(v) => set("solutionAr", v)} dir="rtl" />
           </Row>
         </Section>
 
-        <Section title="Metrics">
+        <Section title={t.sections.metrics}>
           <div className="space-y-3">
             {values.metrics.map((m, i) => (
               <div key={i} className="flex items-end gap-3">
-                <Field label="Value" value={m.value} onChange={(v) => updateMetric(i, "value", v)} compact />
-                <Field label="Label (EN)" value={m.label} onChange={(v) => updateMetric(i, "label", v)} compact />
+                <Field label={t.fields.metricValue} value={m.value} onChange={(v) => updateMetric(i, "value", v)} compact />
+                <Field label={t.fields.metricLabelEn} value={m.label} onChange={(v) => updateMetric(i, "label", v)} compact />
                 <Field
-                  label="Label (AR)"
+                  label={t.fields.metricLabelAr}
                   value={m.labelAr ?? ""}
                   onChange={(v) => updateMetric(i, "labelAr", v)}
                   dir="rtl"
@@ -246,7 +246,7 @@ export default function ProjectForm() {
                   type="button"
                   onClick={() => removeMetric(i)}
                   className="mb-1 shrink-0 text-ink/35 hover:text-red-400"
-                  aria-label="Remove metric"
+                  aria-label={t.common.delete}
                 >
                   <Trash2 size={16} />
                 </button>
@@ -257,19 +257,19 @@ export default function ProjectForm() {
               onClick={addMetric}
               className="flex items-center gap-2 text-sm font-medium text-[var(--color-accent)]"
             >
-              <Plus size={15} /> Add metric
+              <Plus size={15} /> {t.fields.addMetric}
             </button>
           </div>
         </Section>
 
-        <Section title="Tech & tags">
+        <Section title={t.sections.techTags}>
           <Row>
             <Field
-              label="Tech stack (comma-separated)"
+              label={t.fields.techStack}
               value={values.techStack}
               onChange={(v) => set("techStack", v)}
             />
-            <Field label="Tags (comma-separated)" value={values.tags} onChange={(v) => set("tags", v)} />
+            <Field label={t.fields.tags} value={values.tags} onChange={(v) => set("tags", v)} />
           </Row>
           <label className="mt-3 flex items-center gap-2 text-sm text-ink/70">
             <input
@@ -277,23 +277,23 @@ export default function ProjectForm() {
               checked={values.hasCaseStudy}
               onChange={(e) => set("hasCaseStudy", e.target.checked)}
             />
-            Has a full case study page
+            {t.fields.hasCaseStudy}
           </label>
         </Section>
 
-        <Section title="SEO">
+        <Section title={t.sections.seo}>
           <Row>
-            <Field label="Meta title (EN)" value={values.metaTitle} onChange={(v) => set("metaTitle", v)} />
-            <Field label="Meta title (AR)" value={values.metaTitleAr} onChange={(v) => set("metaTitleAr", v)} dir="rtl" />
+            <Field label={t.fields.metaTitleEn} value={values.metaTitle} onChange={(v) => set("metaTitle", v)} />
+            <Field label={t.fields.metaTitleAr} value={values.metaTitleAr} onChange={(v) => set("metaTitleAr", v)} dir="rtl" />
           </Row>
           <Row>
             <Textarea
-              label="Meta description (EN)"
+              label={t.fields.metaDescriptionEn}
               value={values.metaDescription}
               onChange={(v) => set("metaDescription", v)}
             />
             <Textarea
-              label="Meta description (AR)"
+              label={t.fields.metaDescriptionAr}
               value={values.metaDescriptionAr}
               onChange={(v) => set("metaDescriptionAr", v)}
               dir="rtl"
@@ -301,23 +301,23 @@ export default function ProjectForm() {
           </Row>
         </Section>
 
-        <Section title="Publishing">
+        <Section title={t.sections.publishing}>
           <div className="flex flex-wrap items-end gap-4">
             <div>
               <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
-                Status
+                {t.common.status}
               </label>
               <select
                 value={values.status}
                 onChange={(e) => set("status", e.target.value as "DRAFT" | "PUBLISHED")}
                 className="rounded-full border border-ink/10 bg-ink/[0.02] px-4 py-2.5 text-sm text-ink focus:border-[var(--color-accent)] focus:outline-none"
               >
-                <option value="DRAFT">Draft</option>
-                <option value="PUBLISHED">Published</option>
+                <option value="DRAFT">{t.common.draft}</option>
+                <option value="PUBLISHED">{t.common.published}</option>
               </select>
             </div>
             <Field
-              label="Sort order"
+              label={t.common.sortOrder}
               type="number"
               value={String(values.sortOrder)}
               onChange={(v) => set("sortOrder", Number(v) || 0)}
@@ -329,7 +329,7 @@ export default function ProjectForm() {
                 checked={values.featured}
                 onChange={(e) => set("featured", e.target.checked)}
               />
-              Featured
+              {t.common.featured}
             </label>
           </div>
         </Section>
@@ -338,7 +338,7 @@ export default function ProjectForm() {
           isEdit={isEdit}
           isPending={saveMutation.isPending}
           onCancel={() => navigate("/admin/projects")}
-          createLabel="Create project"
+          createLabel={t.createLabels.project}
         />
       </form>
     </div>

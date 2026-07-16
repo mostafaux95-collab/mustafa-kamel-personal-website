@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, Select, FormActions } from "@/admin/components/FormFields";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 const CATEGORIES = ["Design", "Research", "Systems", "AI", "Frontend", "Leadership"];
 
@@ -29,6 +30,7 @@ const EMPTY: FormValues = {
 };
 
 export default function SkillForm() {
+  const { t } = useAdminLang();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -77,7 +79,7 @@ export default function SkillForm() {
   return (
     <div className="mx-auto max-w-3xl p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        {isEdit ? "Edit skill" : "New skill"}
+        {isEdit ? t.editTitles.skill.edit : t.editTitles.skill.new}
       </h1>
 
       {error && (
@@ -94,39 +96,39 @@ export default function SkillForm() {
         }}
         className="mt-6 space-y-8"
       >
-        <Section title="Basics">
+        <Section title={t.sections.basics}>
           <Row>
-            <Field label="Name" value={values.name} onChange={(v) => set("name", v)} required />
+            <Field label={t.fields.name} value={values.name} onChange={(v) => set("name", v)} required />
             <Select
-              label="Category"
+              label={t.fields.category}
               value={values.category}
               onChange={(v) => set("category", v)}
               options={CATEGORIES.map((c) => ({ value: c, label: c }))}
             />
           </Row>
           <Row>
-            <Textarea label="Detail (EN)" value={values.detail} onChange={(v) => set("detail", v)} required />
-            <Textarea label="Detail (AR)" value={values.detailAr} onChange={(v) => set("detailAr", v)} dir="rtl" />
+            <Textarea label={t.fields.detailEn} value={values.detail} onChange={(v) => set("detail", v)} required />
+            <Textarea label={t.fields.detailAr} value={values.detailAr} onChange={(v) => set("detailAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Level (1-5, optional)" type="number" value={values.level} onChange={(v) => set("level", v)} />
-            <Field label="Years (optional)" type="number" value={values.years} onChange={(v) => set("years", v)} />
+            <Field label={t.fields.level} type="number" value={values.level} onChange={(v) => set("level", v)} />
+            <Field label={t.fields.years} type="number" value={values.years} onChange={(v) => set("years", v)} />
           </Row>
         </Section>
 
-        <Section title="Publishing">
+        <Section title={t.sections.publishing}>
           <div className="flex flex-wrap items-end gap-4">
             <Select
-              label="Status"
+              label={t.common.status}
               value={values.status}
               onChange={(v) => set("status", v as "DRAFT" | "PUBLISHED")}
               options={[
-                { value: "DRAFT", label: "Draft" },
-                { value: "PUBLISHED", label: "Published" },
+                { value: "DRAFT", label: t.common.draft },
+                { value: "PUBLISHED", label: t.common.published },
               ]}
             />
             <Field
-              label="Sort order"
+              label={t.common.sortOrder}
               type="number"
               value={String(values.sortOrder)}
               onChange={(v) => set("sortOrder", Number(v) || 0)}
@@ -139,7 +141,7 @@ export default function SkillForm() {
           isEdit={isEdit}
           isPending={saveMutation.isPending}
           onCancel={() => navigate("/admin/skills")}
-          createLabel="Create skill"
+          createLabel={t.createLabels.skill}
         />
       </form>
     </div>

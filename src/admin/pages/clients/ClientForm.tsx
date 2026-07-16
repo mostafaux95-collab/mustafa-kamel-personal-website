@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, ColorField, Select, Checkbox, FormActions } from "@/admin/components/FormFields";
 import { ImageUpload } from "@/admin/components/ImageUpload";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface FormValues {
   name: string;
@@ -34,6 +35,7 @@ const EMPTY: FormValues = {
 };
 
 export default function ClientForm() {
+  const { t } = useAdminLang();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -77,7 +79,7 @@ export default function ClientForm() {
   return (
     <div className="mx-auto max-w-3xl p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        {isEdit ? "Edit client" : "New client"}
+        {isEdit ? t.editTitles.client.edit : t.editTitles.client.new}
       </h1>
 
       {error && (
@@ -94,51 +96,49 @@ export default function ClientForm() {
         }}
         className="mt-6 space-y-8"
       >
-        <Section title="Basics">
+        <Section title={t.sections.basics}>
           <Row>
-            <Field label="Name (EN)" value={values.name} onChange={(v) => set("name", v)} required />
-            <Field label="Name (AR)" value={values.nameAr} onChange={(v) => set("nameAr", v)} dir="rtl" />
+            <Field label={t.fields.nameEn} value={values.name} onChange={(v) => set("name", v)} required />
+            <Field label={t.fields.nameAr} value={values.nameAr} onChange={(v) => set("nameAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Field label="Website" value={values.website} onChange={(v) => set("website", v)} />
-            <Field label="Category" value={values.category} onChange={(v) => set("category", v)} />
+            <Field label={t.fields.website} value={values.website} onChange={(v) => set("website", v)} />
+            <Field label={t.fields.category} value={values.category} onChange={(v) => set("category", v)} />
           </Row>
         </Section>
 
-        <Section title="Logo">
-          <ImageUpload label="Logo image" value={values.logoUrl} onChange={(v) => set("logoUrl", v)} />
-          <p className="mt-4 mb-1.5 text-xs text-ink/40">
-            Fallback monogram tile — used until a logo is uploaded above.
-          </p>
+        <Section title={t.sections.logo}>
+          <ImageUpload label={t.fields.logoImage} value={values.logoUrl} onChange={(v) => set("logoUrl", v)} />
+          <p className="mt-4 mb-1.5 text-xs text-ink/40">{t.fields.logoNote}</p>
           <Row>
-            <Field label="Initial" value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />
+            <Field label={t.fields.initial} value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />
             <div />
           </Row>
           <Row>
-            <ColorField label="Background" value={values.logoBg} onChange={(v) => set("logoBg", v)} />
-            <ColorField label="Text" value={values.logoFg} onChange={(v) => set("logoFg", v)} />
+            <ColorField label={t.fields.background} value={values.logoBg} onChange={(v) => set("logoBg", v)} />
+            <ColorField label={t.fields.text} value={values.logoFg} onChange={(v) => set("logoFg", v)} />
           </Row>
         </Section>
 
-        <Section title="Publishing">
+        <Section title={t.sections.publishing}>
           <div className="flex flex-wrap items-end gap-4">
             <Select
-              label="Status"
+              label={t.common.status}
               value={values.status}
               onChange={(v) => set("status", v as "DRAFT" | "PUBLISHED")}
               options={[
-                { value: "DRAFT", label: "Draft" },
-                { value: "PUBLISHED", label: "Published" },
+                { value: "DRAFT", label: t.common.draft },
+                { value: "PUBLISHED", label: t.common.published },
               ]}
             />
             <Field
-              label="Sort order"
+              label={t.common.sortOrder}
               type="number"
               value={String(values.sortOrder)}
               onChange={(v) => set("sortOrder", Number(v) || 0)}
               compact
             />
-            <Checkbox label="Featured" checked={values.featured} onChange={(v) => set("featured", v)} />
+            <Checkbox label={t.common.featured} checked={values.featured} onChange={(v) => set("featured", v)} />
           </div>
         </Section>
 
@@ -146,7 +146,7 @@ export default function ClientForm() {
           isEdit={isEdit}
           isPending={saveMutation.isPending}
           onCancel={() => navigate("/admin/clients")}
-          createLabel="Create client"
+          createLabel={t.createLabels.client}
         />
       </form>
     </div>

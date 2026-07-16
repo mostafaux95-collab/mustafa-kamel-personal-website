@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, Select, FormActions } from "@/admin/components/FormFields";
+import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface FormValues {
   title: string;
@@ -25,6 +26,7 @@ const EMPTY: FormValues = {
 };
 
 export default function ServiceForm() {
+  const { t } = useAdminLang();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -67,7 +69,7 @@ export default function ServiceForm() {
   return (
     <div className="mx-auto max-w-3xl p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
-        {isEdit ? "Edit service" : "New service"}
+        {isEdit ? t.editTitles.service.edit : t.editTitles.service.new}
       </h1>
 
       {error && (
@@ -84,37 +86,37 @@ export default function ServiceForm() {
         }}
         className="mt-6 space-y-8"
       >
-        <Section title="Content">
+        <Section title={t.sections.content}>
           <Row>
-            <Field label="Title (EN)" value={values.title} onChange={(v) => set("title", v)} required />
-            <Field label="Title (AR)" value={values.titleAr} onChange={(v) => set("titleAr", v)} dir="rtl" />
+            <Field label={t.fields.titleEn} value={values.title} onChange={(v) => set("title", v)} required />
+            <Field label={t.fields.titleAr} value={values.titleAr} onChange={(v) => set("titleAr", v)} dir="rtl" />
           </Row>
           <Row>
-            <Textarea label="Body (EN)" value={values.body} onChange={(v) => set("body", v)} required />
-            <Textarea label="Body (AR)" value={values.bodyAr} onChange={(v) => set("bodyAr", v)} dir="rtl" />
+            <Textarea label={t.fields.bodyEn} value={values.body} onChange={(v) => set("body", v)} required />
+            <Textarea label={t.fields.bodyAr} value={values.bodyAr} onChange={(v) => set("bodyAr", v)} dir="rtl" />
           </Row>
           <Row>
             <Field
-              label="Icon (lucide-react name, e.g. PenLine)"
+              label={t.fields.icon}
               value={values.icon}
               onChange={(v) => set("icon", v)}
             />
           </Row>
         </Section>
 
-        <Section title="Publishing">
+        <Section title={t.sections.publishing}>
           <div className="flex flex-wrap items-end gap-4">
             <Select
-              label="Status"
+              label={t.common.status}
               value={values.status}
               onChange={(v) => set("status", v as "DRAFT" | "PUBLISHED")}
               options={[
-                { value: "DRAFT", label: "Draft" },
-                { value: "PUBLISHED", label: "Published" },
+                { value: "DRAFT", label: t.common.draft },
+                { value: "PUBLISHED", label: t.common.published },
               ]}
             />
             <Field
-              label="Sort order"
+              label={t.common.sortOrder}
               type="number"
               value={String(values.sortOrder)}
               onChange={(v) => set("sortOrder", Number(v) || 0)}
@@ -127,7 +129,7 @@ export default function ServiceForm() {
           isEdit={isEdit}
           isPending={saveMutation.isPending}
           onCancel={() => navigate("/admin/services")}
-          createLabel="Create service"
+          createLabel={t.createLabels.service}
         />
       </form>
     </div>

@@ -47,7 +47,7 @@ export default function ProjectsList() {
     <div className="p-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-ink">Projects</h1>
+          <h1 className="font-display text-2xl font-semibold text-ink">{t.nav.projects}</h1>
           <p className="mt-1 text-sm text-ink/50">
             {data?.total ?? 0} {t.common.total}
           </p>
@@ -66,7 +66,7 @@ export default function ProjectsList() {
       <input
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search projects…"
+        placeholder={t.common.search}
         className="mt-6 w-full max-w-sm rounded-full border border-ink/10 bg-ink/[0.02] px-4 py-2.5 text-sm text-ink placeholder:text-ink/35 focus:border-[var(--color-accent)] focus:outline-none"
       />
 
@@ -74,9 +74,9 @@ export default function ProjectsList() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-ink/[0.08] bg-[var(--color-card)] text-start text-xs uppercase tracking-widest text-ink/45">
-              <th className="px-5 py-3 text-start font-medium">Title</th>
-              <th className="px-5 py-3 text-start font-medium">Company</th>
-              <th className="px-5 py-3 text-start font-medium">Category</th>
+              <th className="px-5 py-3 text-start font-medium">{t.lists.title}</th>
+              <th className="px-5 py-3 text-start font-medium">{t.lists.company}</th>
+              <th className="px-5 py-3 text-start font-medium">{t.lists.category}</th>
               <th className="px-5 py-3 text-start font-medium">{t.common.status}</th>
               <th className="px-5 py-3 font-medium"></th>
             </tr>
@@ -128,7 +128,7 @@ export default function ProjectsList() {
                   {canWrite && (
                     <button
                       onClick={() => {
-                        if (confirm(`Delete "${p.title}"?`)) deleteMutation.mutate(p.id);
+                        if (confirm(t.common.deleteConfirm)) deleteMutation.mutate(p.id);
                       }}
                       className="text-ink/35 transition-colors hover:text-red-400"
                       aria-label={t.common.delete}

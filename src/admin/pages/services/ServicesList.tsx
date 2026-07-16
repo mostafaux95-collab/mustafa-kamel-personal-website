@@ -13,16 +13,16 @@ export default function ServicesList() {
   const { t: ui } = useAdminLang();
   return (
     <EntityList<ServiceItem>
-      title="Services"
+      title={ui.nav.services}
       basePath="/admin/services"
       permissionKey="services"
-      searchPlaceholder="Search services…"
+      searchPlaceholder={ui.common.search}
       matchesSearch={(s, q) => s.title.toLowerCase().includes(q.toLowerCase())}
       columns={[
-        { header: "Title", render: (s) => s.title },
-        { header: "Body", render: (s) => <span className="line-clamp-1 max-w-md text-ink/60">{s.body}</span> },
+        { header: ui.lists.title, render: (s) => s.title },
+        { header: ui.lists.body, render: (s) => <span className="line-clamp-1 max-w-md text-ink/60">{s.body}</span> },
         {
-          header: "Status",
+          header: ui.common.status,
           render: (s) => (
             <span
               className={clsx(

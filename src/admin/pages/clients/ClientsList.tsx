@@ -13,16 +13,16 @@ export default function ClientsList() {
   const { t: ui } = useAdminLang();
   return (
     <EntityList<ClientItem>
-      title="Clients"
+      title={ui.nav.clients}
       basePath="/admin/clients"
       permissionKey="clients"
-      searchPlaceholder="Search clients…"
+      searchPlaceholder={ui.common.search}
       matchesSearch={(c, s) => c.name.toLowerCase().includes(s.toLowerCase())}
       columns={[
-        { header: "Name", render: (c) => c.name },
-        { header: "Category", render: (c) => <span className="text-ink/60">{c.category ?? "—"}</span> },
+        { header: ui.lists.name, render: (c) => c.name },
+        { header: ui.lists.category, render: (c) => <span className="text-ink/60">{c.category ?? "—"}</span> },
         {
-          header: "Status",
+          header: ui.common.status,
           render: (c) => (
             <span
               className={clsx(
