@@ -103,8 +103,8 @@ export default function Testimonials() {
       // many testimonials exist.
       const DURATION = Math.max(cards.length * 6, 18);
       const tween = isRtl
-        ? gsap.fromTo(strip, { xPercent: -50 }, { xPercent: 0, duration: DURATION, ease: "none", repeat: -1 })
-        : gsap.fromTo(strip, { xPercent: 0 }, { xPercent: -50, duration: DURATION, ease: "none", repeat: -1 });
+        ? gsap.fromTo(strip, { xPercent: 0 }, { xPercent: -50, duration: DURATION, ease: "none", repeat: -1 })
+        : gsap.fromTo(strip, { xPercent: -50 }, { xPercent: 0, duration: DURATION, ease: "none", repeat: -1 });
 
       const pause = () => gsap.to(tween, { timeScale: 0, duration: 0.4, overwrite: true });
       const resume = () => gsap.to(tween, { timeScale: 1, duration: 0.4, overwrite: true });
