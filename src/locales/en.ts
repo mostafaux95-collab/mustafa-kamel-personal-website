@@ -123,6 +123,8 @@ export const en = {
     title: "In collaborators' words",
     note: "Placeholder layout, real quotes coming soon",
     addRole: "Add role",
+    prev: "Previous testimonial",
+    next: "Next testimonial",
     items: [
       {
         quote:
