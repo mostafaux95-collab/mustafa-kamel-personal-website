@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Quote } from "lucide-react";
 import Container from "@/components/ui/Container";
@@ -6,7 +6,7 @@ import FadeIn from "@/components/ui/FadeIn";
 import SplitReveal from "@/components/ui/SplitReveal";
 import { useLang } from "@/lib/i18n";
 import { fetchPublic, getAssetUrl } from "@/lib/api";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
+import { prefersReducedMotion } from "@/lib/gsapSetup";
 
 const ACCENTS = ["#432666", "#6a3f9c", "#F58963"];
 
@@ -35,8 +35,7 @@ interface CardData {
 export default function Testimonials() {
   const { t, lang } = useLang();
   const isRtl = lang === "ar";
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const stripRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
 
   const { data } = useQuery({
     queryKey: ["public", "testimonials"],
@@ -90,45 +89,6 @@ export default function Testimonials() {
         };
       });
 
-  useGSAP(
-    () => {
-      if (prefersReducedMotion() || cards.length === 0) return;
-      const strip = stripRef.current!;
-
-      // Same trick as the bottom-of-page Marquee: the strip holds two
-      // identical halves, and the tween only ever travels the first 0 to
-      // -50% of it, so the viewport is always fully covered and the loop
-      // wraps with zero visible seam. Duration scales with card count so
-      // the perceived speed per card stays consistent regardless of how
-      // many testimonials exist.
-      const DURATION = Math.max(cards.length * 6, 18);
-      const tween = isRtl
-        ? gsap.fromTo(strip, { xPercent: 0 }, { xPercent: -50, duration: DURATION, ease: "none", repeat: -1 })
-        : gsap.fromTo(strip, { xPercent: -50 }, { xPercent: 0, duration: DURATION, ease: "none", repeat: -1 });
-
-      const pause = () => gsap.to(tween, { timeScale: 0, duration: 0.4, overwrite: true });
-      const resume = () => gsap.to(tween, { timeScale: 1, duration: 0.4, overwrite: true });
-
-      strip.addEventListener("mouseenter", pause);
-      strip.addEventListener("mouseleave", resume);
-      strip.addEventListener("touchstart", pause, { passive: true });
-      strip.addEventListener("touchend", resume, { passive: true });
-      strip.addEventListener("focusin", pause);
-      strip.addEventListener("focusout", resume);
-
-      return () => {
-        tween.kill();
-        strip.removeEventListener("mouseenter", pause);
-        strip.removeEventListener("mouseleave", resume);
-        strip.removeEventListener("touchstart", pause);
-        strip.removeEventListener("touchend", resume);
-        strip.removeEventListener("focusin", pause);
-        strip.removeEventListener("focusout", resume);
-      };
-    },
-    { scope: wrapRef, dependencies: [cards.map((c) => c.key).join(), isRtl], revertOnUpdate: true },
-  );
-
   function renderCard(card: CardData, key: string) {
     return (
       <div
@@ -157,13 +117,37 @@ export default function Testimonials() {
     );
   }
 
-  // Each half repeats the cards enough times to comfortably exceed the
-  // viewport width, so the seam between halves never sits alone on screen.
+  // The strip renders exactly two identical halves back to back. A CSS
+  // animation (not JS-driven) translates the whole strip by precisely
+  // -50% of its own width — i.e. exactly one half — so the frame at the
+  // end of the loop is pixel-identical to the frame at the start and the
+  // wrap is invisible; there is no discrete "jump" or restart. Direction
+  // is flipped for RTL via animation-direction rather than by mirroring
+  // the DOM, so spacing between every card (including the seam between
+  // the two halves) stays uniform.
+  //
+  // Each half repeats the cards enough times to comfortably exceed any
+  // viewport width, so the seam is never the only thing on screen.
   const REPEAT = 3;
   const half = (keyPrefix: string) =>
     Array.from({ length: REPEAT }).flatMap((_, r) =>
       cards.map((card, i) => renderCard(card, `${keyPrefix}-${r}-${i}`)),
     );
+
+  const reduced = prefersReducedMotion();
+  const durationSec = Math.max(cards.length * 6, 18);
+  // Set directly rather than through a Tailwind --animate-* theme token:
+  // those tokens are custom properties resolved once at :root, so a
+  // nested var() fallback inside them can't see a per-instance override
+  // set on the element that actually uses them.
+  const stripStyle: CSSProperties = {
+    animationName: "marquee",
+    animationDuration: `${durationSec}s`,
+    animationTimingFunction: "linear",
+    animationIterationCount: "infinite",
+    animationDirection: isRtl ? "reverse" : "normal",
+    animationPlayState: paused ? "paused" : "running",
+  };
 
   return (
     <section className="relative overflow-hidden border-t border-ink/[0.06] py-32 sm:py-40">
@@ -182,11 +166,17 @@ export default function Testimonials() {
         </FadeIn>
       </Container>
 
-      <div ref={wrapRef} className="overflow-hidden">
+      <div className="overflow-hidden">
         <div
-          ref={stripRef}
           dir="ltr"
           className="flex w-max gap-6 py-4 will-change-transform"
+          style={cards.length > 0 && !reduced ? stripStyle : undefined}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
         >
           {half("a")}
           {half("b")}

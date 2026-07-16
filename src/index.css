@@ -67,6 +67,19 @@
       transform: translateY(-16px) translateX(6px);
     }
   }
+  /* Strip holds two identical halves of content; translating exactly
+     -50% moves precisely one half's width, so the loop point is pixel-
+     identical to the start and the browser-native animation timeline
+     (not JS/rAF-driven) never visibly resets or drifts. Duration is set
+     inline per-instance (@theme custom-property tokens resolve nested
+     var() fallbacks at :root, not at the element using them, so a
+     dynamic per-instance duration can't be threaded through an
+     --animate-* token — the animation shorthand is applied directly). */
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 * {
