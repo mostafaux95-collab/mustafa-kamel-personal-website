@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -7,6 +7,9 @@ import FadeIn from "@/components/ui/FadeIn";
 import SplitReveal from "@/components/ui/SplitReveal";
 import { useLang } from "@/lib/i18n";
 import { fetchPublic, getAssetUrl } from "@/lib/api";
+import { prefersReducedMotion } from "@/lib/gsapSetup";
+
+const AUTOPLAY_INTERVAL_MS = 4500;
 
 const ACCENTS = ["#432666", "#6a3f9c", "#F58963"];
 
@@ -36,6 +39,7 @@ export default function Testimonials() {
   // testimonials exist in the CMS — same cards, same layout, just swapped
   // content source once there's something real to show.
   const hasReal = realTestimonials.length > 0;
+  const itemCount = hasReal ? realTestimonials.length : t.testimonials.items.length;
 
   function scrollByCard(dir: 1 | -1) {
     const track = trackRef.current;
@@ -45,6 +49,50 @@ export default function Testimonials() {
     const isRtl = getComputedStyle(track).direction === "rtl";
     track.scrollBy({ left: (isRtl ? -1 : 1) * dir * step, behavior: "smooth" });
   }
+
+  // Auto-advance the slider, pausing on hover/touch/focus so visitors who
+  // stop to read a card aren't fighting the animation, and looping back to
+  // the first card once the track is exhausted.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || itemCount <= 1 || prefersReducedMotion()) return;
+
+    let paused = false;
+    const pause = () => {
+      paused = true;
+    };
+    const resume = () => {
+      paused = false;
+    };
+
+    track.addEventListener("mouseenter", pause);
+    track.addEventListener("mouseleave", resume);
+    track.addEventListener("touchstart", pause, { passive: true });
+    track.addEventListener("touchend", resume, { passive: true });
+    track.addEventListener("focusin", pause);
+    track.addEventListener("focusout", resume);
+
+    const id = window.setInterval(() => {
+      if (paused) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      const atEnd = Math.abs(Math.abs(track.scrollLeft) - maxScroll) < 4;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        scrollByCard(1);
+      }
+    }, AUTOPLAY_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(id);
+      track.removeEventListener("mouseenter", pause);
+      track.removeEventListener("mouseleave", resume);
+      track.removeEventListener("touchstart", pause);
+      track.removeEventListener("touchend", resume);
+      track.removeEventListener("focusin", pause);
+      track.removeEventListener("focusout", resume);
+    };
+  }, [itemCount, lang]);
 
   return (
     <section className="relative overflow-hidden border-t border-ink/[0.06] py-32 sm:py-40">
