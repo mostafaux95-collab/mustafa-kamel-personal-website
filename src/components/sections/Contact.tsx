@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { ArrowUpRight, Mail } from "lucide-react";
 import Container from "@/components/ui/Container";
 import FadeIn from "@/components/ui/FadeIn";
@@ -6,6 +7,7 @@ import GradientMesh from "@/components/ui/GradientMesh";
 import SplitReveal from "@/components/ui/SplitReveal";
 import Magnetic from "@/components/ui/Magnetic";
 import { useLang } from "@/lib/i18n";
+import { postPublic } from "@/lib/api";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 
 const RING_LENGTH = 2 * Math.PI * 34; // r=34 circle circumference
@@ -127,13 +129,22 @@ const SOCIALS = [
 ];
 
 export default function Contact() {
-  const [sent, setSent] = useState(false);
   const [values, setValues] = useState({ name: "", email: "", whatsapp: "", message: "" });
   const { t } = useLang();
 
+  const submitMutation = useMutation({
+    mutationFn: () =>
+      postPublic("/contact", {
+        name: values.name,
+        email: values.email,
+        whatsapp: values.whatsapp || undefined,
+        message: values.message,
+      }),
+  });
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSent(true);
+    submitMutation.mutate();
   }
 
   return (
@@ -213,10 +224,15 @@ export default function Contact() {
                 onSubmit={handleSubmit}
                 className="rounded-3xl border border-ink/[0.08] bg-[var(--color-card)] p-8"
               >
-                {sent ? (
+                {submitMutation.isSuccess ? (
                   <SentSuccess title={t.contact.sentTitle} body={t.contact.sentBody} />
                 ) : (
                   <div className="flex flex-col gap-5">
+                    {submitMutation.isError && (
+                      <p className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                        {t.contact.error}
+                      </p>
+                    )}
                     <Field
                       id="name"
                       label={t.contact.name}
@@ -252,9 +268,10 @@ export default function Contact() {
                     <Magnetic cursor="view" className="mt-2 w-full">
                       <button
                         type="submit"
-                        className="btn-shine w-full rounded-full bg-[var(--color-accent)] px-6 py-4 font-display text-sm font-semibold text-[#1a0f10] transition-transform"
+                        disabled={submitMutation.isPending}
+                        className="btn-shine w-full rounded-full bg-[var(--color-accent)] px-6 py-4 font-display text-sm font-semibold text-[#1a0f10] transition-transform disabled:opacity-60"
                       >
-                        {t.contact.send}
+                        {submitMutation.isPending ? t.contact.sending : t.contact.send}
                       </button>
                     </Magnetic>
                   </div>

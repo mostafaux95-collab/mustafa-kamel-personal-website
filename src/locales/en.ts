@@ -345,6 +345,8 @@ export const en = {
     message: "Message",
     messagePh: "Tell me about your product and what you need…",
     send: "Send Message",
+    sending: "Sending…",
+    error: "Something went wrong — please try again or email me directly.",
     sentTitle: "Message received.",
     sentBody: "I'll get back to you within a couple of days.",
   },
