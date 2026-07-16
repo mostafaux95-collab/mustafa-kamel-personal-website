@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import { FolderKanban, Quote, Building2, Wrench, Sparkles, Briefcase } from "lucide-react";
+import { FolderKanban, Quote, Building2, Wrench, Sparkles, Briefcase, Inbox } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api } from "@/admin/lib/api";
 import { useAdminAuth } from "@/admin/lib/auth";
@@ -20,6 +20,7 @@ export default function AdminDashboard() {
     { key: "services", label: t.nav.services, icon: Wrench },
     { key: "skills", label: t.nav.skills, icon: Sparkles },
     { key: "experience", label: t.nav.experience, icon: Briefcase },
+    { key: "messages", label: t.nav.messages, icon: Inbox },
   ];
 
   const results = useQueries({

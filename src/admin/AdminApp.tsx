@@ -18,6 +18,7 @@ import SkillsList from "./pages/skills/SkillsList";
 import SkillForm from "./pages/skills/SkillForm";
 import ExperienceList from "./pages/experience/ExperienceList";
 import ExperienceForm from "./pages/experience/ExperienceForm";
+import MessagesList from "./pages/messages/MessagesList";
 
 // Mounted at /admin/* by the main App router. Deliberately isolated from
 // the public site's providers (i18n, sound, GSAP scroll setup, cursor) —
@@ -77,6 +78,8 @@ function AdminAppShell() {
               <Route path="experience" element={<ExperienceList />} />
               <Route path="experience/new" element={<ExperienceForm />} />
               <Route path="experience/:id" element={<ExperienceForm />} />
+
+              <Route path="messages" element={<MessagesList />} />
             </Route>
           </Routes>
         </AdminAuthProvider>

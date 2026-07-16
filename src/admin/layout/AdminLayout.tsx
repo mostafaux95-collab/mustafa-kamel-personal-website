@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -7,11 +8,13 @@ import {
   Wrench,
   Sparkles,
   Briefcase,
+  Inbox,
   LogOut,
   Moon,
   Sun,
   Languages,
 } from "lucide-react";
+import { api } from "@/admin/lib/api";
 import { useAdminAuth } from "@/admin/lib/auth";
 import { useAdminLang } from "@/admin/lib/adminI18n";
 import { useTheme } from "@/lib/theme";
@@ -22,6 +25,12 @@ export default function AdminLayout() {
   const { theme, toggle } = useTheme();
   const { t, toggle: toggleLang } = useAdminLang();
 
+  const { data: messages } = useQuery({
+    queryKey: ["admin", "messages", "unread-count"],
+    queryFn: () => api.get<{ unread: number }>("/admin/messages?pageSize=1"),
+    refetchInterval: 60_000,
+  });
+
   const NAV = [
     { to: "/admin", label: t.nav.dashboard, icon: LayoutDashboard, end: true },
     { to: "/admin/projects", label: t.nav.projects, icon: FolderKanban, end: false },
@@ -30,6 +39,13 @@ export default function AdminLayout() {
     { to: "/admin/services", label: t.nav.services, icon: Wrench, end: false },
     { to: "/admin/skills", label: t.nav.skills, icon: Sparkles, end: false },
     { to: "/admin/experience", label: t.nav.experience, icon: Briefcase, end: false },
+    {
+      to: "/admin/messages",
+      label: t.nav.messages,
+      icon: Inbox,
+      end: false,
+      badge: messages?.unread,
+    },
   ];
 
   return (
@@ -56,7 +72,12 @@ export default function AdminLayout() {
               }
             >
               <item.icon size={17} />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {!!item.badge && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--color-accent)] px-1.5 text-[11px] font-semibold text-[#1a0f10]">
+                  {item.badge}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>
