@@ -149,10 +149,6 @@ export default function ProjectCard({ project, index }: { project: ApiProject; i
     </motion.div>
   );
 
-  if (!project.hasCaseStudy) {
-    return <div data-cursor="view">{body}</div>;
-  }
-
   return (
     <Link to={`/work/${project.slug}`} data-cursor="view" className="block">
       {body}

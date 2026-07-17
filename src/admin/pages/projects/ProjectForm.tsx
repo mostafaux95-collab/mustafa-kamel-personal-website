@@ -298,14 +298,6 @@ export default function ProjectForm() {
               placeholder={t.fields.tagsPlaceholder}
             />
           </div>
-          <label className="mt-3 flex items-center gap-2 text-sm text-ink/70">
-            <input
-              type="checkbox"
-              checked={values.hasCaseStudy}
-              onChange={(e) => set("hasCaseStudy", e.target.checked)}
-            />
-            {t.fields.hasCaseStudy}
-          </label>
         </Section>
 
         <Section title={t.sections.seo}>
