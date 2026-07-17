@@ -49,14 +49,14 @@ export default function AdminLayout() {
   ];
 
   return (
-    <div className="flex min-h-screen bg-[var(--color-bg)] text-ink">
+    <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] text-ink">
       <aside className="flex w-64 shrink-0 flex-col border-e border-ink/[0.08] bg-[var(--color-card)]">
-        <div className="flex h-16 items-center border-b border-ink/[0.08] px-6">
+        <div className="flex h-16 shrink-0 items-center border-b border-ink/[0.08] px-6">
           <span className="font-display text-sm font-semibold tracking-tight">
             Mustafa Kamel <span className="text-ink/40">/ {t.layout.admin}</span>
           </span>
         </div>
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 space-y-1 overflow-y-auto p-4">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
@@ -81,7 +81,7 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <div className="border-t border-ink/[0.08] p-4">
+        <div className="shrink-0 border-t border-ink/[0.08] p-4">
           <div className="mb-3 flex items-center gap-3 rounded-xl px-2 py-2">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/15 font-display text-sm font-semibold text-[var(--color-accent)]">
               {user?.firstName?.[0]}
