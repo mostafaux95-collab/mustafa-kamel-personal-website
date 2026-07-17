@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { adminQueryClient } from "./lib/queryClient";
 import { AdminAuthProvider, RequireAuth } from "./lib/auth";
 import { AdminLangProvider, useAdminLang } from "./lib/adminI18n";
+import { AdminConfirmProvider } from "./lib/confirm";
 import AdminLayout from "./layout/AdminLayout";
 import AdminLogin from "./pages/Login";
 import AdminDashboard from "./pages/Dashboard";
@@ -44,44 +45,46 @@ function AdminAppShell() {
     <div dir={dir} lang={lang}>
       <QueryClientProvider client={adminQueryClient}>
         <AdminAuthProvider>
-          <Routes>
-            <Route path="login" element={<AdminLogin />} />
-            <Route
-              element={
-                <RequireAuth>
-                  <AdminLayout />
-                </RequireAuth>
-              }
-            >
-              <Route index element={<AdminDashboard />} />
+          <AdminConfirmProvider>
+            <Routes>
+              <Route path="login" element={<AdminLogin />} />
+              <Route
+                element={
+                  <RequireAuth>
+                    <AdminLayout />
+                  </RequireAuth>
+                }
+              >
+                <Route index element={<AdminDashboard />} />
 
-              <Route path="projects" element={<ProjectsList />} />
-              <Route path="projects/new" element={<ProjectForm />} />
-              <Route path="projects/:id" element={<ProjectForm />} />
+                <Route path="projects" element={<ProjectsList />} />
+                <Route path="projects/new" element={<ProjectForm />} />
+                <Route path="projects/:id" element={<ProjectForm />} />
 
-              <Route path="testimonials" element={<TestimonialsList />} />
-              <Route path="testimonials/new" element={<TestimonialForm />} />
-              <Route path="testimonials/:id" element={<TestimonialForm />} />
+                <Route path="testimonials" element={<TestimonialsList />} />
+                <Route path="testimonials/new" element={<TestimonialForm />} />
+                <Route path="testimonials/:id" element={<TestimonialForm />} />
 
-              <Route path="clients" element={<ClientsList />} />
-              <Route path="clients/new" element={<ClientForm />} />
-              <Route path="clients/:id" element={<ClientForm />} />
+                <Route path="clients" element={<ClientsList />} />
+                <Route path="clients/new" element={<ClientForm />} />
+                <Route path="clients/:id" element={<ClientForm />} />
 
-              <Route path="services" element={<ServicesList />} />
-              <Route path="services/new" element={<ServiceForm />} />
-              <Route path="services/:id" element={<ServiceForm />} />
+                <Route path="services" element={<ServicesList />} />
+                <Route path="services/new" element={<ServiceForm />} />
+                <Route path="services/:id" element={<ServiceForm />} />
 
-              <Route path="skills" element={<SkillsList />} />
-              <Route path="skills/new" element={<SkillForm />} />
-              <Route path="skills/:id" element={<SkillForm />} />
+                <Route path="skills" element={<SkillsList />} />
+                <Route path="skills/new" element={<SkillForm />} />
+                <Route path="skills/:id" element={<SkillForm />} />
 
-              <Route path="experience" element={<ExperienceList />} />
-              <Route path="experience/new" element={<ExperienceForm />} />
-              <Route path="experience/:id" element={<ExperienceForm />} />
+                <Route path="experience" element={<ExperienceList />} />
+                <Route path="experience/new" element={<ExperienceForm />} />
+                <Route path="experience/:id" element={<ExperienceForm />} />
 
-              <Route path="messages" element={<MessagesList />} />
-            </Route>
-          </Routes>
+                <Route path="messages" element={<MessagesList />} />
+              </Route>
+            </Routes>
+          </AdminConfirmProvider>
         </AdminAuthProvider>
       </QueryClientProvider>
     </div>

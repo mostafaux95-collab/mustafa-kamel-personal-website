@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { api } from "@/admin/lib/api";
 import { useHasPermission } from "@/admin/lib/auth";
 import { useAdminLang } from "@/admin/lib/adminI18n";
+import { useConfirm } from "@/admin/lib/confirm";
 
 interface ContactMessageItem {
   id: string;
@@ -25,6 +26,7 @@ export default function MessagesList() {
   const { t } = useAdminLang();
   const canWrite = useHasPermission("messages:write");
   const queryClient = useQueryClient();
+  const confirm = useConfirm();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin", "messages", "list"],
@@ -102,8 +104,8 @@ export default function MessagesList() {
                       {item.isRead ? <Mail size={15} /> : <MailOpen size={15} />}
                     </button>
                     <button
-                      onClick={() => {
-                        if (confirm(t.messages.deleteConfirm)) deleteMutation.mutate(item.id);
+                      onClick={async () => {
+                        if (await confirm(t.messages.deleteConfirm)) deleteMutation.mutate(item.id);
                       }}
                       className="text-ink/35 transition-colors hover:text-red-400"
                       aria-label={t.common.delete}

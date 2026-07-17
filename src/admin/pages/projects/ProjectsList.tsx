@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { api } from "@/admin/lib/api";
 import { useHasPermission } from "@/admin/lib/auth";
 import { useAdminLang } from "@/admin/lib/adminI18n";
+import { useConfirm } from "@/admin/lib/confirm";
 
 interface ProjectListItem {
   id: string;
@@ -28,6 +29,7 @@ export default function ProjectsList() {
   const canWrite = useHasPermission("projects:write");
   const queryClient = useQueryClient();
   const { t } = useAdminLang();
+  const confirm = useConfirm();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin", "projects", "list"],
@@ -127,8 +129,8 @@ export default function ProjectsList() {
                 <td className="px-5 py-3.5 text-end">
                   {canWrite && (
                     <button
-                      onClick={() => {
-                        if (confirm(t.common.deleteConfirm)) deleteMutation.mutate(p.id);
+                      onClick={async () => {
+                        if (await confirm(t.common.deleteConfirm)) deleteMutation.mutate(p.id);
                       }}
                       className="text-ink/35 transition-colors hover:text-red-400"
                       aria-label={t.common.delete}

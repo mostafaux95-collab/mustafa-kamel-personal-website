@@ -6,6 +6,7 @@ import clsx from "clsx";
 import { api } from "@/admin/lib/api";
 import { useHasPermission } from "@/admin/lib/auth";
 import { useAdminLang } from "@/admin/lib/adminI18n";
+import { useConfirm } from "@/admin/lib/confirm";
 
 export interface EntityListColumn<T> {
   header: string;
@@ -41,6 +42,7 @@ export function EntityList<T extends { id: string }>({
   const canWrite = useHasPermission(`${permissionKey}:write`);
   const queryClient = useQueryClient();
   const { t } = useAdminLang();
+  const confirm = useConfirm();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin", permissionKey, "list"],
@@ -131,8 +133,8 @@ export function EntityList<T extends { id: string }>({
                 <td className="px-5 py-3.5 text-end">
                   {canWrite && (
                     <button
-                      onClick={() => {
-                        if (confirm(t.common.deleteConfirm)) deleteMutation.mutate(item.id);
+                      onClick={async () => {
+                        if (await confirm(t.common.deleteConfirm)) deleteMutation.mutate(item.id);
                       }}
                       className="text-ink/35 transition-colors hover:text-red-400"
                       aria-label={t.common.delete}
