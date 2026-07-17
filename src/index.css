@@ -113,18 +113,21 @@ html.light .noise-overlay {
   mix-blend-mode: multiply;
 }
 
-/* ---------- Arabic ---------- */
-html[lang="ar"] {
+/* ---------- Arabic ----------
+   Matches [lang="ar"] anywhere, not just html[lang="ar"] — the admin
+   dashboard has its own language state, independent of the public
+   site's, and sets `lang` on its own wrapper div rather than <html>. */
+[lang="ar"] {
   --font-display: "IBM Plex Sans Arabic", "Space Grotesk", system-ui, sans-serif;
   --font-body: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
 }
 
 /* Positive tracking mangles connected Arabic script; negative squeezes it */
-html[lang="ar"] * {
+[lang="ar"] * {
   letter-spacing: 0 !important;
 }
 
-html[lang="ar"] .font-mono {
+[lang="ar"] .font-mono {
   font-family: ui-monospace, monospace;
 }
 

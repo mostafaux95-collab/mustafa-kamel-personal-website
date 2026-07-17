@@ -77,7 +77,7 @@ export default function SkillForm() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl p-8">
+    <div className="p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
         {isEdit ? t.editTitles.skill.edit : t.editTitles.skill.new}
       </h1>

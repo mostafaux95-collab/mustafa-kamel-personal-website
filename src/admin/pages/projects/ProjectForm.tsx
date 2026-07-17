@@ -169,7 +169,7 @@ export default function ProjectForm() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl p-8">
+    <div className="p-8">
       <h1 className="font-display text-2xl font-semibold text-ink">
         {isEdit ? t.editTitles.project.edit : t.editTitles.project.new}
       </h1>
