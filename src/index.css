@@ -67,18 +67,24 @@
       transform: translateY(-16px) translateX(6px);
     }
   }
-  /* Strip holds two identical halves of content; translating exactly
-     -50% moves precisely one half's width, so the loop point is pixel-
-     identical to the start and the browser-native animation timeline
-     (not JS/rAF-driven) never visibly resets or drifts. Duration is set
-     inline per-instance (@theme custom-property tokens resolve nested
-     var() fallbacks at :root, not at the element using them, so a
-     dynamic per-instance duration can't be threaded through an
-     --animate-* token — the animation shorthand is applied directly). */
-  @keyframes marquee {
-    to {
-      transform: translateX(-50%);
-    }
+}
+
+/* Strip holds two identical halves of content; translating exactly -50%
+   moves precisely one half's width, so the loop point is pixel-identical
+   to the start and the browser-native animation timeline (not JS/rAF-
+   driven) never visibly resets or drifts. Duration is set inline
+   per-instance (@theme custom-property tokens resolve nested var()
+   fallbacks at :root, not at the element using them, so a dynamic
+   per-instance duration can't be threaded through an --animate-* token —
+   the animation shorthand is applied directly via inline style instead).
+   Deliberately kept OUTSIDE @theme: Tailwind only emits a @theme
+   keyframes block when a corresponding --animate-* token is referenced
+   by a generated utility class: applying `animationName` via inline
+   style doesn't count, so the keyframes were being silently dropped
+   from the build entirely. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
   }
 }
 
