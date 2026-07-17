@@ -37,6 +37,13 @@ function KonamiListener() {
 }
 
 function PublicChrome() {
+  // Lenis hijacks wheel/scroll input at the window level to smooth-
+  // scroll the document — appropriate for the public site's single
+  // long-scrolling page, but it doesn't know about the admin's nested
+  // overflow-y-auto containers and would swallow scroll input meant for
+  // them. Scoped here so it only ever mounts on non-admin routes.
+  useLenis();
+
   return (
     <>
       <div className="noise-overlay" />
@@ -49,7 +56,6 @@ function PublicChrome() {
 }
 
 export default function App() {
-  useLenis();
   const location = useLocation();
   // The admin dashboard is a plain tool UI — skip the public site's custom
   // cursor, noise texture, command palette, and easter eggs there.
