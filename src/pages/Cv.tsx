@@ -1,5 +1,6 @@
 import { lazy, Suspense, useRef } from "react";
 import { Download, GraduationCap, Languages } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Container from "@/components/ui/Container";
@@ -10,12 +11,25 @@ import CountUp from "@/components/ui/CountUp";
 import CtaStrip from "@/components/ui/CtaStrip";
 import Marquee from "@/components/ui/Marquee";
 import ContactBanner from "@/components/sections/ContactBanner";
-import ExperienceTimeline from "@/components/experience/ExperienceTimeline";
+import ExperienceTimeline, { type ExperienceRole } from "@/components/experience/ExperienceTimeline";
 import { usePageTitle } from "@/lib/usePageTitle";
 import { useLang } from "@/lib/i18n";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 import { useStaggerReveal } from "@/lib/useStaggerReveal";
+import { fetchPublic } from "@/lib/api";
+
+interface ExperienceItem {
+  id: string;
+  company: string;
+  role: string;
+  roleAr: string | null;
+  period: string;
+  summary: string;
+  summaryAr: string | null;
+  highlights: string[];
+  highlightsAr: string[];
+}
 
 const PageShape = lazy(() => import("@/components/three/PageShape"));
 
@@ -55,9 +69,25 @@ function DownloadButton({ label, note }: { label: string; note: string }) {
 }
 
 export default function Cv() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const reduced = useReducedMotion();
   usePageTitle(t.nav.cv);
+
+  const { data: experienceData } = useQuery({
+    queryKey: ["public", "experience"],
+    queryFn: () => fetchPublic<{ items: ExperienceItem[] }>("/experience?pageSize=50"),
+  });
+  const realExperience = experienceData?.items ?? [];
+  const roles: ExperienceRole[] =
+    realExperience.length > 0
+      ? realExperience.map((item) => ({
+          company: item.company,
+          title: lang === "ar" && item.roleAr ? item.roleAr : item.role,
+          period: item.period,
+          points:
+            lang === "ar" && item.highlightsAr.length > 0 ? item.highlightsAr : item.highlights,
+        }))
+      : t.cv.roles;
 
   const headerRef = useRef<HTMLDivElement>(null);
   const statsRef = useStaggerReveal<HTMLDivElement>({ y: 40, stagger: 0.08 });
@@ -174,7 +204,7 @@ export default function Cv() {
               </span>
             </GsapFade>
             <div className="mt-14">
-              <ExperienceTimeline roles={t.cv.roles} />
+              <ExperienceTimeline roles={roles} />
             </div>
           </Container>
         </section>
