@@ -2,13 +2,7 @@ import { useRef } from "react";
 import { gsap, useGSAP, ScrollTrigger, prefersReducedMotion } from "@/lib/gsapSetup";
 import { useLang } from "@/lib/i18n";
 
-export default function Marquee({
-  items,
-  reverse = false,
-}: {
-  items: string[];
-  reverse?: boolean;
-}) {
+export default function Marquee({ items }: { items: string[] }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const { lang } = useLang();
@@ -24,13 +18,15 @@ export default function Marquee({
       // so the loop wraps with zero visible gap in either direction.
       // A long linear duration keeps the drift calm and continuous.
       //
-      // Direction is chosen by picking which fromTo to build, NOT by
-      // flipping timeScale negative on an already-running repeat:-1 tween
-      // — GSAP can't play an infinitely-repeating tween backward past its
-      // start (totalTime hits 0 and the tween just stops there), which is
-      // why the strip used to freeze on an RTL language switch.
+      // Direction follows reading direction: English drifts forward
+      // (left to right), Arabic drifts backward (right to left) — chosen
+      // by picking which fromTo to build, NOT by flipping timeScale
+      // negative on an already-running repeat:-1 tween — GSAP can't play
+      // an infinitely-repeating tween backward past its start (totalTime
+      // hits 0 and the tween just stops there), which is why the strip
+      // used to freeze on an RTL language switch.
       const DURATION = 110;
-      const goForward = reverse === isRtl;
+      const goForward = !isRtl;
       const tween = goForward
         ? gsap.fromTo(
             strip,
@@ -62,7 +58,7 @@ export default function Marquee({
         tween.kill();
       };
     },
-    { scope: wrapRef, dependencies: [items.join(), reverse, isRtl], revertOnUpdate: true },
+    { scope: wrapRef, dependencies: [items.join(), isRtl], revertOnUpdate: true },
   );
 
   // Each half repeats the items enough times to always exceed the viewport

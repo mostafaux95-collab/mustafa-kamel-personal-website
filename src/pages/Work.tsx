@@ -33,7 +33,7 @@ export default function Work() {
         <EngagementModels />
         <StatsBar />
         <ContactBanner />
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip />
       </main>
       <Footer />

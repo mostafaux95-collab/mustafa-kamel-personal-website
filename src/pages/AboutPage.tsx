@@ -32,7 +32,7 @@ export default function AboutPage() {
         <Collaboration />
         <Tools />
         <ContactBanner />
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip />
       </main>
       <Footer />

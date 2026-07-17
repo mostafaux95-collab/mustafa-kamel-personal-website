@@ -273,7 +273,7 @@ export default function Cv() {
         </section>
 
         <ContactBanner />
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip />
       </main>
       <Footer />

@@ -21,7 +21,7 @@ export default function ContactPage() {
         <Contact />
         <NextSteps />
         <Faq />
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip />
       </main>
       <Footer />

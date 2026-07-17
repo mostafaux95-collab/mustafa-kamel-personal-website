@@ -28,7 +28,7 @@ export default function Home() {
         <Services />
         <AboutTeaser />
         <Testimonials />
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip headline={t.cta.home} />
       </main>
       <Footer />

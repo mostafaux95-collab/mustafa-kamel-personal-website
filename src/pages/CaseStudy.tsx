@@ -188,7 +188,7 @@ export default function CaseStudy() {
           </section>
         )}
 
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip headline={t.cta.caseStudy} />
       </main>
       <Footer />

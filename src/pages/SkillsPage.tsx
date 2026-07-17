@@ -28,7 +28,7 @@ export default function SkillsPage() {
         <Industries />
         <Learning />
         <ContactBanner />
-        <Marquee reverse items={t.marqueeBottom} />
+        <Marquee items={t.marqueeBottom} />
         <CtaStrip />
       </main>
       <Footer />

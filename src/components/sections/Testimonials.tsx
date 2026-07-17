@@ -140,12 +140,16 @@ export default function Testimonials() {
   // those tokens are custom properties resolved once at :root, so a
   // nested var() fallback inside them can't see a per-instance override
   // set on the element that actually uses them.
+  // The marquee keyframe plays 0% -> -50% ("normal"), which drifts the
+  // strip leftward — so English (left to right reading, forward drift)
+  // needs "reverse" (plays -50% -> 0%, drifting rightward) while Arabic
+  // matches "normal" directly.
   const stripStyle: CSSProperties = {
     animationName: "marquee",
     animationDuration: `${durationSec}s`,
     animationTimingFunction: "linear",
     animationIterationCount: "infinite",
-    animationDirection: isRtl ? "reverse" : "normal",
+    animationDirection: isRtl ? "normal" : "reverse",
     animationPlayState: paused ? "paused" : "running",
   };
 
