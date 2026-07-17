@@ -52,6 +52,7 @@ export const adminEn = {
     saving: "Saving…",
     cancel: "Cancel",
     search: "Search…",
+    add: "Add",
   },
   // Section (card) titles used across the 6 entity forms.
   sections: {
@@ -99,9 +100,7 @@ export const adminEn = {
     addMetric: "Add metric",
     techStack: "Tech stack (comma-separated)",
     tags: "Tags",
-    tagSaas: "SaaS",
-    tagEcommerce: "E-commerce",
-    tagFnb: "F&B",
+    tagsPlaceholder: "Type a tag and press Enter",
     hasCaseStudy: "Has a full case study page",
     galleryImages: "Gallery images",
     metaTitleEn: "Meta title (EN)",
@@ -230,6 +229,7 @@ export const adminAr: AdminLocale = {
     saving: "جارٍ الحفظ…",
     cancel: "إلغاء",
     search: "بحث…",
+    add: "إضافة",
   },
   sections: {
     basics: "الأساسيات",
@@ -275,9 +275,7 @@ export const adminAr: AdminLocale = {
     addMetric: "إضافة مؤشر",
     techStack: "التقنيات المستخدمة (مفصولة بفواصل)",
     tags: "الوسوم",
-    tagSaas: "SaaS",
-    tagEcommerce: "تجارة إلكترونية",
-    tagFnb: "مأكولات ومشروبات",
+    tagsPlaceholder: "اكتب وسمًا واضغط Enter",
     hasCaseStudy: "له صفحة دراسة حالة كاملة",
     galleryImages: "صور المعرض",
     metaTitleEn: "عنوان السيو (إنجليزي)",

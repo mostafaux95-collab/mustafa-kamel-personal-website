@@ -54,7 +54,7 @@ export const en = {
     title: "Products shipped, not just designed",
     para: "A selection of platforms where I owned design end to end, from research and systems to the pixels that shipped.",
     allWork: "All work",
-    filters: { all: "All", saas: "SaaS", ecommerce: "E-commerce", fnb: "F&B" },
+    filters: { all: "All" },
     loading: "Loading projects…",
   },
   projects: {

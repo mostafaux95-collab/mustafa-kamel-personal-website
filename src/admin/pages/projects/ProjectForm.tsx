@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { api, ApiError } from "@/admin/lib/api";
-import { Section, Row, Field, Textarea, ColorField, MultiSelect, FormActions } from "@/admin/components/FormFields";
+import { Section, Row, Field, Textarea, ColorField, TagInput, FormActions } from "@/admin/components/FormFields";
 import { ImageUpload } from "@/admin/components/ImageUpload";
 import { GalleryUpload } from "@/admin/components/GalleryUpload";
 import { useAdminLang } from "@/admin/lib/adminI18n";
@@ -99,6 +99,18 @@ export default function ProjectForm() {
     queryFn: () => api.get<ApiProject>(`/admin/projects/${id}`),
     enabled: isEdit,
   });
+
+  // Tag suggestions: whatever values are already in use across other
+  // projects, so picking a known tag is one click while a brand-new one
+  // (which becomes its own filter tab on the public Work page) is still
+  // just a matter of typing it.
+  const { data: allProjects } = useQuery({
+    queryKey: ["admin", "projects", "all-tags"],
+    queryFn: () => api.get<{ items: ApiProject[] }>("/admin/projects?pageSize=100"),
+  });
+  const tagSuggestions = Array.from(
+    new Set((allProjects?.items ?? []).flatMap((p) => p.tags)),
+  ).sort((a, b) => a.localeCompare(b));
 
   useEffect(() => {
     if (existing) {
@@ -278,15 +290,12 @@ export default function ProjectForm() {
             onChange={(v) => set("techStack", v)}
           />
           <div className="mt-4">
-            <MultiSelect
+            <TagInput
               label={t.fields.tags}
               value={values.tags}
               onChange={(v) => set("tags", v)}
-              options={[
-                { value: "saas", label: t.fields.tagSaas },
-                { value: "ecommerce", label: t.fields.tagEcommerce },
-                { value: "fnb", label: t.fields.tagFnb },
-              ]}
+              suggestions={tagSuggestions}
+              placeholder={t.fields.tagsPlaceholder}
             />
           </div>
           <label className="mt-3 flex items-center gap-2 text-sm text-ink/70">

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useAdminLang } from "@/admin/lib/adminI18n";
 
 // Shared building blocks for admin entity forms (Projects, Testimonials,
@@ -192,6 +192,103 @@ export function MultiSelect({
             </button>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+// Free-text tags with autocomplete, not a fixed enum: `suggestions` is
+// whatever values already exist elsewhere (e.g. other projects' tags),
+// offered as one-click pills, but typing something new and pressing
+// Enter (or the Add button) works too. This is what lets a new filter
+// tab appear on the public site without a code change — the tag value
+// typed here becomes that tab.
+export function TagInput({
+  label,
+  value,
+  onChange,
+  suggestions,
+  placeholder,
+}: {
+  label: string;
+  value: string[];
+  onChange: (v: string[]) => void;
+  suggestions: string[];
+  placeholder?: string;
+}) {
+  const { t } = useAdminLang();
+  const [draft, setDraft] = useState("");
+
+  function add(raw: string) {
+    const tag = raw.trim();
+    if (!tag || value.includes(tag)) return;
+    onChange([...value, tag]);
+    setDraft("");
+  }
+
+  function remove(tag: string) {
+    onChange(value.filter((v) => v !== tag));
+  }
+
+  const unusedSuggestions = suggestions.filter((s) => !value.includes(s));
+
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-medium uppercase tracking-widest text-ink/45">
+        {label}
+      </label>
+
+      {value.length > 0 && (
+        <div className="mb-2 flex flex-wrap gap-2">
+          {value.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => remove(tag)}
+              className="flex items-center gap-1.5 rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)]/15 px-4 py-2 text-sm font-medium text-[var(--color-accent)]"
+            >
+              {tag}
+              <span aria-hidden>×</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {unusedSuggestions.length > 0 && (
+        <div className="mb-2 flex flex-wrap gap-2">
+          {unusedSuggestions.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => add(tag)}
+              className="rounded-full border border-ink/10 bg-ink/[0.02] px-4 py-2 text-sm text-ink/60 hover:border-ink/20"
+            >
+              + {tag}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="flex gap-2">
+        <input
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              add(draft);
+            }
+          }}
+          placeholder={placeholder}
+          className="w-full rounded-full border border-ink/10 bg-ink/[0.02] px-4 py-2.5 text-sm text-ink focus:border-[var(--color-accent)] focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={() => add(draft)}
+          className="shrink-0 rounded-full border border-ink/10 px-4 py-2.5 text-sm font-medium text-ink/70 hover:border-ink/20"
+        >
+          {t.common.add}
+        </button>
       </div>
     </div>
   );

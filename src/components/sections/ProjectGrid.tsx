@@ -6,17 +6,23 @@ import type { ApiProject } from "@/lib/projectsApi";
 import { useLang } from "@/lib/i18n";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 
-type FilterKey = "all" | "saas" | "ecommerce" | "fnb";
-const FILTERS: FilterKey[] = ["all", "saas", "ecommerce", "fnb"];
+const ALL = "all";
 
 /**
  * Filterable project list shared by the home Featured Work section and
  * the Work page. GSAP handles both the sliding tab indicator and the
  * out-then-in card transition on every filter change.
+ *
+ * Filter tabs are derived from whatever tag values actually exist across
+ * the loaded projects, rather than a fixed list — adding a brand-new tag
+ * to a project in the admin (e.g. "Fintech") makes its own tab appear
+ * here automatically, no code change required. Tags are plain display
+ * strings (not per-language keys), so they render as typed regardless
+ * of site language — the same tradeoff free-text tags make anywhere.
  */
 export default function ProjectGrid() {
   const { t, lang } = useLang();
-  const [filter, setFilter] = useState<FilterKey>("all");
+  const [filter, setFilter] = useState<string>(ALL);
   const [animating, setAnimating] = useState(false);
   const tabsRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
@@ -29,7 +35,12 @@ export default function ProjectGrid() {
   });
   const projects = data?.items ?? [];
 
-  const visible = filter === "all" ? projects : projects.filter((p) => p.tags.includes(filter));
+  const tags = Array.from(new Set(projects.flatMap((p) => p.tags))).sort((a, b) =>
+    a.localeCompare(b),
+  );
+  const filters = [ALL, ...tags];
+
+  const visible = filter === ALL ? projects : projects.filter((p) => p.tags.includes(filter));
 
   // Slide the pill indicator under the active tab
   useGSAP(
@@ -45,7 +56,7 @@ export default function ProjectGrid() {
         ease: "power3.out",
       });
     },
-    { scope: tabsRef, dependencies: [filter, lang] },
+    { scope: tabsRef, dependencies: [filter, lang, filters.join()] },
   );
 
   // Cards animate in whenever the filtered set changes
@@ -75,7 +86,7 @@ export default function ProjectGrid() {
     { scope: listRef, dependencies: [filter] },
   );
 
-  function changeFilter(next: FilterKey) {
+  function changeFilter(next: string) {
     if (next === filter || animating) return;
     if (prefersReducedMotion() || !listRef.current?.children.length) {
       setFilter(next);
@@ -116,7 +127,7 @@ export default function ProjectGrid() {
           className="absolute top-1.5 bottom-1.5 rounded-full bg-[var(--color-accent)]"
           style={{ left: 6, width: 0 }}
         />
-        {FILTERS.map((key) => (
+        {filters.map((key) => (
           <button
             key={key}
             data-filter={key}
@@ -128,7 +139,7 @@ export default function ProjectGrid() {
               filter === key ? "text-[#1a0f10]" : "text-ink/60 hover:text-ink"
             }`}
           >
-            {t.projectsSection.filters[key]}
+            {key === ALL ? t.projectsSection.filters.all : key}
           </button>
         ))}
       </div>
