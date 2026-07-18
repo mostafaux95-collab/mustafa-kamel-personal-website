@@ -170,7 +170,15 @@ export default function Testimonials() {
         </FadeIn>
       </Container>
 
-      <div className="overflow-hidden">
+      {/* dir="ltr" here too, not just on the strip below: the strip is a
+          block-level box wider than its container (`w-max`), and in an
+          RTL page a block child like that anchors to its parent's RTL
+          start edge (the right) and overflows leftward — pushing the
+          whole strip thousands of pixels off-screen so the visible
+          window lands on empty space past the last card. Forcing this
+          wrapper to LTR keeps the strip anchored at its own left edge,
+          matching the physical math the animation assumes. */}
+      <div dir="ltr" className="overflow-hidden">
         <div
           dir="ltr"
           className="flex w-max gap-6 py-4 will-change-transform"
