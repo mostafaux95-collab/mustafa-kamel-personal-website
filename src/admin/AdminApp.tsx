@@ -19,6 +19,11 @@ import SkillsList from "./pages/skills/SkillsList";
 import SkillForm from "./pages/skills/SkillForm";
 import ExperienceList from "./pages/experience/ExperienceList";
 import ExperienceForm from "./pages/experience/ExperienceForm";
+import EducationList from "./pages/education/EducationList";
+import EducationForm from "./pages/education/EducationForm";
+import LanguageList from "./pages/languages/LanguageList";
+import LanguageForm from "./pages/languages/LanguageForm";
+import CvSettings from "./pages/cv/CvSettings";
 import MessagesList from "./pages/messages/MessagesList";
 
 // Mounted at /admin/* by the main App router. Deliberately isolated from
@@ -80,6 +85,16 @@ function AdminAppShell() {
                 <Route path="experience" element={<ExperienceList />} />
                 <Route path="experience/new" element={<ExperienceForm />} />
                 <Route path="experience/:id" element={<ExperienceForm />} />
+
+                <Route path="education" element={<EducationList />} />
+                <Route path="education/new" element={<EducationForm />} />
+                <Route path="education/:id" element={<EducationForm />} />
+
+                <Route path="languages" element={<LanguageList />} />
+                <Route path="languages/new" element={<LanguageForm />} />
+                <Route path="languages/:id" element={<LanguageForm />} />
+
+                <Route path="cv-settings" element={<CvSettings />} />
 
                 <Route path="messages" element={<MessagesList />} />
               </Route>

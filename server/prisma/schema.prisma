@@ -352,6 +352,55 @@ model Experience {
   @@map("experiences")
 }
 
+// CV page: education history and language proficiency entries. Kept as
+// separate small models (rather than folding into Experience or a
+// generic settings blob) since each is its own add/edit/delete list.
+model CvEducation {
+  id String @id @default(uuid())
+
+  degree   String
+  degreeAr String?
+
+  school   String
+  schoolAr String?
+
+  years String
+
+  status    ContentStatus @default(DRAFT)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("cv_education")
+}
+
+model CvLanguage {
+  id String @id @default(uuid())
+
+  name   String
+  nameAr String?
+
+  level   String
+  levelAr String?
+
+  status    ContentStatus @default(DRAFT)
+  sortOrder Int           @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([status, sortOrder])
+  @@map("cv_languages")
+}
+
 // Local-disk media library (Phase 3 pulled forward). `url` is a path
 // relative to the API's static /uploads mount (e.g. "/uploads/xxx.jpg"),
 // not an absolute URL — callers build the full src by prefixing the API

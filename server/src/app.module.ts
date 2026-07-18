@@ -17,6 +17,8 @@ import { ClientsModule } from './clients/clients.module';
 import { ServicesModule } from './services/services.module';
 import { SkillsModule } from './skills/skills.module';
 import { ExperienceModule } from './experience/experience.module';
+import { EducationModule } from './education/education.module';
+import { LanguageModule } from './languages/language.module';
 import { MediaModule } from './media/media.module';
 import { ContactModule } from './contact/contact.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -53,6 +55,8 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
     ServicesModule,
     SkillsModule,
     ExperienceModule,
+    EducationModule,
+    LanguageModule,
     MediaModule,
     ContactModule,
   ],

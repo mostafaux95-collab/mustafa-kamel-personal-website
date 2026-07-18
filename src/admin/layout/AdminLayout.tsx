@@ -8,11 +8,13 @@ import {
   Wrench,
   Sparkles,
   Briefcase,
+  GraduationCap,
+  Languages,
+  Settings,
   Inbox,
   LogOut,
   Moon,
   Sun,
-  Languages,
 } from "lucide-react";
 import { api } from "@/admin/lib/api";
 import { useAdminAuth } from "@/admin/lib/auth";
@@ -39,6 +41,9 @@ export default function AdminLayout() {
     { to: "/admin/services", label: t.nav.services, icon: Wrench, end: false },
     { to: "/admin/skills", label: t.nav.skills, icon: Sparkles, end: false },
     { to: "/admin/experience", label: t.nav.experience, icon: Briefcase, end: false },
+    { to: "/admin/education", label: t.nav.education, icon: GraduationCap, end: false },
+    { to: "/admin/languages", label: t.nav.languages, icon: Languages, end: false },
+    { to: "/admin/cv-settings", label: t.nav.cvSettings, icon: Settings, end: false },
     {
       to: "/admin/messages",
       label: t.nav.messages,

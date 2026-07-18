@@ -29,6 +29,7 @@ const ALLOWED_MIME_TYPES = new Set([
   'image/webp',
   'image/gif',
   'image/svg+xml',
+  'application/pdf',
 ]);
 const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024; // 8MB
 

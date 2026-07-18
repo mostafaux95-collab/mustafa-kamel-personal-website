@@ -17,7 +17,7 @@ import { useLang } from "@/lib/i18n";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
 import { useStaggerReveal } from "@/lib/useStaggerReveal";
-import { fetchPublic } from "@/lib/api";
+import { fetchPublic, getAssetUrl } from "@/lib/api";
 
 interface ExperienceItem {
   id: string;
@@ -31,11 +31,50 @@ interface ExperienceItem {
   highlightsAr: string[];
 }
 
+interface EducationItem {
+  id: string;
+  degree: string;
+  degreeAr: string | null;
+  school: string;
+  schoolAr: string | null;
+  years: string;
+}
+
+interface LanguageItem {
+  id: string;
+  name: string;
+  nameAr: string | null;
+  level: string;
+  levelAr: string | null;
+}
+
+interface CvStat {
+  value: string;
+  label: string;
+  labelAr: string;
+}
+
+interface CvSettingsValue {
+  profile: string;
+  profileAr: string;
+  stats: CvStat[];
+  skills: string[];
+  skillsAr: string[];
+  tools: string[];
+  toolsAr: string[];
+  resumeUrl: string;
+}
+
+interface SiteSettingRow {
+  key: string;
+  value: unknown;
+}
+
 const PageShape = lazy(() => import("@/components/three/PageShape"));
 
 const CV_FILE = "/Mustafa-Kamel-CV-2026.pdf";
 
-function DownloadButton({ label, note }: { label: string; note: string }) {
+function DownloadButton({ label, note, href }: { label: string; note: string; href?: string }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const iconRef = useRef<HTMLSpanElement>(null);
   const { contextSafe } = useGSAP({ scope: ref });
@@ -53,7 +92,7 @@ function DownloadButton({ label, note }: { label: string; note: string }) {
     <Magnetic cursor="view" strength={0.45}>
       <a
         ref={ref}
-        href={CV_FILE}
+        href={href ?? CV_FILE}
         download="Mustafa Kamel CV 2026.pdf"
         onMouseEnter={onEnter}
         className="btn-shine group inline-flex items-center gap-3 rounded-full bg-[var(--color-accent)] px-8 py-4 font-display text-sm font-semibold text-[#1a0f10]"
@@ -88,6 +127,54 @@ export default function Cv() {
             lang === "ar" && item.highlightsAr.length > 0 ? item.highlightsAr : item.highlights,
         }))
       : t.cv.roles;
+
+  const { data: educationData } = useQuery({
+    queryKey: ["public", "education"],
+    queryFn: () => fetchPublic<{ items: EducationItem[] }>("/education?pageSize=20"),
+  });
+  const realEducation = educationData?.items ?? [];
+
+  const { data: languageData } = useQuery({
+    queryKey: ["public", "languages"],
+    queryFn: () => fetchPublic<{ items: LanguageItem[] }>("/languages?pageSize=20"),
+  });
+  const realLanguages = languageData?.items ?? [];
+
+  const { data: settings } = useQuery({
+    queryKey: ["public", "settings"],
+    queryFn: () => fetchPublic<SiteSettingRow[]>("/settings"),
+  });
+  const cvSettings = settings?.find((s) => s.key === "cv")?.value as CvSettingsValue | undefined;
+
+  const profile = cvSettings?.profile
+    ? lang === "ar" && cvSettings.profileAr
+      ? cvSettings.profileAr
+      : cvSettings.profile
+    : t.cv.profile;
+
+  const stats =
+    cvSettings?.stats && cvSettings.stats.length > 0
+      ? cvSettings.stats.map((s) => ({
+          value: s.value,
+          label: lang === "ar" && s.labelAr ? s.labelAr : s.label,
+        }))
+      : t.cv.stats;
+
+  const skillChips =
+    lang === "ar" && cvSettings?.skillsAr && cvSettings.skillsAr.length > 0
+      ? cvSettings.skillsAr
+      : cvSettings?.skills && cvSettings.skills.length > 0
+        ? cvSettings.skills
+        : t.cv.skills;
+
+  const toolChips =
+    lang === "ar" && cvSettings?.toolsAr && cvSettings.toolsAr.length > 0
+      ? cvSettings.toolsAr
+      : cvSettings?.tools && cvSettings.tools.length > 0
+        ? cvSettings.tools
+        : t.cv.tools;
+
+  const resumeHref = getAssetUrl(cvSettings?.resumeUrl) ?? CV_FILE;
 
   const headerRef = useRef<HTMLDivElement>(null);
   const statsRef = useStaggerReveal<HTMLDivElement>({ y: 40, stagger: 0.08 });
@@ -152,7 +239,7 @@ export default function Cv() {
               </h1>
               <p className="mt-6 max-w-xl text-lg text-[var(--color-ink-secondary)]">{t.cv.sub}</p>
               <div className="mt-10">
-                <DownloadButton label={t.cv.download} note={t.cv.downloadNote} />
+                <DownloadButton label={t.cv.download} note={t.cv.downloadNote} href={resumeHref} />
               </div>
             </div>
           </Container>
@@ -171,7 +258,7 @@ export default function Cv() {
               type="lines"
               className="mt-6 max-w-3xl font-display text-2xl font-medium leading-relaxed text-ink sm:text-3xl"
             >
-              {t.cv.profile}
+              {profile}
             </SplitReveal>
           </Container>
         </section>
@@ -180,7 +267,7 @@ export default function Cv() {
         <section className="border-t border-ink/[0.06] py-16 sm:py-20">
           <Container>
             <div ref={statsRef} className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {t.cv.stats.map((stat) => (
+              {stats.map((stat) => (
                 <div key={stat.label} data-reveal>
                   <CountUp
                     value={stat.value}
@@ -223,10 +310,27 @@ export default function Cv() {
                 <h3 className="mt-6 font-display text-sm font-medium uppercase tracking-widest text-[var(--color-ink-muted)]">
                   {t.cv.eduTitle}
                 </h3>
-                <p className="mt-2 font-display text-xl font-semibold text-ink">{t.cv.eduDegree}</p>
-                <p className="mt-1 text-sm text-[var(--color-ink-secondary)]">
-                  {t.cv.eduSchool} · {t.cv.eduYears}
-                </p>
+                {realEducation.length > 0 ? (
+                  <div className="mt-2 space-y-4">
+                    {realEducation.map((edu) => (
+                      <div key={edu.id}>
+                        <p className="font-display text-xl font-semibold text-ink">
+                          {lang === "ar" && edu.degreeAr ? edu.degreeAr : edu.degree}
+                        </p>
+                        <p className="mt-1 text-sm text-[var(--color-ink-secondary)]">
+                          {lang === "ar" && edu.schoolAr ? edu.schoolAr : edu.school} · {edu.years}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <>
+                    <p className="mt-2 font-display text-xl font-semibold text-ink">{t.cv.eduDegree}</p>
+                    <p className="mt-1 text-sm text-[var(--color-ink-secondary)]">
+                      {t.cv.eduSchool} · {t.cv.eduYears}
+                    </p>
+                  </>
+                )}
               </div>
               <div
                 data-reveal
@@ -239,7 +343,13 @@ export default function Cv() {
                   {t.cv.langTitle}
                 </h3>
                 <div className="mt-2 space-y-1.5">
-                  {t.cv.languages.map((l) => (
+                  {(realLanguages.length > 0
+                    ? realLanguages.map((l) => ({
+                        name: lang === "ar" && l.nameAr ? l.nameAr : l.name,
+                        level: lang === "ar" && l.levelAr ? l.levelAr : l.level,
+                      }))
+                    : t.cv.languages
+                  ).map((l) => (
                     <p key={l.name} className="font-display text-lg font-semibold text-ink">
                       {l.name}{" "}
                       <span className="text-sm font-medium text-[var(--color-ink-muted)]">
@@ -262,7 +372,7 @@ export default function Cv() {
               </span>
             </GsapFade>
             <div ref={skillsRef} className="mt-8 flex flex-wrap gap-3">
-              {t.cv.skills.map((skill) => (
+              {skillChips.map((skill) => (
                 <span
                   key={skill}
                   data-reveal
@@ -284,7 +394,7 @@ export default function Cv() {
               </span>
             </GsapFade>
             <div ref={toolsRef} className="mt-8 flex flex-wrap gap-3">
-              {t.cv.tools.map((tool) => (
+              {toolChips.map((tool) => (
                 <span
                   key={tool}
                   data-reveal
@@ -296,7 +406,7 @@ export default function Cv() {
             </div>
             <GsapFade delay={0.2}>
               <div className="mt-14">
-                <DownloadButton label={t.cv.download} note={t.cv.downloadNote} />
+                <DownloadButton label={t.cv.download} note={t.cv.downloadNote} href={resumeHref} />
               </div>
             </GsapFade>
           </Container>
