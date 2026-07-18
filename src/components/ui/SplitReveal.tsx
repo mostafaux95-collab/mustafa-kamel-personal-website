@@ -56,8 +56,17 @@ export default function SplitReveal({
   );
 
   return (
+    // Keyed by the rendered text itself: GSAP's SplitText.revert() restores
+    // the *original* HTML it captured at split time, not whatever React
+    // wrote to the DOM afterward. On a language switch, React updates the
+    // text first, then this effect's cleanup fires (dependencies changed)
+    // and reverts straight back to the pre-switch text before re-splitting
+    // it — so the heading gets stuck showing the old language until a full
+    // page reload remounts it fresh. Keying on `children` forces React to
+    // unmount/remount the node instead, sidestepping the revert race
+    // entirely.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <Tag ref={ref as any} className={clsx(className)}>
+    <Tag key={`${effType}:${children}`} ref={ref as any} className={clsx(className)}>
       {children}
     </Tag>
   );

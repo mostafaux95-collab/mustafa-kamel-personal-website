@@ -185,7 +185,13 @@ export default function Hero() {
             {t.hero.badge}
           </p>
 
-          <div ref={headlineWrapRef} className="relative max-w-5xl">
+          {/* Keyed by lang: SplitText.revert() (cleanup below) restores the
+              *original* HTML captured at split time, not whatever React
+              wrote afterward, so on a language switch the headline gets
+              stuck on the pre-switch text until a full reload. Keying this
+              subtree forces React to unmount/remount it instead, so the
+              GSAP effect always splits fresh, already-correct text. */}
+          <div key={lang} ref={headlineWrapRef} className="relative max-w-5xl">
             <h1 className="font-display text-[13vw] leading-[1.08] font-semibold tracking-tight text-ink sm:text-[9vw] lg:text-[6.4vw]">
               <span ref={line1Ref} className="block">
                 {t.hero.line1}
