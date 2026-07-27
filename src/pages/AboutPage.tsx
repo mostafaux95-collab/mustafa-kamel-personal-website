@@ -6,6 +6,7 @@ import Principles from "@/components/sections/Principles";
 import Process from "@/components/sections/Process";
 import Collaboration from "@/components/sections/Collaboration";
 import Tools from "@/components/sections/Tools";
+import CertificatesSlider from "@/components/cv/CertificatesSlider";
 import ContactBanner from "@/components/sections/ContactBanner";
 import CtaStrip from "@/components/ui/CtaStrip";
 import Marquee from "@/components/ui/Marquee";
@@ -31,6 +32,7 @@ export default function AboutPage() {
         <Principles />
         <Collaboration />
         <Tools />
+        <CertificatesSlider />
         <ContactBanner />
         <Marquee items={t.marqueeBottom} />
         <CtaStrip />
