@@ -12,6 +12,7 @@ import CtaStrip from "@/components/ui/CtaStrip";
 import Marquee from "@/components/ui/Marquee";
 import ContactBanner from "@/components/sections/ContactBanner";
 import ExperienceTimeline, { type ExperienceRole } from "@/components/experience/ExperienceTimeline";
+import CertificatesSlider from "@/components/cv/CertificatesSlider";
 import { usePageTitle } from "@/lib/usePageTitle";
 import { useLang } from "@/lib/i18n";
 import { useReducedMotion } from "@/lib/useReducedMotion";
@@ -411,6 +412,8 @@ export default function Cv() {
             </GsapFade>
           </Container>
         </section>
+
+        <CertificatesSlider />
 
         <ContactBanner />
         <Marquee items={t.marqueeBottom} />

@@ -19,6 +19,7 @@ import { SkillsModule } from './skills/skills.module';
 import { ExperienceModule } from './experience/experience.module';
 import { EducationModule } from './education/education.module';
 import { LanguageModule } from './languages/language.module';
+import { CertificateModule } from './certificates/certificate.module';
 import { MediaModule } from './media/media.module';
 import { ContactModule } from './contact/contact.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
@@ -57,6 +58,7 @@ import { PermissionsGuard } from './common/guards/permissions.guard';
     ExperienceModule,
     EducationModule,
     LanguageModule,
+    CertificateModule,
     MediaModule,
     ContactModule,
   ],

@@ -391,6 +391,8 @@ export const en = {
     techStack: "Tech stack",
     tags: "Tags",
     notFound: "This case study isn't available.",
+    projectLink: "Project link",
+    visitProject: "Visit live project",
   },
   palette: {
     placeholder: "Type a command…",
@@ -615,6 +617,10 @@ export const en = {
     ],
     toolsTitle: "Tools",
     tools: ["Figma", "Miro", "Framer", "Jira", "Notion", "Whimsical", "Claude", "Manus AI"],
+    certificatesTitle: "Certificates",
+    certificatesPrev: "Previous certificate",
+    certificatesNext: "Next certificate",
+    certificatesClose: "Close",
   },
   ds: {
     eyebrow: "Design System",

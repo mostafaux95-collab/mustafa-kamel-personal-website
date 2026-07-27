@@ -1,6 +1,6 @@
 import { Navigate, useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Container from "@/components/ui/Container";
@@ -184,6 +184,33 @@ export default function CaseStudy() {
                   </span>
                 ))}
               </div>
+            </Container>
+          </section>
+        )}
+
+        {project.projectUrl && (
+          <section className="border-t border-ink/[0.06] py-32 sm:py-40">
+            <Container>
+              <FadeIn className="flex flex-col items-start gap-6">
+                <span className="font-display text-[13px] font-medium uppercase tracking-[0.25em] text-[var(--color-accent)]">
+                  {t.caseStudy.projectLink}
+                </span>
+                <Magnetic cursor="view">
+                  <a
+                    href={project.projectUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="link"
+                    className="btn-shine group inline-flex items-center gap-3 rounded-full bg-[var(--color-accent)] px-8 py-4 font-display text-sm font-semibold text-[#1a0f10]"
+                  >
+                    {t.caseStudy.visitProject}
+                    <ArrowUpRight
+                      size={17}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:-scale-x-100"
+                    />
+                  </a>
+                </Magnetic>
+              </FadeIn>
             </Container>
           </section>
         )}

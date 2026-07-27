@@ -38,6 +38,7 @@ interface ProjectFormValues {
   techStack: string;
   tags: string[];
   hasCaseStudy: boolean;
+  projectUrl: string;
   metaTitle: string;
   metaTitleAr: string;
   metaDescription: string;
@@ -71,6 +72,7 @@ const EMPTY: ProjectFormValues = {
   techStack: "",
   tags: [],
   hasCaseStudy: false,
+  projectUrl: "",
   metaTitle: "",
   metaTitleAr: "",
   metaDescription: "",
@@ -121,6 +123,7 @@ export default function ProjectForm() {
         roleAr: existing.roleAr ?? "",
         challengeAr: existing.challengeAr ?? "",
         solutionAr: existing.solutionAr ?? "",
+        projectUrl: existing.projectUrl ?? "",
         metaTitle: existing.metaTitle ?? "",
         metaTitleAr: existing.metaTitleAr ?? "",
         metaDescription: existing.metaDescription ?? "",
@@ -208,6 +211,15 @@ export default function ProjectForm() {
           <Row>
             <Field label={t.fields.category} value={values.category} onChange={(v) => set("category", v)} required />
             <Field label={t.fields.year} value={values.year} onChange={(v) => set("year", v)} required />
+          </Row>
+          <Row>
+            <Field
+              label={t.fields.projectUrl}
+              type="url"
+              value={values.projectUrl}
+              onChange={(v) => set("projectUrl", v)}
+            />
+            <div />
           </Row>
         </Section>
 

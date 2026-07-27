@@ -381,6 +381,8 @@ export const ar: Locale = {
     techStack: "التقنيات المستخدمة",
     tags: "الوسوم",
     notFound: "دراسة الحالة هذه غير متاحة.",
+    projectLink: "رابط المشروع",
+    visitProject: "زيارة المشروع الحي",
   },
   palette: {
     placeholder: "اكتب أمرًا…",
@@ -605,6 +607,10 @@ export const ar: Locale = {
     ],
     toolsTitle: "الأدوات",
     tools: ["Figma", "Miro", "Framer", "Jira", "Notion", "Whimsical", "Claude", "Manus AI"],
+    certificatesTitle: "الشهادات",
+    certificatesPrev: "الشهادة السابقة",
+    certificatesNext: "الشهادة التالية",
+    certificatesClose: "إغلاق",
   },
   ds: {
     eyebrow: "نظام التصميم",

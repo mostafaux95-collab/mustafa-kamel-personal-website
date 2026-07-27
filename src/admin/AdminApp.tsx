@@ -23,6 +23,7 @@ import EducationList from "./pages/education/EducationList";
 import EducationForm from "./pages/education/EducationForm";
 import LanguageList from "./pages/languages/LanguageList";
 import LanguageForm from "./pages/languages/LanguageForm";
+import CertificatesManager from "./pages/certificates/CertificatesManager";
 import CvSettings from "./pages/cv/CvSettings";
 import MessagesList from "./pages/messages/MessagesList";
 
@@ -93,6 +94,8 @@ function AdminAppShell() {
                 <Route path="languages" element={<LanguageList />} />
                 <Route path="languages/new" element={<LanguageForm />} />
                 <Route path="languages/:id" element={<LanguageForm />} />
+
+                <Route path="certificates" element={<CertificatesManager />} />
 
                 <Route path="cv-settings" element={<CvSettings />} />
 

@@ -36,6 +36,7 @@ export const ProjectFieldsSchema = z.object({
   techStack: z.array(z.string()).default([]),
   tags: z.array(z.string()).default([]),
   hasCaseStudy: z.boolean().default(false),
+  projectUrl: z.string().optional(),
   metaTitle: z.string().optional(),
   metaTitleAr: z.string().optional(),
   metaDescription: z.string().optional(),

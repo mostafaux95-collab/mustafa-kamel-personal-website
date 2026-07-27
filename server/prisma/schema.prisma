@@ -184,6 +184,11 @@ model Project {
 
   hasCaseStudy Boolean @default(false)
 
+  // Live product / external link shown as "Project link" at the end of
+  // the case study — opens in a new tab. Optional: not every project has
+  // a public URL (client work under NDA, internal tools, etc.).
+  projectUrl String?
+
   metaTitle          String?
   metaTitleAr        String?
   metaDescription    String?
@@ -399,6 +404,40 @@ model CvLanguage {
 
   @@index([status, sortOrder])
   @@map("cv_languages")
+}
+
+// CV page: certificate/credential images shown in an auto-playing
+// slider. `isVisible` is a plain show/hide toggle rather than the
+// DRAFT/PUBLISHED ContentStatus enum used elsewhere — certificates are
+// simpler, binary content with no meaningful "draft" state. The
+// metadata fields (title/issuer/date/verifyUrl) are optional and
+// mostly unused today; they exist now so a future "show issuer/date on
+// hover" feature needs no migration, just admin UI to fill them in.
+model Certificate {
+  id String @id @default(uuid())
+
+  imageUrl String
+
+  title   String?
+  titleAr String?
+
+  issuer   String?
+  issuerAr String?
+
+  issueDate String?
+  verifyUrl String?
+
+  isVisible Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+
+  @@index([isVisible, sortOrder])
+  @@map("certificates")
 }
 
 // Local-disk media library (Phase 3 pulled forward). `url` is a path

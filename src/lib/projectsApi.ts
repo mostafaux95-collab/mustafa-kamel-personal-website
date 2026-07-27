@@ -33,6 +33,7 @@ export interface ApiProject {
   techStack: string[];
   tags: string[];
   hasCaseStudy: boolean;
+  projectUrl: string | null;
   metaTitle: string | null;
   metaTitleAr: string | null;
   metaDescription: string | null;

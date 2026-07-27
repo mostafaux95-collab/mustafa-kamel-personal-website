@@ -10,6 +10,7 @@ import {
   Briefcase,
   GraduationCap,
   Languages,
+  Award,
   Settings,
   Inbox,
   LogOut,
@@ -43,6 +44,7 @@ export default function AdminLayout() {
     { to: "/admin/experience", label: t.nav.experience, icon: Briefcase, end: false },
     { to: "/admin/education", label: t.nav.education, icon: GraduationCap, end: false },
     { to: "/admin/languages", label: t.nav.languages, icon: Languages, end: false },
+    { to: "/admin/certificates", label: t.nav.certificates, icon: Award, end: false },
     { to: "/admin/cv-settings", label: t.nav.cvSettings, icon: Settings, end: false },
     {
       to: "/admin/messages",
