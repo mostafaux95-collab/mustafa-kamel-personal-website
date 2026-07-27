@@ -223,7 +223,7 @@ export default function Cv() {
           {!reduced && (
             <div
               aria-hidden
-              className="pointer-events-none absolute -end-16 top-1/2 hidden h-[460px] w-[460px] -translate-y-1/3 opacity-70 lg:block"
+              className="pointer-events-none absolute end-0 top-1/2 hidden h-[460px] w-[460px] -translate-y-1/2 opacity-70 lg:block"
             >
               <Suspense fallback={null}>
                 <PageShape variant="knot" />

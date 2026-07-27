@@ -25,7 +25,12 @@ export default function PageHeader({
       {scene && !reduced && (
         <div
           aria-hidden
-          className="pointer-events-none absolute -end-16 top-1/2 hidden h-[460px] w-[460px] -translate-y-1/3 opacity-70 lg:block"
+          // Positioned flush at the edge and true-centered, matching the
+          // home hero's HeroScene treatment — previously this sat at
+          // -end-16 (pushed 64px past the edge) with an off-center
+          // -translate-y-1/3, cramping it and cutting more of it off
+          // than the home page's version.
+          className="pointer-events-none absolute end-0 top-1/2 hidden h-[460px] w-[460px] -translate-y-1/2 opacity-70 lg:block"
         >
           <Suspense fallback={null}>
             <PageShape variant={scene} />
