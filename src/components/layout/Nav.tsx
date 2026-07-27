@@ -141,8 +141,14 @@ export default function Nav() {
           to="/"
           data-cursor="link"
           data-cursor-magnetic
-          className="font-display text-sm font-semibold tracking-tight text-ink"
+          className="flex items-center gap-2.5 font-display text-sm font-semibold tracking-tight text-ink"
         >
+          <img
+            src={theme === "light" ? "/logo-dark.png" : "/logo-light.png"}
+            alt=""
+            aria-hidden
+            className="h-[35px] w-[35px] shrink-0 rounded-xl object-cover"
+          />
           {t.brand}
         </Link>
 
