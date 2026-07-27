@@ -95,7 +95,14 @@ export default function Testimonials() {
         key={key}
         tabIndex={0}
         dir={isRtl ? "rtl" : "ltr"}
-        className="relative flex h-full w-[300px] shrink-0 flex-col gap-6 rounded-3xl border border-ink/[0.08] bg-ink/[0.03] p-8 backdrop-blur-xl sm:w-[380px]"
+        // No explicit height: the strip's own height is content-driven
+        // (`auto`), so `height: 100%` on a card can't resolve against it
+        // and each card silently falls back to its own content height
+        // instead of the intended equal-height row. Leaving height unset
+        // lets the flex row's default `align-items: stretch` (which only
+        // kicks in for `auto`-height items) equalize every card to the
+        // tallest one instead.
+        className="relative flex w-[300px] shrink-0 flex-col gap-6 rounded-3xl border border-ink/[0.08] bg-ink/[0.03] p-8 backdrop-blur-xl sm:w-[380px]"
       >
         <div
           className="absolute -end-10 -top-10 h-32 w-32 rounded-full opacity-20 blur-3xl"
