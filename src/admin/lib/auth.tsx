@@ -80,7 +80,7 @@ export function useAdminAuth() {
 // Route-level permission check, mirroring the backend's seeded permission
 // keys (see server/prisma/seed.ts) so the UI hides actions a role can't
 // perform rather than letting them hit a 403.
-const CONTENT_ENTITIES = ["projects", "testimonials", "clients", "services", "skills", "experience", "media", "messages"];
+const CONTENT_ENTITIES = ["projects", "testimonials", "clients", "services", "skills", "experience", "education", "languages", "certificates", "media", "messages"];
 const CONTENT_READ = CONTENT_ENTITIES.map((e) => `${e}:read`);
 const CONTENT_WRITE = CONTENT_ENTITIES.map((e) => `${e}:write`);
 
