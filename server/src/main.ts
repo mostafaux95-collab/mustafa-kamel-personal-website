@@ -7,14 +7,13 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { mkdirSync } from 'node:fs';
 import { AppModule } from './app.module';
-import { UPLOAD_DIR } from './media/media.service';
+import { UPLOAD_DIR } from './media/storage/storage.service';
 import type { AppConfig } from './config/configuration';
 
 async function bootstrap() {
-  mkdirSync(UPLOAD_DIR, { recursive: true });
-
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService<AppConfig, true>);
+  const usingR2 = Boolean(config.get('r2', { infer: true }).bucketName);
 
   app.use(
     helmet({
@@ -30,10 +29,16 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Local-disk fallback only (dev, or a host with a persistent volume) —
+  // when R2 is configured, uploads live there instead and are served
+  // directly from R2's public URL, so there's nothing to mount here.
   // Served outside the /api prefix (setGlobalPrefix only applies to
   // controller routes) so a MediaAsset's stored `url` (e.g.
   // "/uploads/xxx.jpg") resolves directly against the API origin.
-  app.useStaticAssets(UPLOAD_DIR, { prefix: '/uploads' });
+  if (!usingR2) {
+    mkdirSync(UPLOAD_DIR, { recursive: true });
+    app.useStaticAssets(UPLOAD_DIR, { prefix: '/uploads' });
+  }
 
   app.useGlobalPipes(new ZodValidationPipe());
   app.setGlobalPrefix('api');

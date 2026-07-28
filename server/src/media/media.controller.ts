@@ -13,10 +13,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
-import { extname } from 'node:path';
-import { randomUUID } from 'node:crypto';
-import { MediaService, UPLOAD_DIR } from './media.service';
+import { memoryStorage } from 'multer';
+import { MediaService } from './media.service';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { ListMediaDto } from './dto/list-media.dto';
 import { RequirePermissions } from '../common/decorators/permissions.decorator';
@@ -50,12 +48,7 @@ export class MediaController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
-      storage: diskStorage({
-        destination: UPLOAD_DIR,
-        filename: (_req, file, cb) => {
-          cb(null, `${randomUUID()}${extname(file.originalname)}`);
-        },
-      }),
+      storage: memoryStorage(),
       limits: { fileSize: MAX_FILE_SIZE_BYTES },
       fileFilter: (_req, file, cb) => {
         // NestJS's own MulterOptions type (not raw multer's) requires

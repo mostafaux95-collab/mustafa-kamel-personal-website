@@ -7,7 +7,10 @@ export const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(4000),
 
   DATABASE_URL: z.string().min(1),
-  REDIS_URL: z.string().min(1),
+  // Reserved for a future Redis-backed ThrottlerStorage when the API scales
+  // horizontally — nothing connects to Redis today, so this stays optional
+  // rather than forcing every deployment to provision an unused service.
+  REDIS_URL: z.string().optional(),
 
   JWT_ACCESS_SECRET: z.string().min(32),
   JWT_ACCESS_TTL: z.string().min(1).default('15m'),
@@ -26,6 +29,16 @@ export const envSchema = z.object({
   MAIL_FROM: z.string().email(),
 
   APP_URL: z.string().min(1),
+
+  // Cloudflare R2 (S3-compatible) media storage. All optional together —
+  // when unset, uploads fall back to local disk (fine for dev; most free
+  // hosts wipe local disk on every deploy/restart, so production must set
+  // these).
+  R2_ACCOUNT_ID: z.string().optional(),
+  R2_ACCESS_KEY_ID: z.string().optional(),
+  R2_SECRET_ACCESS_KEY: z.string().optional(),
+  R2_BUCKET_NAME: z.string().optional(),
+  R2_PUBLIC_URL: z.string().optional(),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;

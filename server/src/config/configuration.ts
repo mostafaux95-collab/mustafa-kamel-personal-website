@@ -10,7 +10,7 @@ export interface AppConfig {
     url: string;
   };
   redis: {
-    url: string;
+    url: string | undefined;
   };
   jwt: {
     accessSecret: string;
@@ -30,6 +30,13 @@ export interface AppConfig {
     from: string;
   };
   appUrl: string;
+  r2: {
+    accountId: string | undefined;
+    accessKeyId: string | undefined;
+    secretAccessKey: string | undefined;
+    bucketName: string | undefined;
+    publicUrl: string | undefined;
+  };
 }
 
 export default function configuration(): AppConfig {
@@ -57,5 +64,12 @@ export default function configuration(): AppConfig {
       from: env.MAIL_FROM,
     },
     appUrl: env.APP_URL,
+    r2: {
+      accountId: env.R2_ACCOUNT_ID,
+      accessKeyId: env.R2_ACCESS_KEY_ID,
+      secretAccessKey: env.R2_SECRET_ACCESS_KEY,
+      bucketName: env.R2_BUCKET_NAME,
+      publicUrl: env.R2_PUBLIC_URL,
+    },
   };
 }

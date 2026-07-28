@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { readFile, unlink } from 'node:fs/promises';
-import { join } from 'node:path';
 import { imageSize } from 'image-size';
 import { MediaRepository, type ListFilter } from './media.repository';
+import { StorageService } from './storage/storage.service';
 import type { UpdateMediaDto } from './dto/update-media.dto';
-
-export const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
 @Injectable()
 export class MediaService {
-  constructor(private readonly repo: MediaRepository) {}
+  constructor(
+    private readonly repo: MediaRepository,
+    private readonly storage: StorageService,
+  ) {}
 
   async recordUpload(
     file: Express.Multer.File,
@@ -19,19 +19,19 @@ export class MediaService {
     let width: number | undefined;
     let height: number | undefined;
     try {
-      // image-size v2 reads raw bytes, not a file path.
-      const buffer = await readFile(file.path);
-      const dimensions = imageSize(new Uint8Array(buffer));
+      const dimensions = imageSize(new Uint8Array(file.buffer));
       width = dimensions.width;
       height = dimensions.height;
     } catch {
       // Non-image upload (or unsupported format) — width/height stay null.
     }
 
+    const stored = await this.storage.save(file.buffer, file.originalname, file.mimetype);
+
     return this.repo.create(
       {
-        url: `/uploads/${file.filename}`,
-        filename: file.filename,
+        url: stored.url,
+        filename: stored.filename,
         originalName: file.originalname,
         mimeType: file.mimetype,
         size: file.size,
@@ -62,11 +62,7 @@ export class MediaService {
 
   async remove(id: string) {
     const item = await this.findByIdAdmin(id);
-    try {
-      await unlink(join(UPLOAD_DIR, item.filename));
-    } catch {
-      // File already gone — fine, still remove the DB record.
-    }
+    await this.storage.remove(item.filename);
     return this.repo.hardDelete(id);
   }
 }
