@@ -122,10 +122,21 @@ html.light .noise-overlay {
 /* ---------- Arabic ----------
    Matches [lang="ar"] anywhere, not just html[lang="ar"] — the admin
    dashboard has its own language state, independent of the public
-   site's, and sets `lang` on its own wrapper div rather than <html>. */
+   site's, and sets `lang` on its own wrapper div rather than <html>.
+   The explicit `font-family` here (not just the --font-body/--font-display
+   custom properties) matters: `body { font-family: var(--font-body) }`
+   resolves its value at the <body> level, which sits *outside* the
+   admin's lang="ar" div, so that already-resolved (English) font-family
+   was what plain text without its own font-display/font-body class
+   inherited — buttons/headings using those utility classes re-resolved
+   correctly since they reference var(--font-body) at their own scope,
+   but labels and other plain text stayed on the English font. Setting
+   font-family directly here re-resolves it at the div itself, so every
+   descendant correctly inherits the Arabic font by default. */
 [lang="ar"] {
   --font-display: "IBM Plex Sans Arabic", "Space Grotesk", system-ui, sans-serif;
   --font-body: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
 /* Positive tracking mangles connected Arabic script; negative squeezes it */
