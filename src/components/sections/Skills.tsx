@@ -2,7 +2,6 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Container from "@/components/ui/Container";
 import FadeIn from "@/components/ui/FadeIn";
-import SplitReveal from "@/components/ui/SplitReveal";
 import { categoryColors, type SkillCategory } from "@/data/skills";
 import { useLang } from "@/lib/i18n";
 
@@ -25,21 +24,10 @@ export default function Skills() {
       className="relative overflow-hidden border-t border-ink/[0.06] py-32 sm:py-40"
     >
       <Container>
-        <div className="mb-16 sm:mb-20">
-          <FadeIn>
-            <span className="font-display text-[13px] font-medium uppercase tracking-[0.25em] text-[var(--color-accent)]">
-              {t.skillsSection.eyebrow}
-            </span>
-          </FadeIn>
-          <SplitReveal
-            as="h2"
-            type="lines"
-            className="mt-6 max-w-xl font-display text-4xl font-semibold leading-[1.1] tracking-tight text-ink sm:text-5xl"
-          >
-            {t.skillsSection.title}
-          </SplitReveal>
-        </div>
-
+        {/* No eyebrow/title here — PageHeader on SkillsPage already
+            renders this section's heading (same copy: t.pages.skills),
+            so repeating it via t.skillsSection produced a visible
+            duplicate. */}
         <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {CATEGORIES.map((category, ci) => (
             <FadeIn key={category} delay={ci * 0.06}>
