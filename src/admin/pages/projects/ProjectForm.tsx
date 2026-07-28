@@ -193,7 +193,24 @@ export default function ProjectForm() {
       >
         <Section title={t.sections.basics}>
           <Row>
-            <Field label={t.fields.slug} value={values.slug} onChange={(v) => set("slug", v)} required />
+            <Field
+              label={t.fields.slug}
+              value={values.slug}
+              // The backend requires lowercase, hyphen-separated slugs
+              // (used directly in the public URL) — sanitize on input
+              // rather than letting a capital letter or space silently
+              // fail validation on submit.
+              onChange={(v) =>
+                set(
+                  "slug",
+                  v
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, ""),
+                )
+              }
+              required
+            />
             <Field label={t.fields.company} value={values.company} onChange={(v) => set("company", v)} required />
           </Row>
           <Row>

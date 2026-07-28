@@ -34,10 +34,34 @@ export class ApiError extends Error {
   }
 }
 
+interface ZodIssue {
+  path?: (string | number)[];
+  message?: string;
+}
+
 interface Envelope<T> {
   success: boolean;
   data?: T;
   message?: string;
+  errors?: ZodIssue[];
+}
+
+// nestjs-zod collapses every field-level validation error into a single
+// generic "Validation failed" message and puts the actual per-field
+// issues in a separate `errors` array — surface those here instead, so
+// e.g. "slug: Slug must be lowercase, hyphen-separated" shows up rather
+// than a message that doesn't say which field or why.
+function formatErrorMessage(body: Envelope<unknown> | null, status: number): string {
+  if (body?.errors?.length) {
+    return body.errors
+      .map((issue) => {
+        const field = issue.path?.join(".");
+        return field ? `${field}: ${issue.message}` : issue.message;
+      })
+      .filter(Boolean)
+      .join("; ");
+  }
+  return body?.message ?? `Request failed (${status})`;
 }
 
 let refreshPromise: Promise<boolean> | null = null;
@@ -92,7 +116,7 @@ async function request<T>(path: string, options: RequestInit = {}, isRetry = fal
   const body = (await res.json().catch(() => null)) as Envelope<T> | null;
 
   if (!res.ok || !body?.success) {
-    throw new ApiError(body?.message ?? `Request failed (${res.status})`, res.status);
+    throw new ApiError(formatErrorMessage(body, res.status), res.status);
   }
 
   return body.data as T;
