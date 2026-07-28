@@ -9,6 +9,7 @@ import Magnetic from "@/components/ui/Magnetic";
 import { useLang } from "@/lib/i18n";
 import { postPublic } from "@/lib/api";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
+import { SOCIALS } from "@/data/socials";
 
 const RING_LENGTH = 2 * Math.PI * 34; // r=34 circle circumference
 const PARTICLES = Array.from({ length: 12 }, (_, i) => i);
@@ -120,13 +121,6 @@ function SentSuccess({ title, body }: { title: string; body: string }) {
     </div>
   );
 }
-
-const SOCIALS = [
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "Dribbble", href: "https://dribbble.com" },
-  { label: "Behance", href: "https://behance.net" },
-  { label: "GitHub", href: "https://github.com" },
-];
 
 export default function Contact() {
   const [values, setValues] = useState({ name: "", email: "", whatsapp: "", message: "" });

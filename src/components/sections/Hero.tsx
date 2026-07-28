@@ -9,6 +9,7 @@ import HeroScene from "@/components/three/HeroScene";
 import { gsap, useGSAP, SplitText, prefersReducedMotion } from "@/lib/gsapSetup";
 import { useLang } from "@/lib/i18n";
 import { knotSpin } from "@/lib/heroInteraction";
+import { SOCIALS } from "@/data/socials";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -252,6 +253,26 @@ export default function Hero() {
                 {t.hero.build}
               </Link>
             </Magnetic>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
+            {SOCIALS.map((s) => (
+              <Magnetic key={s.label} cursor="link">
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-cursor="link"
+                  className="group flex items-center gap-1 font-display text-sm font-medium text-ink/50 transition-colors hover:text-ink"
+                >
+                  {s.label}
+                  <ArrowUpRight
+                    size={13}
+                    className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:-scale-x-100"
+                  />
+                </a>
+              </Magnetic>
+            ))}
           </div>
           </Container>
         </div>
