@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { publicQueryClient } from "@/lib/publicQueryClient";
@@ -43,6 +43,23 @@ function PublicChrome() {
   // overflow-y-auto containers and would swallow scroll input meant for
   // them. Scoped here so it only ever mounts on non-admin routes.
   useLenis();
+
+  // PageShape (the decorative wireframe shown on Work/About/Skills/CV)
+  // pulls in a genuinely heavy shared Three.js chunk (~230KB gzipped).
+  // Its own lazy() import only fires once that specific page mounts, so
+  // a visitor landing directly on e.g. /about (not arriving via Home,
+  // which already warms this same chunk for its hero) sees the shape
+  // pop in late while the chunk cold-loads. Prefetching it here, once,
+  // on any public page, means it's warm long before someone navigates
+  // to a page that actually renders it.
+  useEffect(() => {
+    const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
+    const cancel = window.cancelIdleCallback ?? clearTimeout;
+    const id = idle(() => {
+      import("@/components/three/PageShape");
+    });
+    return () => cancel(id);
+  }, []);
 
   return (
     <>
