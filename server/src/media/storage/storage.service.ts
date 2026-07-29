@@ -6,12 +6,15 @@ import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { extname } from 'node:path';
 import type { AppConfig } from '../../config/configuration';
+import { trimAndPadLogo } from './logo-processing';
 
 export const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
 export interface StoredFile {
   url: string;
   filename: string;
+  mimeType: string;
+  buffer: Buffer;
 }
 
 // Two backends behind one interface: Cloudflare R2 (S3-compatible) when
@@ -46,24 +49,44 @@ export class StorageService {
     return this.r2Client !== null;
   }
 
-  async save(buffer: Buffer, originalName: string, mimeType: string): Promise<StoredFile> {
-    const filename = `${randomUUID()}${extname(originalName)}`;
+  async save(
+    buffer: Buffer,
+    originalName: string,
+    mimeType: string,
+    options: { trimLogo?: boolean } = {},
+  ): Promise<StoredFile> {
+    let outBuffer = buffer;
+    let outMimeType = mimeType;
+    let outName = originalName;
+
+    if (options.trimLogo && mimeType.startsWith('image/') && mimeType !== 'image/svg+xml') {
+      try {
+        outBuffer = await trimAndPadLogo(buffer);
+        outMimeType = 'image/png';
+        outName = `${originalName.replace(/\.[^.]+$/, '')}.png`;
+      } catch {
+        // Malformed/unsupported image for sharp to process — fall back to
+        // storing it unmodified rather than failing the whole upload.
+      }
+    }
+
+    const filename = `${randomUUID()}${extname(outName)}`;
 
     if (this.r2Client) {
       await this.r2Client.send(
         new PutObjectCommand({
           Bucket: this.bucketName,
           Key: filename,
-          Body: buffer,
-          ContentType: mimeType,
+          Body: outBuffer,
+          ContentType: outMimeType,
         }),
       );
-      return { url: `${this.publicUrl}/${filename}`, filename };
+      return { url: `${this.publicUrl}/${filename}`, filename, mimeType: outMimeType, buffer: outBuffer };
     }
 
     await mkdir(UPLOAD_DIR, { recursive: true });
-    await writeFile(join(UPLOAD_DIR, filename), buffer);
-    return { url: `/uploads/${filename}`, filename };
+    await writeFile(join(UPLOAD_DIR, filename), outBuffer);
+    return { url: `/uploads/${filename}`, filename, mimeType: outMimeType, buffer: outBuffer };
   }
 
   async remove(filename: string): Promise<void> {

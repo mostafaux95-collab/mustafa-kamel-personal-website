@@ -168,7 +168,7 @@ export default function ExperienceForm() {
 
         <Section title={t.sections.logoTile}>
           <Row>
-            <ImageUpload label={t.fields.logoImage} value={values.logoUrl} onChange={(v) => set("logoUrl", v)} />
+            <ImageUpload label={t.fields.logoImage} value={values.logoUrl} onChange={(v) => set("logoUrl", v)} trim />
             <div />
           </Row>
           <p className="mb-4 text-xs text-ink/45">{t.fields.logoNote}</p>

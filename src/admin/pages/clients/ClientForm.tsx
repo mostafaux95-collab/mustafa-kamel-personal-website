@@ -108,7 +108,7 @@ export default function ClientForm() {
         </Section>
 
         <Section title={t.sections.logo}>
-          <ImageUpload label={t.fields.logoImage} value={values.logoUrl} onChange={(v) => set("logoUrl", v)} />
+          <ImageUpload label={t.fields.logoImage} value={values.logoUrl} onChange={(v) => set("logoUrl", v)} trim />
           <p className="mt-4 mb-1.5 text-xs text-ink/40">{t.fields.logoNote}</p>
           <Row>
             <Field label={t.fields.initial} value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />

@@ -65,13 +65,13 @@ export class MediaController {
   )
   async upload(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: { altText?: string; altTextAr?: string; folder?: string },
+    @Body() body: { altText?: string; altTextAr?: string; folder?: string; trim?: string },
     @CurrentUser() actor: AuthenticatedUser,
   ) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
-    return this.service.recordUpload(file, body, actor.id);
+    return this.service.recordUpload(file, { ...body, trimLogo: body.trim === 'true' }, actor.id);
   }
 
   @Patch(':id')

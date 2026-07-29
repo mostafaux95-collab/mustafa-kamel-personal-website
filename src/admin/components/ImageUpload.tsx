@@ -16,10 +16,16 @@ export function ImageUpload({
   label,
   value,
   onChange,
+  trim = false,
 }: {
   label: string;
   value: string | undefined;
   onChange: (url: string | undefined) => void;
+  // Trims blank padding around the subject and re-pads to a fixed ratio,
+  // so logos with wildly different source padding all fill their tile
+  // consistently. Only meaningful for small, single-mark images — leave
+  // off for photos/covers where cropping would be destructive.
+  trim?: boolean;
 }) {
   const { t } = useAdminLang();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,6 +40,7 @@ export function ImageUpload({
     try {
       const formData = new FormData();
       formData.append("file", file);
+      if (trim) formData.append("trim", "true");
       const asset = await api.upload<UploadedAsset>("/admin/media/upload", formData);
       onChange(asset.url);
     } catch (err) {

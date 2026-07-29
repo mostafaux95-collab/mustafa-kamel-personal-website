@@ -13,27 +13,30 @@ export class MediaService {
 
   async recordUpload(
     file: Express.Multer.File,
-    fields: { altText?: string; altTextAr?: string; folder?: string },
+    fields: { altText?: string; altTextAr?: string; folder?: string; trimLogo?: boolean },
     actorId: string,
   ) {
+    const stored = await this.storage.save(file.buffer, file.originalname, file.mimetype, {
+      trimLogo: fields.trimLogo,
+    });
+
     let width: number | undefined;
     let height: number | undefined;
     try {
-      const dimensions = imageSize(new Uint8Array(file.buffer));
+      // Measure the actually-stored bytes — trimming changes dimensions.
+      const dimensions = imageSize(new Uint8Array(stored.buffer));
       width = dimensions.width;
       height = dimensions.height;
     } catch {
       // Non-image upload (or unsupported format) — width/height stay null.
     }
 
-    const stored = await this.storage.save(file.buffer, file.originalname, file.mimetype);
-
     return this.repo.create(
       {
         url: stored.url,
         filename: stored.filename,
         originalName: file.originalname,
-        mimeType: file.mimetype,
+        mimeType: stored.mimeType,
         size: file.size,
         width,
         height,
