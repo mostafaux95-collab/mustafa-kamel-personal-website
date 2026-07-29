@@ -108,13 +108,13 @@ export default function Companies() {
                     src={logoSrc}
                     alt=""
                     aria-hidden
-                    className="h-[50px] w-[50px] shrink-0 rounded-xl object-cover shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6"
+                    className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6 sm:h-11 sm:w-11"
                   />
                 ) : (
                   <span
                     data-tile
                     aria-hidden
-                    className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-xl font-display text-xl font-bold shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-display text-xl font-bold shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6 sm:h-11 sm:w-11"
                     style={{ backgroundColor: client.logoBg ?? "#432666", color: client.logoFg ?? "#ffffff" }}
                   >
                     {client.logoInitial ?? name.slice(0, 1)}
