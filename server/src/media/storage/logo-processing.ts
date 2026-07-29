@@ -10,9 +10,37 @@ import sharp from 'sharp';
 // file was originally exported.
 const PADDING_RATIO = 1.4; // final canvas = trimmed content * this, so content always fills ~71% of the tile
 
+// sharp's trim() compares every edge pixel against a single reference
+// color (the corner pixel) — it has no real understanding of the logo's
+// actual subject. For logos with a soft gradient, drop shadow, or a
+// background that's only subtly different from that corner color, this
+// can walk the "trimmable" region deep into the real mark, producing a
+// tiny fragment instead of the intended crop. If more than this fraction
+// of either dimension would be removed, the detection is almost
+// certainly wrong — skip trimming and use the image as-is rather than
+// risk destroying the logo.
+const MAX_TRIM_FRACTION = 0.55;
+
 export async function trimAndPadLogo(buffer: Buffer): Promise<Buffer> {
-  const trimmed = sharp(buffer).trim({ threshold: 12 });
-  const { data, info } = await trimmed.ensureAlpha().toBuffer({ resolveWithObject: true });
+  const original = sharp(buffer);
+  const originalMeta = await original.metadata();
+
+  let data: Buffer;
+  let info: sharp.OutputInfo;
+  try {
+    ({ data, info } = await sharp(buffer)
+      .trim({ threshold: 12 })
+      .ensureAlpha()
+      .toBuffer({ resolveWithObject: true }));
+
+    const widthDrop = 1 - info.width / (originalMeta.width ?? info.width);
+    const heightDrop = 1 - info.height / (originalMeta.height ?? info.height);
+    if (widthDrop > MAX_TRIM_FRACTION || heightDrop > MAX_TRIM_FRACTION) {
+      throw new Error('trim result implausibly small, falling back to untrimmed image');
+    }
+  } catch {
+    ({ data, info } = await sharp(buffer).ensureAlpha().toBuffer({ resolveWithObject: true }));
+  }
 
   const side = Math.round(Math.max(info.width, info.height) * PADDING_RATIO);
 
