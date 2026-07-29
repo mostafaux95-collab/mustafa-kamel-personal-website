@@ -8,7 +8,7 @@ import sharp from 'sharp';
 // mark's bounding box and re-padding to a fixed ratio makes every logo
 // occupy the same proportion of its tile, regardless of how the source
 // file was originally exported.
-const PADDING_RATIO = 1.4; // final canvas = trimmed content * this, so content always fills ~71% of the tile
+const PADDING_RATIO = 1.1; // final canvas = trimmed content * this, so content always fills ~91% of the tile
 
 // sharp's trim() compares every edge pixel against a single reference
 // color (the corner pixel) — it has no real understanding of the logo's
