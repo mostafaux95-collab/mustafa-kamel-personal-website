@@ -12,6 +12,7 @@ export const ExperienceFieldsSchema = z.object({
   summaryAr: z.string().optional(),
   highlights: z.array(z.string()).default([]),
   highlightsAr: z.array(z.string()).default([]),
+  logoUrl: z.string().optional(),
   logoInitial: z.string().optional(),
   logoBg: z.string().optional(),
   logoFg: z.string().optional(),

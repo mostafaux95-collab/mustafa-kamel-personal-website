@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/admin/lib/api";
 import { Section, Row, Field, Textarea, ColorField, Select, FormActions } from "@/admin/components/FormFields";
+import { ImageUpload } from "@/admin/components/ImageUpload";
 import { useAdminLang } from "@/admin/lib/adminI18n";
 
 interface FormValues {
@@ -16,6 +17,7 @@ interface FormValues {
   summaryAr: string;
   highlights: string; // newline-separated in the UI, array on the wire
   highlightsAr: string;
+  logoUrl: string | undefined;
   logoInitial: string;
   logoBg: string;
   logoFg: string;
@@ -34,6 +36,7 @@ const EMPTY: FormValues = {
   summaryAr: "",
   highlights: "",
   highlightsAr: "",
+  logoUrl: undefined,
   logoInitial: "",
   logoBg: "#432666",
   logoFg: "#ffffff",
@@ -66,6 +69,7 @@ export default function ExperienceForm() {
         summaryAr: (existing.summaryAr as string) ?? "",
         highlights: ((existing.highlights as string[]) ?? []).join("\n"),
         highlightsAr: ((existing.highlightsAr as string[]) ?? []).join("\n"),
+        logoUrl: (existing.logoUrl as string) ?? undefined,
         logoInitial: (existing.logoInitial as string) ?? "",
         logoBg: (existing.logoBg as string) ?? "#432666",
         logoFg: (existing.logoFg as string) ?? "#ffffff",
@@ -163,6 +167,11 @@ export default function ExperienceForm() {
         </Section>
 
         <Section title={t.sections.logoTile}>
+          <Row>
+            <ImageUpload label={t.fields.logoImage} value={values.logoUrl} onChange={(v) => set("logoUrl", v)} />
+            <div />
+          </Row>
+          <p className="mb-4 text-xs text-ink/45">{t.fields.logoNote}</p>
           <Row>
             <Field label={t.fields.initial} value={values.logoInitial} onChange={(v) => set("logoInitial", v)} />
             <div />

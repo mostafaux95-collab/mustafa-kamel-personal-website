@@ -10,6 +10,7 @@ export interface ExperienceRole {
   title: string;
   period: string;
   points: string[];
+  logoUrl?: string;
 }
 
 export default function ExperienceTimeline({ roles }: { roles: ExperienceRole[] }) {
@@ -76,17 +77,26 @@ export default function ExperienceTimeline({ roles }: { roles: ExperienceRole[] 
         className="absolute start-0 top-0 h-full w-px origin-top bg-[var(--color-accent)]"
       />
       {roles.map((role, i) => {
-        const logo = COMPANY_LOGOS[i % COMPANY_LOGOS.length];
+        const fallbackLogo = COMPANY_LOGOS[i % COMPANY_LOGOS.length];
         const nameBlock = (
           <span className="inline-flex items-center gap-3">
-            <span
-              data-logo
-              aria-hidden
-              className="flex h-10 w-10 items-center justify-center rounded-xl font-display text-base font-bold shadow-md sm:h-11 sm:w-11"
-              style={{ backgroundColor: logo.bg, color: logo.fg }}
-            >
-              {logo.initial}
-            </span>
+            {role.logoUrl ? (
+              <img
+                src={role.logoUrl}
+                alt=""
+                data-logo
+                className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-md sm:h-11 sm:w-11"
+              />
+            ) : (
+              <span
+                data-logo
+                aria-hidden
+                className="flex h-10 w-10 items-center justify-center rounded-xl font-display text-base font-bold shadow-md sm:h-11 sm:w-11"
+                style={{ backgroundColor: fallbackLogo.bg, color: fallbackLogo.fg }}
+              >
+                {fallbackLogo.initial}
+              </span>
+            )}
             {role.company}
           </span>
         );

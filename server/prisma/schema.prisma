@@ -340,6 +340,7 @@ model Experience {
   highlights   String[] @default([])
   highlightsAr String[] @default([])
 
+  logoUrl     String?
   logoInitial String?
   logoBg      String?
   logoFg      String?

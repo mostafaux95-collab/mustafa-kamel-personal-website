@@ -30,6 +30,7 @@ interface ExperienceItem {
   summaryAr: string | null;
   highlights: string[];
   highlightsAr: string[];
+  logoUrl: string | null;
 }
 
 interface EducationItem {
@@ -126,6 +127,7 @@ export default function Cv() {
           period: item.period,
           points:
             lang === "ar" && item.highlightsAr.length > 0 ? item.highlightsAr : item.highlights,
+          logoUrl: getAssetUrl(item.logoUrl),
         }))
       : t.cv.roles;
 
