@@ -103,13 +103,12 @@ export default function Companies() {
                 className="group flex cursor-default items-center gap-3.5"
               >
                 {logoSrc ? (
-                  <img
+                  <span
                     data-tile
-                    src={logoSrc}
-                    alt=""
-                    aria-hidden
-                    className="h-[50px] w-[50px] shrink-0 rounded-xl object-cover shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6"
-                  />
+                    className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-xl bg-white p-2 shadow-md transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-6"
+                  >
+                    <img src={logoSrc} alt="" aria-hidden className="h-full w-full object-contain" />
+                  </span>
                 ) : (
                   <span
                     data-tile

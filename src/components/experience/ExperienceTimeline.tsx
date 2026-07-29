@@ -81,12 +81,12 @@ export default function ExperienceTimeline({ roles }: { roles: ExperienceRole[] 
         const nameBlock = (
           <span className="inline-flex items-center gap-3">
             {role.logoUrl ? (
-              <img
-                src={role.logoUrl}
-                alt=""
+              <span
                 data-logo
-                className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-md sm:h-11 sm:w-11"
-              />
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white p-1.5 shadow-md sm:h-11 sm:w-11"
+              >
+                <img src={role.logoUrl} alt="" className="h-full w-full object-contain" />
+              </span>
             ) : (
               <span
                 data-logo
