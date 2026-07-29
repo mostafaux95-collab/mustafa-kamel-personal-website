@@ -37,22 +37,23 @@ export default function Companies() {
         const name = item.querySelector("[data-name]");
         const tl = gsap.timeline({
           scrollTrigger: { trigger: groupRef.current, start: "top 85%", once: true },
-          delay: i * 0.09,
+          delay: i * 0.04,
         });
         tl.from(tile, {
-          // "back.out" easing intentionally overshoots past the target
-          // scale before settling — combined with the per-tile stagger
-          // delay below, that meant whichever tile started animating
-          // first (delay: i * 0.09, so always the first one) finished its
-          // overshoot-and-settle while later tiles were still small and
-          // mid-animation, making it look permanently larger in any
-          // screenshot taken during that ~1s window. power3.out never
-          // exceeds the final scale, so no tile can ever appear bigger
-          // than its settled size, even mid-animation.
-          scale: 0.2,
-          rotate: -18,
+          // Unlike the CV page's timeline (where each role's logo animates
+          // independently as the user scrolls past it, so it's long
+          // settled by the time it's visible), all 10 tiles here share one
+          // scroll trigger and are merely staggered — so a screenshot taken
+          // right after scrolling into view can catch several tiles still
+          // small/mid-animation, reading as "inconsistent sizes" even
+          // though nothing is actually wrong once the animation finishes.
+          // Keeping the start scale close to 1 (rather than a dramatic
+          // pop-in from 0.2) means even a mid-animation frame looks like a
+          // settled tile, not a broken one.
+          scale: 0.85,
+          rotate: -6,
           autoAlpha: 0,
-          duration: 0.6,
+          duration: 0.4,
           ease: "power3.out",
         }).from(
           name,
