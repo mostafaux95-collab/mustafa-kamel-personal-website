@@ -1,12 +1,45 @@
+import { useQuery } from "@tanstack/react-query";
 import FadeIn from "@/components/ui/FadeIn";
 import Container from "@/components/ui/Container";
 import SplitReveal from "@/components/ui/SplitReveal";
 import PortraitCard from "@/components/about/PortraitCard";
-import ExperienceTimeline from "@/components/experience/ExperienceTimeline";
+import ExperienceTimeline, { type ExperienceRole } from "@/components/experience/ExperienceTimeline";
 import { useLang } from "@/lib/i18n";
+import { fetchPublic, getAssetUrl } from "@/lib/api";
+
+interface ExperienceItem {
+  id: string;
+  company: string;
+  role: string;
+  roleAr: string | null;
+  period: string;
+  highlights: string[];
+  highlightsAr: string[];
+  logoUrl: string | null;
+}
 
 export default function About() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+
+  // Same backend-first-with-locale-fallback pattern as Cv.tsx's experience
+  // timeline — this section renders the identical timeline on a different
+  // page, so it needs the same real data rather than the hardcoded roles.
+  const { data: experienceData } = useQuery({
+    queryKey: ["public", "experience"],
+    queryFn: () => fetchPublic<{ items: ExperienceItem[] }>("/experience?pageSize=50"),
+  });
+  const realExperience = experienceData?.items ?? [];
+  const roles: ExperienceRole[] =
+    realExperience.length > 0
+      ? realExperience.map((item) => ({
+          company: item.company,
+          title: lang === "ar" && item.roleAr ? item.roleAr : item.role,
+          period: item.period,
+          points:
+            lang === "ar" && item.highlightsAr.length > 0 ? item.highlightsAr : item.highlights,
+          logoUrl: getAssetUrl(item.logoUrl),
+        }))
+      : t.cv.roles;
 
   return (
     <section id="about" className="relative border-t border-ink/[0.06] py-32 sm:py-40">
@@ -41,7 +74,7 @@ export default function About() {
           </div>
 
           <div className="lg:col-span-7">
-            <ExperienceTimeline roles={t.cv.roles} />
+            <ExperienceTimeline roles={roles} />
           </div>
         </div>
       </Container>
