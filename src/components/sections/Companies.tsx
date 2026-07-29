@@ -40,11 +40,20 @@ export default function Companies() {
           delay: i * 0.09,
         });
         tl.from(tile, {
+          // "back.out" easing intentionally overshoots past the target
+          // scale before settling — combined with the per-tile stagger
+          // delay below, that meant whichever tile started animating
+          // first (delay: i * 0.09, so always the first one) finished its
+          // overshoot-and-settle while later tiles were still small and
+          // mid-animation, making it look permanently larger in any
+          // screenshot taken during that ~1s window. power3.out never
+          // exceeds the final scale, so no tile can ever appear bigger
+          // than its settled size, even mid-animation.
           scale: 0.2,
           rotate: -18,
           autoAlpha: 0,
-          duration: 0.7,
-          ease: "back.out(2)",
+          duration: 0.6,
+          ease: "power3.out",
         }).from(
           name,
           {
