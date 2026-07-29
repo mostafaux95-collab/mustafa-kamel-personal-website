@@ -124,7 +124,7 @@ function SentSuccess({ title, body }: { title: string; body: string }) {
 
 export default function Contact() {
   const [values, setValues] = useState({ name: "", email: "", whatsapp: "", message: "" });
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const submitMutation = useMutation({
     mutationFn: () =>
@@ -201,7 +201,7 @@ export default function Contact() {
                     data-cursor="link"
                     className="group flex items-center gap-1 font-display text-sm font-medium text-ink/60 transition-colors hover:text-ink"
                   >
-                    {s.label}
+                    {lang === "ar" ? s.labelAr : s.label}
                     <ArrowUpRight
                       size={14}
                       className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:-scale-x-100"

@@ -265,7 +265,7 @@ export default function Hero() {
                   data-cursor="link"
                   className="group flex items-center gap-1 font-display text-sm font-medium text-ink/50 transition-colors hover:text-ink"
                 >
-                  {s.label}
+                  {lang === "ar" ? s.labelAr : s.label}
                   <ArrowUpRight
                     size={13}
                     className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:-scale-x-100"
