@@ -1,12 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ProjectCard from "@/components/sections/ProjectCard";
 import { fetchPublic } from "@/lib/api";
 import type { ApiProject } from "@/lib/projectsApi";
 import { useLang } from "@/lib/i18n";
 import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsapSetup";
-
-const ALL = "all";
 
 /**
  * Filterable project list shared by the home Featured Work section and
@@ -19,10 +17,13 @@ const ALL = "all";
  * here automatically, no code change required. Tags are plain display
  * strings (not per-language keys), so they render as typed regardless
  * of site language — the same tradeoff free-text tags make anywhere.
+ *
+ * There's no "All" tab — one specific category is always active, defaulting
+ * to the first tag once projects load.
  */
-export default function ProjectGrid() {
+export default function ProjectGrid({ limit }: { limit?: number } = {}) {
   const { t, lang } = useLang();
-  const [filter, setFilter] = useState<string>(ALL);
+  const [filter, setFilter] = useState<string>("");
   const [animating, setAnimating] = useState(false);
   const tabsRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
@@ -35,12 +36,18 @@ export default function ProjectGrid() {
   });
   const projects = data?.items ?? [];
 
-  const tags = Array.from(new Set(projects.flatMap((p) => p.tags))).sort((a, b) =>
+  const filters = Array.from(new Set(projects.flatMap((p) => p.tags))).sort((a, b) =>
     a.localeCompare(b),
   );
-  const filters = [ALL, ...tags];
 
-  const visible = filter === ALL ? projects : projects.filter((p) => p.tags.includes(filter));
+  useEffect(() => {
+    if (filters.length && !filters.includes(filter)) {
+      setFilter(filters[0]);
+    }
+  }, [filters.join(), filter]);
+
+  const filtered = filter ? projects.filter((p) => p.tags.includes(filter)) : [];
+  const visible = limit ? filtered.slice(0, limit) : filtered;
 
   // Slide the pill indicator under the active tab
   useGSAP(
@@ -139,7 +146,7 @@ export default function ProjectGrid() {
               filter === key ? "text-[#1a0f10]" : "text-ink/60 hover:text-ink"
             }`}
           >
-            {key === ALL ? t.projectsSection.filters.all : key}
+            {key}
           </button>
         ))}
       </div>

@@ -78,13 +78,30 @@ export default function CaseStudy() {
               {title}
             </SplitReveal>
             <p className="mt-8 max-w-xl text-lg text-[var(--color-ink-secondary)]">{tagline}</p>
-            <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
+            <div className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-4">
               <div>
                 <div className="text-xs uppercase tracking-widest text-[var(--color-ink-muted)]">
                   {t.caseStudy.role}
                 </div>
                 <div className="mt-1 font-display text-ink">{role}</div>
               </div>
+              {project.projectUrl && (
+                <Magnetic cursor="view">
+                  <a
+                    href={project.projectUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="link"
+                    className="btn-shine group inline-flex items-center gap-2.5 rounded-full bg-[var(--color-accent)] px-6 py-3 font-display text-sm font-semibold text-[#1a0f10]"
+                  >
+                    {t.caseStudy.visitProject}
+                    <ArrowUpRight
+                      size={16}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:-scale-x-100"
+                    />
+                  </a>
+                </Magnetic>
+              )}
             </div>
           </Container>
         </section>

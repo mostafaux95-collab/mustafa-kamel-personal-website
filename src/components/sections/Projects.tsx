@@ -45,7 +45,7 @@ export default function Projects() {
           </FadeIn>
         </div>
 
-        <ProjectGrid />
+        <ProjectGrid limit={4} />
       </Container>
     </section>
   );

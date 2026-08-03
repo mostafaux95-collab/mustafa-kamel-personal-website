@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { ApiProject } from "@/lib/projectsApi";
 import CountUp from "@/components/ui/CountUp";
@@ -119,8 +119,25 @@ export default function ProjectCard({ project, index }: { project: ApiProject; i
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
-        <div className="absolute end-6 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 translate-x-2 sm:end-8 sm:top-8">
-          <ArrowUpRight size={20} className="text-white rtl:-scale-x-100" />
+        <div className="absolute end-6 top-6 flex items-center gap-2.5 sm:end-8 sm:top-8">
+          {project.projectUrl && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(project.projectUrl!, "_blank", "noopener,noreferrer");
+              }}
+              data-cursor="link"
+              aria-label={copy.title}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 opacity-0 backdrop-blur-md transition-all duration-300 hover:bg-white/20 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2"
+            >
+              <ExternalLink size={18} className="text-white" />
+            </button>
+          )}
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 translate-x-2">
+            <ArrowUpRight size={20} className="text-white rtl:-scale-x-100" />
+          </div>
         </div>
       </div>
 
