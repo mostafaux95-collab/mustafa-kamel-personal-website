@@ -14,6 +14,7 @@ import Cursor from "@/components/cursor/Cursor";
 import CommandPalette from "@/components/CommandPalette";
 import ShortcutsModal from "@/components/ShortcutsModal";
 import KonamiEffect from "@/components/easter-eggs/KonamiEffect";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import ScrollToTop from "@/lib/ScrollToTop";
 import { useLenis } from "@/lib/useLenis";
 import { useKonami } from "@/lib/useKonami";
@@ -68,6 +69,7 @@ function PublicChrome() {
       <CommandPalette />
       <ShortcutsModal />
       <KonamiListener />
+      <WhatsAppButton />
     </>
   );
 }
