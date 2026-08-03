@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { Whatsapp } from "iconsax-react";
 
 const WHATSAPP_URL = "https://wa.me/2001206338893";
 
@@ -15,7 +15,7 @@ export default function WhatsAppButton() {
       aria-label="WhatsApp"
       className="fixed bottom-6 end-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/20 transition-transform duration-300 hover:scale-110 sm:bottom-8 sm:end-8"
     >
-      <MessageCircle size={28} strokeWidth={2} className="text-white" />
+      <Whatsapp size={28} variant="Bold" color="currentColor" className="text-white" />
     </a>
   );
 }
