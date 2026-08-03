@@ -108,13 +108,20 @@ export default function ProjectCard({ project, index }: { project: ApiProject; i
               "radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25), transparent 45%), radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15), transparent 40%)",
           }}
         />
+        {/* Cover images vary from dark to very light — a plain white/10
+            overlay reads fine on dark art but nearly disappears on light
+            ones (e.g. a pale pink product shot). These scrims guarantee
+            the category label and action buttons stay legible regardless
+            of what's underneath. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/45 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute inset-0 flex items-end justify-between p-8 sm:p-10">
-          <span className="font-display text-[13px] font-medium uppercase tracking-[0.2em] text-white/80">
+          <span className="font-display text-[13px] font-medium uppercase tracking-[0.2em] text-white">
             {copy.category}
           </span>
           <span
             ref={numberRef}
-            className="font-display text-6xl font-semibold text-white/15 sm:text-8xl"
+            className="font-display text-6xl font-semibold text-white/25 sm:text-8xl"
           >
             {String(index + 1).padStart(2, "0")}
           </span>
@@ -130,12 +137,12 @@ export default function ProjectCard({ project, index }: { project: ApiProject; i
               }}
               data-cursor="link"
               aria-label={copy.title}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 opacity-0 backdrop-blur-md transition-all duration-300 hover:bg-white/20 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2"
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/30 opacity-0 backdrop-blur-md transition-all duration-300 hover:bg-black/50 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2"
             >
               <ExternalLink size={18} className="text-white" />
             </button>
           )}
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 translate-x-2">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-black/30 opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 translate-x-2">
             <ArrowUpRight size={20} className="text-white rtl:-scale-x-100" />
           </div>
         </div>
