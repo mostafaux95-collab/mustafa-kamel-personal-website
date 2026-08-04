@@ -116,9 +116,18 @@ export default function CaseStudy() {
                   </h2>
                 </FadeIn>
                 <FadeIn delay={0.1} className="flex flex-col gap-5 lg:col-span-8 lg:col-start-5">
-                  <p className="max-w-2xl text-lg leading-relaxed text-[var(--color-ink-secondary)]">
-                    {challenge}
-                  </p>
+                  {challenge
+                    .split(/\n{2,}/)
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                    .map((paragraph, i) => (
+                      <p
+                        key={i}
+                        className="max-w-2xl text-lg leading-relaxed text-[var(--color-ink-secondary)]"
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
                 </FadeIn>
               </div>
 
@@ -129,9 +138,18 @@ export default function CaseStudy() {
                   </h2>
                 </FadeIn>
                 <FadeIn delay={0.1} className="flex flex-col gap-5 lg:col-span-8 lg:col-start-5">
-                  <p className="max-w-2xl text-lg leading-relaxed text-[var(--color-ink-secondary)]">
-                    {solution}
-                  </p>
+                  {solution
+                    .split(/\n{2,}/)
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                    .map((paragraph, i) => (
+                      <p
+                        key={i}
+                        className="max-w-2xl text-lg leading-relaxed text-[var(--color-ink-secondary)]"
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
                 </FadeIn>
               </div>
             </div>
