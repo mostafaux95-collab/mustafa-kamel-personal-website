@@ -57,6 +57,7 @@ export const adminEn = {
     cancel: "Cancel",
     search: "Search…",
     add: "Add",
+    dragHintRows: "Drag rows to reorder",
   },
   // Section (card) titles used across the 6 entity forms.
   sections: {
@@ -296,6 +297,7 @@ export const adminAr: AdminLocale = {
     cancel: "إلغاء",
     search: "بحث…",
     add: "إضافة",
+    dragHintRows: "اسحب الصفوف لإعادة الترتيب",
   },
   sections: {
     basics: "الأساسيات",

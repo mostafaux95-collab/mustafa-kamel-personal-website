@@ -54,4 +54,17 @@ export class ProjectsRepository extends BaseRepository<PrismaService['project']>
   incrementViews(id: string) {
     return this.prisma.project.update({ where: { id }, data: { views: { increment: 1 } } });
   }
+
+  // Applies a full new ordering in one transaction so the list is never
+  // seen half-reordered by a concurrent read.
+  reorder(ids: string[], actorId?: string) {
+    return this.prisma.$transaction(
+      ids.map((id, index) =>
+        this.prisma.project.update({
+          where: { id },
+          data: { sortOrder: index, updatedById: actorId },
+        }),
+      ),
+    );
+  }
 }

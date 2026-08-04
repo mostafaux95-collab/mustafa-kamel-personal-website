@@ -4,6 +4,7 @@ import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ListProjectsDto } from './dto/list-projects.dto';
+import { ReorderProjectsDto } from './dto/reorder-projects.dto';
 import { RequirePermissions } from '../common/decorators/permissions.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import type { AuthenticatedUser } from '../common/types/auth.types';
@@ -30,6 +31,13 @@ export class ProjectsAdminController {
   @RequirePermissions('projects:write')
   create(@Body() dto: CreateProjectDto, @CurrentUser() actor: AuthenticatedUser) {
     return this.projectsService.create(dto, actor.id);
+  }
+
+  // Registered before ':id' so Nest doesn't try to match "reorder" as an id.
+  @Patch('reorder')
+  @RequirePermissions('projects:write')
+  reorder(@Body() dto: ReorderProjectsDto, @CurrentUser() actor: AuthenticatedUser) {
+    return this.projectsService.reorder(dto.ids, actor.id);
   }
 
   @Patch(':id')

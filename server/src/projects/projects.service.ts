@@ -63,4 +63,8 @@ export class ProjectsService {
     await this.findByIdAdmin(id);
     return this.projectsRepository.softDelete({ id }, actorId);
   }
+
+  reorder(ids: string[], actorId: string) {
+    return this.projectsRepository.reorder(ids, actorId);
+  }
 }
