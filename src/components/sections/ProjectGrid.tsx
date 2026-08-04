@@ -123,32 +123,40 @@ export default function ProjectGrid({ limit }: { limit?: number } = {}) {
 
   return (
     <div>
-      <div
-        ref={tabsRef}
-        role="tablist"
-        className="relative mb-10 inline-flex flex-wrap items-center gap-1 rounded-full border border-ink/10 bg-ink/[0.02] p-1.5"
-      >
-        <span
-          ref={indicatorRef}
-          aria-hidden
-          className="absolute top-1.5 bottom-1.5 rounded-full bg-[var(--color-accent)]"
-          style={{ left: 6, width: 0 }}
-        />
-        {filters.map((key) => (
-          <button
-            key={key}
-            data-filter={key}
-            role="tab"
-            aria-selected={filter === key}
-            onClick={() => changeFilter(key)}
-            data-cursor="link"
-            className={`relative z-10 rounded-full px-5 py-2 font-display text-sm font-semibold transition-colors duration-300 ${
-              filter === key ? "text-[#1a0f10]" : "text-ink/60 hover:text-ink"
-            }`}
-          >
-            {key}
-          </button>
-        ))}
+      {/* A wrapping pill row breaks down on narrow screens — the sliding
+          accent indicator is absolutely positioned assuming a single line,
+          so a wrapped second/third row made it stretch across multiple
+          rows of tabs instead of highlighting just the active one.
+          Horizontal scroll (mobile's standard tab-list pattern) keeps it
+          to one line at every width; desktop has room to wrap instead. */}
+      <div className="relative mb-10 -mx-6 overflow-x-auto no-scrollbar sm:mx-0 sm:overflow-visible">
+        <div
+          ref={tabsRef}
+          role="tablist"
+          className="relative inline-flex flex-nowrap items-center gap-1 rounded-full border border-ink/10 bg-ink/[0.02] p-1.5 mx-6 sm:mx-0 sm:flex-wrap"
+        >
+          <span
+            ref={indicatorRef}
+            aria-hidden
+            className="absolute top-1.5 bottom-1.5 rounded-full bg-[var(--color-accent)]"
+            style={{ left: 6, width: 0 }}
+          />
+          {filters.map((key) => (
+            <button
+              key={key}
+              data-filter={key}
+              role="tab"
+              aria-selected={filter === key}
+              onClick={() => changeFilter(key)}
+              data-cursor="link"
+              className={`relative z-10 shrink-0 rounded-full px-5 py-2 font-display text-sm font-semibold transition-colors duration-300 ${
+                filter === key ? "text-[#1a0f10]" : "text-ink/60 hover:text-ink"
+              }`}
+            >
+              {key}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading && (

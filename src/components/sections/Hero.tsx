@@ -106,15 +106,23 @@ export default function Hero() {
         ease: "sine.inOut",
       });
 
-      // Parallax exit - content drifts down and fades as the hero scrolls away
+      // Parallax exit - content drifts down and fades as the hero scrolls away.
+      // On short mobile viewports the hero's own content (avatar through
+      // socials) can be taller than the screen, so reaching the bottom
+      // items requires scrolling within the hero itself — starting the
+      // fade at "top top" made that same scroll simultaneously fade the
+      // content out, so by the time the CTA/social row scrolled into
+      // view it was already dimmed and drifting away. Starting the fade
+      // later (once the hero is mostly scrolled past) keeps content at
+      // full opacity while it's still being read/revealed.
       gsap.to(contentRef.current, {
         y: 130,
         autoAlpha: 0,
         ease: "none",
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top top",
-          end: "85% top",
+          start: "bottom bottom",
+          end: "bottom top",
           scrub: true,
         },
       });
@@ -149,7 +157,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-[var(--color-bg)]"
+      className="relative flex min-h-dvh flex-col justify-center overflow-x-hidden bg-[var(--color-bg)]"
     >
       <GradientMesh />
       <MouseLight containerRef={sectionRef} />
@@ -165,13 +173,13 @@ export default function Hero() {
 
       <div ref={contentRef} className="relative z-10">
         <div ref={parallaxRef}>
-          <Container className="pt-24">
-          <div ref={avatarRef} className="mb-7 inline-block">
+          <Container className="pt-20 sm:pt-24">
+          <div ref={avatarRef} className="mb-4 inline-block sm:mb-7">
             <div className="relative">
               <img
                 src="/portrait.jpg"
                 alt={t.brand}
-                className="h-20 w-20 rounded-full border-2 border-ink/15 object-cover object-top shadow-[0_0_50px_rgba(106,63,156,0.55)] sm:h-24 sm:w-24"
+                className="h-16 w-16 rounded-full border-2 border-ink/15 object-cover object-top shadow-[0_0_50px_rgba(106,63,156,0.55)] sm:h-20 sm:w-20 lg:h-24 lg:w-24"
               />
               <span
                 aria-hidden
@@ -181,7 +189,7 @@ export default function Hero() {
           </div>
           <p
             ref={badgeRef}
-            className="mb-6 font-display text-[13px] font-medium uppercase tracking-[0.25em] text-[var(--color-accent)]"
+            className="mb-4 font-display text-[13px] font-medium uppercase tracking-[0.25em] text-[var(--color-accent)] sm:mb-6"
           >
             {t.hero.badge}
           </p>
@@ -227,16 +235,16 @@ export default function Hero() {
 
           <p
             ref={paraRef}
-            className="mt-8 max-w-xl text-balance font-body text-lg text-[var(--color-ink-secondary)] sm:text-xl"
+            className="mt-5 max-w-xl text-balance font-body text-base text-[var(--color-ink-secondary)] sm:mt-8 sm:text-lg lg:text-xl"
           >
             {t.hero.para}
           </p>
 
-          <div ref={ctasRef} className="mt-12 flex flex-wrap items-center gap-5">
+          <div ref={ctasRef} className="mt-7 flex flex-wrap items-center gap-3 sm:mt-12 sm:gap-5">
             <Magnetic cursor="view">
               <Link
                 to="/work"
-                className="btn-shine group flex items-center gap-2 rounded-full bg-ink px-7 py-4 font-display text-sm font-semibold text-bg transition-colors"
+                className="btn-shine group flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 font-display text-sm font-semibold text-bg transition-colors sm:px-7 sm:py-4"
               >
                 {t.hero.viewProjects}
                 <ArrowUpRight
@@ -248,14 +256,14 @@ export default function Hero() {
             <Magnetic cursor="link">
               <Link
                 to="/contact"
-                className="rounded-full border border-ink/15 px-7 py-4 font-display text-sm font-semibold text-ink transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                className="rounded-full border border-ink/15 px-6 py-3.5 font-display text-sm font-semibold text-ink transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:px-7 sm:py-4"
               >
                 {t.hero.build}
               </Link>
             </Magnetic>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
+          <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3 sm:mt-8">
             {SOCIALS.map((s) => (
               <Magnetic key={s.label} cursor="link">
                 <a

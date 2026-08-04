@@ -88,16 +88,21 @@ export default function ProjectCard({ project, index }: { project: ApiProject; i
       className="group relative overflow-hidden rounded-3xl border border-ink/[0.08] bg-[var(--color-card)]"
     >
       <div
-        className="relative h-[46vh] min-h-[320px] w-full overflow-hidden sm:h-[56vh]"
+        className="relative aspect-video w-full overflow-hidden"
         style={{
           background: `linear-gradient(135deg, ${project.coverGradientFrom}, ${project.coverGradientTo})`,
         }}
       >
         {thumbnailSrc && (
+          // object-contain (not cover) — these are designed cover graphics
+          // with text baked into the image itself (titles, logos), often
+          // shot at a wider aspect ratio than this card. Cropping to fill
+          // was cutting words off; showing the whole image, letterboxed
+          // into the card's gradient background, keeps every cover intact.
           <img
             src={thumbnailSrc}
             alt=""
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-contain"
           />
         )}
         <div
