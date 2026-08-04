@@ -51,7 +51,7 @@ export default function ContactBanner() {
                 <Magnetic cursor="link">
                   <a
                     href="mailto:hi@mustafakamel.com"
-                    className="flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 font-display text-sm font-semibold text-bg"
+                    className="flex items-center gap-2 rounded-full bg-[#331C48] px-6 py-3.5 font-display text-sm font-semibold text-white"
                   >
                     <Mail size={15} />
                     hi@mustafakamel.com

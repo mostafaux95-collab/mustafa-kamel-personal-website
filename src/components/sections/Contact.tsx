@@ -183,7 +183,7 @@ export default function Contact() {
                 <Magnetic cursor="link">
                   <a
                     href="mailto:hi@mustafakamel.com"
-                    className="group flex items-center gap-2 rounded-full bg-ink px-7 py-4 font-display text-sm font-semibold text-bg"
+                    className="group flex items-center gap-2 rounded-full bg-[#331C48] px-7 py-4 font-display text-sm font-semibold text-white"
                   >
                     <Mail size={16} />
                     hi@mustafakamel.com

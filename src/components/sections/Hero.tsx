@@ -244,7 +244,7 @@ export default function Hero() {
             <Magnetic cursor="view">
               <Link
                 to="/work"
-                className="btn-shine group flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 font-display text-sm font-semibold text-bg transition-colors sm:px-7 sm:py-4"
+                className="btn-shine group flex items-center gap-2 rounded-full bg-[#331C48] px-6 py-3.5 font-display text-sm font-semibold text-white transition-colors sm:px-7 sm:py-4"
               >
                 {t.hero.viewProjects}
                 <ArrowUpRight
